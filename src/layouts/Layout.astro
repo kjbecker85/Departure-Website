@@ -1,0 +1,116 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Train like a warrior. Transform like a legend. The fitness RPG that actually tracks your workouts." } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="/icon-circle.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <title>{title}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/screenshots/home-screen.png" />
+  </head>
+  <body class="min-h-screen bg-bg text-text">
+    <nav class="fixed top-0 w-full z-50 bg-bg/80 backdrop-blur-lg border-b border-surface-light/50">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2">
+          <img src="/icon-circle.png" alt="Departure" class="w-8 h-8 rounded-lg" />
+          <span class="text-lg font-bold text-text">Departure</span>
+        </a>
+        <div class="hidden md:flex items-center gap-8">
+          <a href="/features" class="text-text-muted hover:text-text transition-colors text-sm font-medium">Features</a>
+          <a href="/gallery" class="text-text-muted hover:text-text transition-colors text-sm font-medium">Gallery</a>
+          <a href="/pricing" class="text-text-muted hover:text-text transition-colors text-sm font-medium">Pricing</a>
+          <a href="/about" class="text-text-muted hover:text-text transition-colors text-sm font-medium">About</a>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="#download" class="bg-primary hover:bg-primary-light text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+            Download
+          </a>
+          <!-- Mobile menu button -->
+          <button id="mobile-menu-btn" class="md:hidden text-text-muted hover:text-text" aria-label="Menu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <!-- Mobile menu -->
+      <div id="mobile-menu" class="hidden md:hidden border-t border-surface-light/50 bg-bg/95 backdrop-blur-lg">
+        <div class="px-4 py-4 flex flex-col gap-3">
+          <a href="/features" class="text-text-muted hover:text-text py-2 text-sm font-medium">Features</a>
+          <a href="/gallery" class="text-text-muted hover:text-text py-2 text-sm font-medium">Gallery</a>
+          <a href="/pricing" class="text-text-muted hover:text-text py-2 text-sm font-medium">Pricing</a>
+          <a href="/about" class="text-text-muted hover:text-text py-2 text-sm font-medium">About</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="pt-16">
+      <slot />
+    </main>
+
+    <footer class="border-t border-surface-light/50 bg-surface/50">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="md:col-span-2">
+            <div class="flex items-center gap-2 mb-4">
+              <img src="/icon-circle.png" alt="Departure" class="w-8 h-8 rounded-lg" />
+              <span class="text-lg font-bold">Departure</span>
+            </div>
+            <p class="text-text-muted text-sm max-w-md">
+              Train like a warrior. Transform like a legend. The fitness RPG that turns every workout into an epic quest.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-3 text-sm">Product</h4>
+            <div class="flex flex-col gap-2">
+              <a href="/features" class="text-text-muted hover:text-text text-sm transition-colors">Features</a>
+              <a href="/gallery" class="text-text-muted hover:text-text text-sm transition-colors">Gallery</a>
+              <a href="/pricing" class="text-text-muted hover:text-text text-sm transition-colors">Pricing</a>
+            </div>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-3 text-sm">Company</h4>
+            <div class="flex flex-col gap-2">
+              <a href="/about" class="text-text-muted hover:text-text text-sm transition-colors">About</a>
+              <a href="mailto:support@engagequalia.com" class="text-text-muted hover:text-text text-sm transition-colors">Contact</a>
+            </div>
+          </div>
+        </div>
+        <div class="border-t border-surface-light/50 mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p class="text-text-muted text-xs">&copy; {new Date().getFullYear()} Qualia AI. All rights reserved.</p>
+          <div class="flex gap-4">
+            <a href="/privacy" class="text-text-muted hover:text-text text-xs transition-colors">Privacy Policy</a>
+            <a href="/terms" class="text-text-muted hover:text-text text-xs transition-colors">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const btn = document.getElementById('mobile-menu-btn');
+      const menu = document.getElementById('mobile-menu');
+      btn?.addEventListener('click', () => {
+        menu?.classList.toggle('hidden');
+      });
+    </script>
+  </body>
+</html>

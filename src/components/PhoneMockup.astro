@@ -1,0 +1,21 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+}
+
+const { src, alt, class: className = '' } = Astro.props;
+---
+
+<div class={`relative inline-block ${className}`}>
+  <!-- Phone frame -->
+  <div class="relative bg-gray-900 rounded-[2.5rem] p-2 shadow-2xl shadow-primary/20 border border-surface-light/30">
+    <!-- Notch -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-6 bg-gray-900 rounded-b-2xl z-10"></div>
+    <!-- Screen -->
+    <div class="rounded-[2rem] overflow-hidden">
+      <img src={src} alt={alt} class="w-full h-auto" loading="lazy" />
+    </div>
+  </div>
+</div>

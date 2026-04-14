@@ -1,0 +1,124 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Pricing — Departure: Fitness Quest">
+  <section class="pt-16 pb-8 lg:pt-24 lg:pb-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+      <h1 class="text-4xl sm:text-5xl font-extrabold mb-4">Free to play. Seriously.</h1>
+      <p class="text-text-muted text-lg max-w-2xl mx-auto">Every core feature is free. Premium packs add cosmetic upgrades and convenience — never power.</p>
+    </div>
+  </section>
+
+  <section class="py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Free Tier -->
+        <div class="bg-surface border-2 border-primary/50 rounded-2xl p-8 relative">
+          <div class="absolute -top-3 left-6 bg-primary px-3 py-1 rounded-full text-xs font-bold text-white">MOST POPULAR</div>
+          <h3 class="text-2xl font-bold mb-2">Free</h3>
+          <p class="text-4xl font-extrabold mb-1">$0</p>
+          <p class="text-text-muted text-sm mb-6">Forever. No catch.</p>
+
+          <ul class="space-y-3 mb-8">
+            {[
+              "Full workout tracking (all 88+ exercises)",
+              "10 exercise categories",
+              "RPG progression & 24 rank tiers",
+              "4 warrior stat tracking (STR/VIT/RES/END)",
+              "Personal record auto-detection",
+              "Training schedule builder (9 methods)",
+              "Team creation & monster battles",
+              "24-monster journey map",
+              "Daily & weekly challenges",
+              "Workout feed, reactions & comments",
+              "AI Future Self transformation image",
+              "Progress photo tracking",
+              "5 equipment slots",
+              "Equipment drops from battles",
+              "Anti-cheat system",
+            ].map(feature => (
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-green mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                <span class="text-sm">{feature}</span>
+              </li>
+            ))}
+          </ul>
+
+          <a href="/#download" class="block text-center bg-primary hover:bg-primary-light text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+            Download Free
+          </a>
+        </div>
+
+        <!-- Premium -->
+        <div class="bg-surface border border-surface-light/50 rounded-2xl p-8">
+          <h3 class="text-2xl font-bold mb-2">Premium Packs</h3>
+          <p class="text-text-muted text-sm mb-6">Optional one-time purchases. Not subscriptions.</p>
+
+          <div class="space-y-4 mb-8">
+            <div class="bg-surface-light/30 rounded-xl p-4">
+              <div class="flex justify-between items-center mb-1">
+                <h4 class="font-semibold">Starter Pack</h4>
+                <span class="text-primary-light font-bold">$4.99</span>
+              </div>
+              <p class="text-text-muted text-sm">1.5x XP Boost (permanent) + Cooldown Skip + 500 Coins</p>
+            </div>
+
+            <div class="bg-surface-light/30 rounded-xl p-4">
+              <div class="flex justify-between items-center mb-1">
+                <h4 class="font-semibold">Pro Pack</h4>
+                <span class="text-primary-light font-bold">$9.99</span>
+              </div>
+              <p class="text-text-muted text-sm">Amulet Slot + 1,000 Coins + Premium Banner</p>
+            </div>
+
+            <div class="bg-surface-light/30 rounded-xl p-4">
+              <div class="flex justify-between items-center mb-1">
+                <h4 class="font-semibold">Elite Pack</h4>
+                <span class="text-primary-light font-bold">$19.99</span>
+              </div>
+              <p class="text-text-muted text-sm">Everything in Pro + 3x XP Boost + Treasure Tier + 3 Cooldown Skips + 2,000 Coins + 2 Premium Banners</p>
+            </div>
+
+            <div class="border-t border-surface-light/50 pt-4">
+              <h4 class="font-semibold text-sm mb-3 text-text-muted">Coin Packs</h4>
+              <div class="grid grid-cols-3 gap-3">
+                <div class="bg-surface-light/30 rounded-lg p-3 text-center">
+                  <p class="font-bold text-gold">500</p>
+                  <p class="text-text-muted text-xs">$1.99</p>
+                </div>
+                <div class="bg-surface-light/30 rounded-lg p-3 text-center">
+                  <p class="font-bold text-gold">1,500</p>
+                  <p class="text-text-muted text-xs">$4.99</p>
+                </div>
+                <div class="bg-surface-light/30 rounded-lg p-3 text-center">
+                  <p class="font-bold text-gold">5,000</p>
+                  <p class="text-text-muted text-xs">$14.99</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-primary/5 border border-primary/20 rounded-xl p-4">
+            <p class="text-sm text-text-muted">
+              <span class="font-semibold text-text">No subscriptions.</span> Every purchase is one-time. Coins are earned through gameplay too — premium just accelerates.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Philosophy -->
+  <section class="py-16 bg-surface/30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+      <h2 class="text-2xl font-bold mb-4">Our philosophy</h2>
+      <p class="text-text-muted text-lg mb-6">
+        Fitness should be free. The workout tracking, progression, battles, challenges, teams — all of it works without spending a dime. Premium packs add cosmetic variety and convenience, not power. A free player can reach Legend rank and clear every monster.
+      </p>
+      <p class="text-text-muted">
+        No ads. No data selling. No dark patterns. Just a game that rewards you for showing up.
+      </p>
+    </div>
+  </section>
+</Layout>

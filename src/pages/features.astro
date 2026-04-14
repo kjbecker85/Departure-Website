@@ -1,0 +1,235 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PhoneMockup from '../components/PhoneMockup.astro';
+---
+
+<Layout title="Features — Departure: Fitness Quest">
+  <!-- Hero -->
+  <section class="pt-16 pb-12 lg:pt-24 lg:pb-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+      <h1 class="text-4xl sm:text-5xl font-extrabold mb-4">Everything you need to level up.</h1>
+      <p class="text-text-muted text-lg max-w-2xl mx-auto">Real workout tracking meets RPG progression. Here's what makes Departure different.</p>
+    </div>
+  </section>
+
+  <!-- Workout Tracking -->
+  <section class="py-16 bg-surface/30">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="text-primary-light text-sm font-semibold uppercase tracking-wider">Core Training</span>
+          <h2 class="text-3xl font-bold mt-2 mb-4">Serious workout tracking.</h2>
+          <p class="text-text-muted mb-6">Not a toy. Departure tracks real exercises with real data — sets, reps, weight, duration. Built for people who actually go to the gym.</p>
+          <div class="space-y-4">
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <span class="text-primary-light text-sm font-bold">10</span>
+              </div>
+              <div>
+                <p class="font-medium text-sm">Exercise Categories</p>
+                <p class="text-text-muted text-sm">Arms, Chest, Back, Shoulders, Legs, Core, Cardio, Power, Stamina, Flex</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <span class="text-primary-light text-sm font-bold">88</span>
+              </div>
+              <div>
+                <p class="font-medium text-sm">Built-in Exercises</p>
+                <p class="text-text-muted text-sm">Every major compound and isolation movement, plus cardio and flexibility work</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 bg-gold/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+              </div>
+              <div>
+                <p class="font-medium text-sm">Auto PR Detection</p>
+                <p class="text-text-muted text-sm">Personal records tracked automatically using Epley 1RM formula for strength, duration for cardio</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 bg-green/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              </div>
+              <div>
+                <p class="font-medium text-sm">Anti-Cheat System</p>
+                <p class="text-text-muted text-sm">Weight limits, volume spike detection, daily caps — honest effort only</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-center gap-4">
+          <PhoneMockup src="/screenshots/training-log.png" alt="Training calendar and workout log" class="max-w-[250px]" />
+          <PhoneMockup src="/screenshots/workout-log.png" alt="Logging a workout with exercises" class="max-w-[250px] hidden sm:block mt-8" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Training Methods -->
+  <section class="py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="flex justify-center order-2 lg:order-1">
+          <PhoneMockup src="/screenshots/equipment.png" alt="Equipment and warrior customization" class="max-w-[280px]" />
+        </div>
+        <div class="order-1 lg:order-2">
+          <span class="text-gold text-sm font-semibold uppercase tracking-wider">Training Methods</span>
+          <h2 class="text-3xl font-bold mt-2 mb-4">Train your way.</h2>
+          <p class="text-text-muted mb-6">9 training methods to match any style. Set your schedule once, then just show up and train.</p>
+          <div class="grid grid-cols-3 gap-3">
+            {["Push/Pull/Legs", "Upper/Lower", "Full Body", "Bro Split", "HIIT", "CrossFit", "Tai Chi", "Domestic", "Custom"].map(method => (
+              <div class="bg-surface border border-surface-light/50 rounded-lg px-3 py-2 text-center">
+                <span class="text-sm font-medium">{method}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RPG System -->
+  <section class="py-16 bg-surface/30">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <span class="text-accent text-sm font-semibold uppercase tracking-wider">RPG System</span>
+        <h2 class="text-3xl font-bold mt-2 mb-4">Your body is your character sheet.</h2>
+        <p class="text-text-muted text-lg max-w-2xl mx-auto">Every workout earns XP, levels your stats, and progresses you through 24 rank tiers.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-surface border border-surface-light/50 rounded-2xl p-6 text-center">
+          <div class="text-3xl font-bold text-red mb-1">STR</div>
+          <p class="text-text-muted text-sm font-medium mb-2">Strength</p>
+          <p class="text-text-muted text-xs">Chest, back, shoulders, arms — how hard you hit</p>
+        </div>
+        <div class="bg-surface border border-surface-light/50 rounded-2xl p-6 text-center">
+          <div class="text-3xl font-bold text-green mb-1">VIT</div>
+          <p class="text-text-muted text-sm font-medium mb-2">Vitality</p>
+          <p class="text-text-muted text-xs">Core, flexibility, recovery — your durability</p>
+        </div>
+        <div class="bg-surface border border-surface-light/50 rounded-2xl p-6 text-center">
+          <div class="text-3xl font-bold text-accent mb-1">RES</div>
+          <p class="text-text-muted text-sm font-medium mb-2">Resilience</p>
+          <p class="text-text-muted text-xs">Power, stamina — explosive performance</p>
+        </div>
+        <div class="bg-surface border border-surface-light/50 rounded-2xl p-6 text-center">
+          <div class="text-3xl font-bold text-gold mb-1">END</div>
+          <p class="text-text-muted text-sm font-medium mb-2">Endurance</p>
+          <p class="text-text-muted text-xs">Cardio, conditioning — go the distance</p>
+        </div>
+      </div>
+
+      <div class="mt-12 text-center">
+        <h3 class="text-xl font-semibold mb-6">24 Ranks to Conquer</h3>
+        <div class="flex flex-wrap justify-center gap-3">
+          {["Recruit", "Warrior", "Gladiator", "Knight", "Champion", "Warlord", "Conqueror", "Legend"].map((rank, i) => (
+            <div class="bg-surface border border-surface-light/50 rounded-full px-4 py-2 flex items-center gap-2">
+              <span class="text-sm font-semibold" style={`color: ${['#94A3B8', '#10B981', '#06B6D4', '#A78BFA', '#F59E0B', '#EF4444', '#F97316', '#FFD700'][i]}`}>{rank}</span>
+              <span class="text-text-muted text-xs">x3</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Transformation -->
+  <section class="py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="text-accent text-sm font-semibold uppercase tracking-wider">AI-Powered</span>
+          <h2 class="text-3xl font-bold mt-2 mb-4">Your future self, visualized.</h2>
+          <p class="text-text-muted mb-6">Upload a selfie and set your goals. Our AI generates what you could realistically look like if you follow through — factoring in your body type, nutrition, and commitment level.</p>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-green mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              <span class="text-text-muted text-sm">AI body transformation images</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-green mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              <span class="text-text-muted text-sm">Weight/body fat projection timeline</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-green mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              <span class="text-text-muted text-sm">Progress photo tracking over time</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-green mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              <span class="text-text-muted text-sm">Weekly check-ins and plan adjustments</span>
+            </li>
+          </ul>
+        </div>
+        <div class="flex justify-center">
+          <PhoneMockup src="/screenshots/transformation.png" alt="AI body transformation feature" class="max-w-[280px]" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team & Social -->
+  <section class="py-16 bg-surface/30">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="flex justify-center gap-4">
+          <PhoneMockup src="/screenshots/team-journey.png" alt="Team journey map" class="max-w-[240px]" />
+          <PhoneMockup src="/screenshots/team-stats.png" alt="Team stats and roster" class="max-w-[240px] hidden sm:block mt-8" />
+        </div>
+        <div>
+          <span class="text-red text-sm font-semibold uppercase tracking-wider">Team Arena</span>
+          <h2 class="text-3xl font-bold mt-2 mb-4">Stronger together.</h2>
+          <p class="text-text-muted mb-6">Form a team, choose your genre (Barbarian, Samurai, Cyberpunk...), and fight through the monster journey together. React to teammates' workouts, chat, and compete.</p>
+          <div class="space-y-3">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-primary-light mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              <span class="text-text-muted text-sm">24-monster journey map across 6 themed worlds</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-primary-light mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              <span class="text-text-muted text-sm">18 team genres with unique art and war banners</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-primary-light mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              <span class="text-text-muted text-sm">Workout feed with emoji reactions and comments</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-primary-light mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              <span class="text-text-muted text-sm">Enhanced Tier 2 warpath for endgame teams</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Challenges & Equipment -->
+  <section class="py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="text-gold text-sm font-semibold uppercase tracking-wider">Daily & Weekly</span>
+          <h2 class="text-3xl font-bold mt-2 mb-4">Challenges that keep you sharp.</h2>
+          <p class="text-text-muted mb-6">Fresh challenges every day and week — tied to your actual stat categories. Complete them for bonus XP, coins, and temporary buffs that boost your combat power.</p>
+        </div>
+        <div class="flex justify-center gap-4">
+          <PhoneMockup src="/screenshots/challenges.png" alt="Daily and weekly challenges" class="max-w-[250px]" />
+          <PhoneMockup src="/screenshots/banners.png" alt="Team banners and war flags" class="max-w-[250px] hidden sm:block mt-8" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 bg-surface/30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+      <h2 class="text-3xl font-bold mb-4">Start your quest today.</h2>
+      <p class="text-text-muted text-lg mb-8">Free. No paywall. No ads. Just train.</p>
+      <a href="/#download" class="inline-flex items-center justify-center bg-primary hover:bg-primary-light text-white px-8 py-4 rounded-xl font-semibold transition-colors text-lg">
+        Download Free
+      </a>
+    </div>
+  </section>
+</Layout>

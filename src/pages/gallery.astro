@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const screenshots = [
+  { src: "/screenshots/home-screen.png", alt: "Home screen — Future Self, XP, stats, lethality", label: "Home" },
+  { src: "/screenshots/home-warlord.png", alt: "Warlord rank progression", label: "Warlord Rank" },
+  { src: "/screenshots/training-log.png", alt: "Training calendar and workout log", label: "Training Log" },
+  { src: "/screenshots/workout-log.png", alt: "Workout entry with exercises", label: "Log Workout" },
+  { src: "/screenshots/equipment.png", alt: "Equipment and warrior gear", label: "Equipment" },
+  { src: "/screenshots/challenges.png", alt: "Daily and weekly challenges", label: "Challenges" },
+  { src: "/screenshots/arena-detail.png", alt: "Arena challenge details", label: "Arena" },
+  { src: "/screenshots/team-journey.png", alt: "Team journey monster map", label: "Journey Map" },
+  { src: "/screenshots/battle-results.png", alt: "Battle results screen", label: "Battle" },
+  { src: "/screenshots/team-stats.png", alt: "Team stats and roster", label: "Team Stats" },
+  { src: "/screenshots/banners.png", alt: "Team war banners", label: "Banners" },
+  { src: "/screenshots/transformation.png", alt: "AI body transformation", label: "Transformation" },
+  { src: "/screenshots/premium-store.png", alt: "Premium store", label: "Premium Store" },
+  { src: "/screenshots/shop-armory.png", alt: "Equipment armory shop", label: "Armory" },
+  { src: "/screenshots/onboarding.png", alt: "Guided onboarding", label: "Onboarding" },
+];
+---
+
+<Layout title="Gallery — Departure: Fitness Quest">
+  <section class="pt-16 pb-8 lg:pt-24 lg:pb-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+      <h1 class="text-4xl sm:text-5xl font-extrabold mb-4">See it in action.</h1>
+      <p class="text-text-muted text-lg max-w-2xl mx-auto">A look inside Departure — from daily workouts to monster battles.</p>
+    </div>
+  </section>
+
+  <section class="pb-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
+        {screenshots.map(({ src, alt, label }) => (
+          <div class="group cursor-pointer">
+            <div class="relative bg-surface border border-surface-light/50 rounded-2xl overflow-hidden hover:border-primary/40 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/10">
+              <img src={src} alt={alt} class="w-full h-auto" loading="lazy" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                <div class="absolute bottom-0 left-0 right-0 p-3">
+                  <p class="text-white text-sm font-semibold">{label}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16 bg-surface/30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+      <h2 class="text-2xl font-bold mb-4">Like what you see?</h2>
+      <p class="text-text-muted mb-6">Download free and start your quest.</p>
+      <a href="/#download" class="inline-flex items-center justify-center bg-primary hover:bg-primary-light text-white px-8 py-3 rounded-xl font-semibold transition-colors">
+        Download Free
+      </a>
+    </div>
+  </section>
+</Layout>
