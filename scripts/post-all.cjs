@@ -43,7 +43,7 @@ const results = [];
 if (xText) {
   try {
     const imageArg = localImage ? ` --image "${localImage}"` : "";
-    execSync(`node "${path.join(scriptsDir, "post-x.js")}" --text "${xText.replace(/"/g, '\\"')}"${imageArg}`, {
+    execSync(`node "${path.join(scriptsDir, "post-x.cjs")}" --text "${xText.replace(/"/g, '\\"')}"${imageArg}`, {
       stdio: "inherit",
       cwd: path.resolve(scriptsDir, ".."),
     });
@@ -57,7 +57,7 @@ if (xText) {
 if (igText && imageUrl) {
   try {
     execSync(
-      `node "${path.join(scriptsDir, "post-instagram.js")}" --text "${igText.replace(/"/g, '\\"')}" --image "${imageUrl}"`,
+      `node "${path.join(scriptsDir, "post-instagram.cjs")}" --text "${igText.replace(/"/g, '\\"')}" --image "${imageUrl}"`,
       {
         stdio: "inherit",
         cwd: path.resolve(scriptsDir, ".."),

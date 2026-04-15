@@ -55,7 +55,7 @@ async function main() {
   const imageUrl = args[imageIdx + 1];
   const igId = process.env.IG_BUSINESS_ACCOUNT_ID;
   const token = process.env.IG_ACCESS_TOKEN;
-  const apiBase = "https://graph.facebook.com/v21.0";
+  const apiBase = "https://graph.instagram.com/v21.0";
 
   try {
     // Step 1: Create media container
