@@ -81,6 +81,66 @@ async function searchTweets(query) {
   }
 }
 
+/**
+ * Generate a contextual reply suggestion based on tweet content.
+ * Uses keyword matching to create relevant, non-spammy replies.
+ */
+function generateReply(tweetText, query, authorUsername) {
+  const text = tweetText.toLowerCase();
+
+  // Reply templates by topic
+  const templates = {
+    recommendation: [
+      `We're building exactly this — a fitness RPG where your workouts earn XP, you rank up, and your team fights monsters. Launching soon: departure.engagequalia.com`,
+      `If you're looking for something that makes workouts actually fun — we're building Departure. Real workout tracking + RPG progression + team battles. Coming soon 🗡️`,
+      `Check out what we're working on — real sets/reps/weight tracking with XP, rank-ups, equipment drops, and team monster battles. departure.engagequalia.com`,
+    ],
+    gamified: [
+      `Love seeing gamified fitness grow! We're taking it further with Departure — 24 monsters to fight, team battles, equipment drops, and AI body transformation. The grind is real 🗡️`,
+      `Gamified fitness is the future. We're building Departure — every workout earns XP, your team fights through 24 bosses, and you see your AI future self. departure.engagequalia.com`,
+      `This is exactly why we built Departure — real workout tracking meets RPG progression. 24 rank tiers, team battles, loot drops. Coming soon to iOS & Android.`,
+    ],
+    motivation: [
+      `That's the energy 💪 We're building an app where that motivation turns into XP, rank-ups, and your team fighting monsters together. Departure — launching soon.`,
+      `Love this. Every rep should feel like it matters. In Departure, it literally does — XP, PRs, rank progression, and team monster battles. departure.engagequalia.com`,
+      `This is what it's about. We built Departure to make every workout count — earn XP, rank up through 24 tiers, battle monsters with your team. Coming soon 🗡️`,
+    ],
+    app: [
+      `We're building something you might like — Departure turns real workouts into an RPG. Track sets/reps/weight, earn XP, rank up, fight monsters with your team. Free to play.`,
+      `If you want a workout tracker that's actually fun — check out Departure. RPG progression, team monster battles, AI body transformation, anti-cheat system. departure.engagequalia.com`,
+      `Real tracking (88+ exercises, auto PR detection) + RPG fun (XP, ranks, monster battles, loot). That's Departure. Coming soon to iOS & Android.`,
+    ],
+    fitness_game: [
+      `Making fitness a game is literally what we do 🎮💪 Departure: your workouts earn XP, your team fights 24 bosses, and you equip legendary gear. departure.engagequalia.com`,
+      `Fitness as a game > fitness as a chore. We're building Departure — RPG progression, team battles, equipment drops, all powered by your real workouts.`,
+      `The best fitness game is the one that actually makes you go to the gym. We're building that. departure.engagequalia.com`,
+    ],
+    generic: [
+      `This caught our eye 👀 We're building Departure — a fitness RPG where your real workouts power the adventure. 24 monsters, team battles, AI transformation. departure.engagequalia.com`,
+      `Love the fitness energy here. We're building something you might dig — Departure turns real workouts into RPG progression with team monster battles. Coming soon 🗡️`,
+      `The fitness community never stops inspiring. We're adding RPG fuel to the fire with Departure — XP, ranks, monster battles, all powered by real workouts.`,
+    ],
+  };
+
+  // Determine best category
+  let category = "generic";
+  if (text.includes("recommend") || text.includes("looking for") || text.includes("suggest") || text.includes("best app")) {
+    category = "recommendation";
+  } else if (text.includes("gamif") || text.includes("rpg") || text.includes("level up") || text.includes("xp")) {
+    category = "gamified";
+  } else if (text.includes("motiv") || text.includes("stepping up") || text.includes("grind") || text.includes("pushing")) {
+    category = "motivation";
+  } else if (text.includes("app") || text.includes("tracker") || text.includes("track")) {
+    category = "app";
+  } else if (text.includes("game") || text.includes("play")) {
+    category = "fitness_game";
+  }
+
+  const options = templates[category];
+  const reply = options[Math.floor(Math.random() * options.length)];
+  return reply;
+}
+
 async function main() {
   console.log("Fetching engagement targets...\n");
 
@@ -131,6 +191,7 @@ async function main() {
     search_query: t.search_query,
     tweeted_at: t.created_at,
     status: "new",
+    suggested_reply: generateReply(t.text, t.search_query, t.author_username),
   }));
 
   const { data, error } = await supabase.from("engagement_targets").insert(rows);

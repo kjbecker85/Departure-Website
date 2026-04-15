@@ -15,6 +15,7 @@ interface Target {
   search_query: string;
   tweeted_at: string;
   status: 'new' | 'engaged' | 'skipped';
+  suggested_reply: string | null;
   notes: string | null;
 }
 
@@ -144,6 +145,38 @@ export function EngagementDigest() {
                   {target.tweeted_at ? new Date(target.tweeted_at).toLocaleDateString() : ''}
                 </span>
               </div>
+
+              {/* Suggested reply */}
+              {target.suggested_reply && (
+                <div style={{
+                  background: '#0F0F1A', border: '1px solid #252540', borderRadius: '8px',
+                  padding: '10px 14px', marginBottom: '10px',
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    <span style={{ color: '#A78BFA', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase' }}>
+                      Suggested Reply
+                    </span>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(target.suggested_reply || '');
+                        const btn = document.getElementById(`copy-${target.id}`);
+                        if (btn) { btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy', 1500); }
+                      }}
+                      id={`copy-${target.id}`}
+                      style={{
+                        padding: '3px 10px', background: '#252540', border: 'none',
+                        borderRadius: '4px', color: '#A78BFA', fontSize: '11px',
+                        cursor: 'pointer', fontWeight: 600,
+                      }}
+                    >
+                      Copy
+                    </button>
+                  </div>
+                  <p style={{ color: '#F1F5F9', fontSize: '12px', margin: 0, lineHeight: '1.5' }}>
+                    {target.suggested_reply}
+                  </p>
+                </div>
+              )}
 
               {/* Actions */}
               <div style={{ display: 'flex', gap: '8px' }}>
