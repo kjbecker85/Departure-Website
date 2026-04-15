@@ -16,6 +16,7 @@ interface Target {
   tweeted_at: string;
   status: 'new' | 'engaged' | 'skipped';
   suggested_reply: string | null;
+  suggested_image: string | null;
   notes: string | null;
 }
 
@@ -172,9 +173,32 @@ export function EngagementDigest() {
                       Copy
                     </button>
                   </div>
-                  <p style={{ color: '#F1F5F9', fontSize: '12px', margin: 0, lineHeight: '1.5' }}>
-                    {target.suggested_reply}
-                  </p>
+                  <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                    <p style={{ color: '#F1F5F9', fontSize: '12px', margin: 0, lineHeight: '1.5', flex: 1 }}>
+                      {target.suggested_reply}
+                    </p>
+                    {target.suggested_image && (
+                      <div style={{ flexShrink: 0, textAlign: 'center' }}>
+                        <img
+                          src={`https://departure.engagequalia.com/${target.suggested_image}`}
+                          alt="Attach this"
+                          style={{ width: '80px', height: '100px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #252540' }}
+                        />
+                        <a
+                          href={`https://departure.engagequalia.com/${target.suggested_image}`}
+                          download
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: 'block', marginTop: '4px',
+                            color: '#06B6D4', fontSize: '10px', textDecoration: 'none', fontWeight: 600,
+                          }}
+                        >
+                          Save Image
+                        </a>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 

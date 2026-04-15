@@ -81,44 +81,84 @@ async function searchTweets(query) {
   }
 }
 
+// Images mapped by category — pick the most relevant visual
+const REPLY_IMAGES = {
+  recommendation: [
+    "social/home-screen.jpg",
+    "social/workout-log.jpg",
+    "social/exercise-picker.jpg",
+  ],
+  gamified: [
+    "social/monster-lich-king.jpg",
+    "social/monster-kraken.jpg",
+    "social/monster-orc-berserker.jpg",
+    "social/team-journey.jpg",
+  ],
+  motivation: [
+    "social/transformation.jpg",
+    "social/home-warlord.jpg",
+    "social/ranks.jpg",
+  ],
+  app: [
+    "social/home-screen.jpg",
+    "social/exercise-picker.jpg",
+    "social/training-log.jpg",
+    "social/workout-log.jpg",
+  ],
+  fitness_game: [
+    "social/monster-goblin-scout.jpg",
+    "social/monster-skeleton-warrior.jpg",
+    "social/monster-dire-wolf-pack.jpg",
+    "social/battle-results.jpg",
+    "social/equipment.jpg",
+  ],
+  generic: [
+    "social/home-screen.jpg",
+    "social/monster-lich-king.jpg",
+    "social/team-journey.jpg",
+  ],
+};
+
+// ~75% of replies get an image
+const IMAGE_PROBABILITY = 0.75;
+
 /**
  * Generate a contextual reply suggestion based on tweet content.
- * Uses keyword matching to create relevant, non-spammy replies.
+ * Returns { reply, image } where image may be null.
  */
 function generateReply(tweetText, query, authorUsername) {
   const text = tweetText.toLowerCase();
 
-  // Reply templates by topic
   const templates = {
     recommendation: [
-      `We're building exactly this — a fitness RPG where your workouts earn XP, you rank up, and your team fights monsters. Launching soon: departure.engagequalia.com`,
-      `If you're looking for something that makes workouts actually fun — we're building Departure. Real workout tracking + RPG progression + team battles. Coming soon 🗡️`,
-      `Check out what we're working on — real sets/reps/weight tracking with XP, rank-ups, equipment drops, and team monster battles. departure.engagequalia.com`,
+      `We're building exactly this. A fitness RPG where your workouts earn XP, you rank up, and your team fights monsters together. Launching soon: departure.engagequalia.com`,
+      `If you want something that makes workouts actually fun, check out Departure. Real workout tracking + RPG progression + team battles. Coming soon 🗡️`,
+      `Check out what we're working on. Real sets/reps/weight tracking with XP, rank ups, equipment drops, and team monster battles. departure.engagequalia.com`,
     ],
     gamified: [
-      `Love seeing gamified fitness grow! We're taking it further with Departure — 24 monsters to fight, team battles, equipment drops, and AI body transformation. The grind is real 🗡️`,
-      `Gamified fitness is the future. We're building Departure — every workout earns XP, your team fights through 24 bosses, and you see your AI future self. departure.engagequalia.com`,
-      `This is exactly why we built Departure — real workout tracking meets RPG progression. 24 rank tiers, team battles, loot drops. Coming soon to iOS & Android.`,
+      `Love seeing gamified fitness grow! We're taking it further with Departure. 24 monsters to fight, team battles, equipment drops, and AI body transformation. The grind is real 🗡️`,
+      `Gamified fitness is the future. We're building Departure where every workout earns XP, your team fights through 24 bosses, and you see your AI future self. departure.engagequalia.com`,
+      `This is exactly why we built Departure. Real workout tracking meets RPG progression. 24 rank tiers, team battles, loot drops. Coming soon to iOS & Android.`,
     ],
     motivation: [
-      `That's the energy 💪 We're building an app where that motivation turns into XP, rank-ups, and your team fighting monsters together. Departure — launching soon.`,
-      `Love this. Every rep should feel like it matters. In Departure, it literally does — XP, PRs, rank progression, and team monster battles. departure.engagequalia.com`,
-      `This is what it's about. We built Departure to make every workout count — earn XP, rank up through 24 tiers, battle monsters with your team. Coming soon 🗡️`,
+      `That's the energy 💪 We're building an app where that motivation turns into XP, rank ups, and your team fighting monsters together. Departure is launching soon.`,
+      `Love this. Every rep should feel like it matters. In Departure, it literally does. XP, PRs, rank progression, and team monster battles. departure.engagequalia.com`,
+      `This is what it's about. We built Departure to make every workout count. Earn XP, rank up through 24 tiers, battle monsters with your team. Coming soon 🗡️`,
     ],
     app: [
-      `We're building something you might like — Departure turns real workouts into an RPG. Track sets/reps/weight, earn XP, rank up, fight monsters with your team. Free to play.`,
-      `If you want a workout tracker that's actually fun — check out Departure. RPG progression, team monster battles, AI body transformation, anti-cheat system. departure.engagequalia.com`,
+      `We're building something you might like. Departure turns real workouts into an RPG. Track sets/reps/weight, earn XP, rank up, fight monsters with your team. Free to play.`,
+      `If you want a workout tracker that's actually fun, check out Departure. RPG progression, team monster battles, AI body transformation, anti cheat system. departure.engagequalia.com`,
       `Real tracking (88+ exercises, auto PR detection) + RPG fun (XP, ranks, monster battles, loot). That's Departure. Coming soon to iOS & Android.`,
     ],
     fitness_game: [
       `Making fitness a game is literally what we do 🎮💪 Departure: your workouts earn XP, your team fights 24 bosses, and you equip legendary gear. departure.engagequalia.com`,
-      `Fitness as a game > fitness as a chore. We're building Departure — RPG progression, team battles, equipment drops, all powered by your real workouts.`,
+      `Fitness as a game > fitness as a chore. We're building Departure with RPG progression, team battles, equipment drops, all powered by your real workouts.`,
       `The best fitness game is the one that actually makes you go to the gym. We're building that. departure.engagequalia.com`,
     ],
     generic: [
-      `This caught our eye 👀 We're building Departure — a fitness RPG where your real workouts power the adventure. 24 monsters, team battles, AI transformation. departure.engagequalia.com`,
-      `Love the fitness energy here. We're building something you might dig — Departure turns real workouts into RPG progression with team monster battles. Coming soon 🗡️`,
-      `The fitness community never stops inspiring. We're adding RPG fuel to the fire with Departure — XP, ranks, monster battles, all powered by real workouts.`,
+      `This caught our eye 👀 We're building Departure, a fitness RPG where your real workouts power the adventure. 24 monsters, team battles, AI transformation. departure.engagequalia.com`,
+      `Love the fitness energy here. We're building something you might dig. Departure turns real workouts into RPG progression with team monster battles. Coming soon 🗡️`,
+      `The fitness community never stops inspiring. We're adding RPG fuel to the fire with Departure. XP, ranks, monster battles, all powered by real workouts.`,
     ],
   };
 
@@ -138,7 +178,15 @@ function generateReply(tweetText, query, authorUsername) {
 
   const options = templates[category];
   const reply = options[Math.floor(Math.random() * options.length)];
-  return reply;
+
+  // Pick image (60% chance)
+  let image = null;
+  if (Math.random() < IMAGE_PROBABILITY) {
+    const images = REPLY_IMAGES[category] || REPLY_IMAGES.generic;
+    image = images[Math.floor(Math.random() * images.length)];
+  }
+
+  return { reply, image };
 }
 
 async function main() {
@@ -191,7 +239,10 @@ async function main() {
     search_query: t.search_query,
     tweeted_at: t.created_at,
     status: "new",
-    suggested_reply: generateReply(t.text, t.search_query, t.author_username),
+    ...(() => {
+      const { reply, image } = generateReply(t.text, t.search_query, t.author_username);
+      return { suggested_reply: reply, suggested_image: image };
+    })(),
   }));
 
   const { data, error } = await supabase.from("engagement_targets").insert(rows);
