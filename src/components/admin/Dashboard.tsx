@@ -13,7 +13,7 @@ interface Props {
 
 export function Dashboard({ userEmail, onSignOut }: Props) {
   const [view, setView] = useState<View>('list');
-  const { posts, schedule, loading, updatePost, skipPost, retryPost, updateSchedule } = usePosts();
+  const { posts, schedule, loading, updatePost, skipPost, retryPost, postNow, updateSchedule } = usePosts();
 
   const posted = posts.filter((p) => p.status === 'posted').length;
   const upcoming = posts.filter((p) => p.status === 'upcoming').length;
@@ -121,7 +121,7 @@ export function Dashboard({ userEmail, onSignOut }: Props) {
 
         {/* Content */}
         {view === 'list' && (
-          <PostList posts={posts} onUpdate={updatePost} onSkip={skipPost} onRetry={retryPost} />
+          <PostList posts={posts} onUpdate={updatePost} onSkip={skipPost} onRetry={retryPost} onPostNow={postNow} />
         )}
         {view === 'calendar' && (
           <PostCalendar posts={posts} onUpdate={updatePost} onSkip={skipPost} onRetry={retryPost} />

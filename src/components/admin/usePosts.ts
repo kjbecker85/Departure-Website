@@ -80,6 +80,44 @@ export function usePosts() {
     return updatePost(id, { scheduled_date: newDate });
   }
 
+  async function postNow(post: SocialPost): Promise<{ success: boolean; error?: string }> {
+    // Get GitHub token from posting_schedule
+    const { data: config } = await supabase
+      .from('posting_schedule')
+      .select('github_token')
+      .eq('id', 1)
+      .single();
+
+    const token = (config as any)?.github_token;
+    if (!token) {
+      return { success: false, error: 'GitHub token not configured. Add it in Schedule settings.' };
+    }
+
+    try {
+      const res = await fetch(
+        'https://api.github.com/repos/kjbecker85/Departure-Website/actions/workflows/social-post.yml/dispatches',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/vnd.github.v3+json',
+          },
+          body: JSON.stringify({
+            ref: 'main',
+            inputs: { date: post.scheduled_date, dry_run: 'false' },
+          }),
+        }
+      );
+      if (!res.ok) {
+        const text = await res.text();
+        return { success: false, error: `GitHub API ${res.status}: ${text}` };
+      }
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err.message };
+    }
+  }
+
   async function updateSchedule(updates: Partial<PostingSchedule>) {
     const { error } = await supabase
       .from('posting_schedule')
@@ -98,6 +136,7 @@ export function usePosts() {
     skipPost,
     retryPost,
     reschedulePost,
+    postNow,
     updateSchedule,
     refreshPosts: fetchPosts,
   };

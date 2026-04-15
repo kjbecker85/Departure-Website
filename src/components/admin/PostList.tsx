@@ -18,11 +18,13 @@ interface Props {
   onUpdate: (id: string, updates: Partial<SocialPost>) => Promise<any>;
   onSkip: (id: string) => Promise<any>;
   onRetry: (id: string) => Promise<any>;
+  onPostNow: (post: SocialPost) => Promise<{ success: boolean; error?: string }>;
 }
 
-export function PostList({ posts, onUpdate, onSkip, onRetry }: Props) {
+export function PostList({ posts, onUpdate, onSkip, onRetry, onPostNow }: Props) {
   const [filter, setFilter] = useState<typeof FILTERS[number]>('all');
   const [editingPost, setEditingPost] = useState<SocialPost | null>(null);
+  const [postingId, setPostingId] = useState<string | null>(null);
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -124,16 +126,40 @@ export function PostList({ posts, onUpdate, onSkip, onRetry }: Props) {
               {/* Quick actions */}
               <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
                 {post.status === 'upcoming' && (
-                  <button
-                    onClick={(e) => { e.stopPropagation(); onSkip(post.id); }}
-                    title="Skip"
-                    style={{
-                      padding: '6px 10px', background: '#F59E0B22', border: '1px solid #F59E0B44',
-                      borderRadius: '6px', color: '#F59E0B', fontSize: '12px', cursor: 'pointer',
-                    }}
-                  >
-                    Skip
-                  </button>
+                  <>
+                    <button
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        setPostingId(post.id);
+                        const result = await onPostNow(post);
+                        setPostingId(null);
+                        if (result.success) {
+                          alert('Post triggered! GitHub Actions will post it in ~1 minute.');
+                        } else {
+                          alert('Failed: ' + (result.error || 'Unknown error'));
+                        }
+                      }}
+                      disabled={postingId === post.id}
+                      title="Post Now"
+                      style={{
+                        padding: '6px 10px', background: '#10B98122', border: '1px solid #10B98144',
+                        borderRadius: '6px', color: '#10B981', fontSize: '12px', cursor: 'pointer',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {postingId === post.id ? 'Posting...' : 'Post Now'}
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onSkip(post.id); }}
+                      title="Skip"
+                      style={{
+                        padding: '6px 10px', background: '#F59E0B22', border: '1px solid #F59E0B44',
+                        borderRadius: '6px', color: '#F59E0B', fontSize: '12px', cursor: 'pointer',
+                      }}
+                    >
+                      Skip
+                    </button>
+                  </>
                 )}
                 {(post.status === 'failed' || post.status === 'skipped') && (
                   <button
