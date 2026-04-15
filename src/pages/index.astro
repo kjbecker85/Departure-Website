@@ -165,9 +165,16 @@ import PhoneMockup from '../components/PhoneMockup.astro';
   <section class="py-20 lg:py-28" id="notify">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
       <h2 class="text-3xl sm:text-4xl font-bold mb-4">Ready to begin your quest?</h2>
-      <p class="text-text-muted text-lg mb-8">
+      <p class="text-text-muted text-lg mb-4">
         Departure is launching soon. Get notified when it drops — plus early access to the beta.
       </p>
+
+      <!-- Coin incentive -->
+      <div class="inline-flex items-center gap-3 bg-gold/10 border border-gold/30 rounded-full px-5 py-2.5 mb-8">
+        <img src="/coin.png" alt="Departure Coin" class="w-8 h-8" />
+        <span class="text-gold font-semibold text-sm">Sign up now & get 1,000 free coins at launch</span>
+        <img src="/coin.png" alt="Departure Coin" class="w-8 h-8" />
+      </div>
 
       <!-- Email capture form -->
       <form id="signup-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-4">
@@ -182,7 +189,7 @@ import PhoneMockup from '../components/PhoneMockup.astro';
           Notify Me
         </button>
       </form>
-      <p id="signup-success" class="text-green text-sm hidden">You're in! We'll notify you at launch.</p>
+      <p id="signup-success" class="text-green text-sm hidden">You're in! 1,000 coins will be waiting for you at launch. 🪙</p>
       <p id="signup-error" class="text-red text-sm hidden">Something went wrong. Try again or email departure@engagequalia.com</p>
       <p class="text-text-muted text-xs mb-12">No spam. Just a one-time launch notification.</p>
 
