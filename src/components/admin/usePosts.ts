@@ -9,9 +9,11 @@ export interface SocialPost {
   image_path: string | null;
   x_text: string | null;
   ig_text: string | null;
+  fb_text: string | null;
   status: 'upcoming' | 'posted' | 'skipped' | 'failed';
   x_posted: boolean;
   ig_posted: boolean;
+  fb_posted: boolean;
   x_post_id: string | null;
   ig_post_id: string | null;
   posted_at: string | null;

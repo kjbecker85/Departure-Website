@@ -15,12 +15,14 @@ interface Props {
 export function PostEditor({ post, onSave, onSkip, onRetry, onClose }: Props) {
   const [xText, setXText] = useState(post.x_text || '');
   const [igText, setIgText] = useState(post.ig_text || '');
+  const [fbText, setFbText] = useState((post as any).fb_text || '');
   const [date, setDate] = useState(post.scheduled_date);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     setXText(post.x_text || '');
     setIgText(post.ig_text || '');
+    setFbText((post as any).fb_text || '');
     setDate(post.scheduled_date);
   }, [post]);
 
@@ -29,8 +31,9 @@ export function PostEditor({ post, onSave, onSkip, onRetry, onClose }: Props) {
     await onSave(post.id, {
       x_text: xText,
       ig_text: igText,
+      fb_text: fbText,
       scheduled_date: date,
-    });
+    } as any);
     setSaving(false);
     onClose();
   }
@@ -124,6 +127,24 @@ export function PostEditor({ post, onSave, onSkip, onRetry, onClose }: Props) {
           style={{
             width: '100%', padding: '10px 14px', background: '#0F0F1A',
             border: `1px solid ${igText.length > 2200 ? '#EF4444' : '#252540'}`,
+            borderRadius: '8px', color: '#F1F5F9', fontSize: '14px',
+            marginBottom: '16px', resize: 'vertical', fontFamily: 'Inter, system-ui, sans-serif',
+            boxSizing: 'border-box',
+          }}
+        />
+
+        {/* FB Text */}
+        <label style={{ color: '#94A3B8', fontSize: '13px', display: 'block', marginBottom: '6px' }}>
+          Facebook — {fbText.length} chars
+        </label>
+        <textarea
+          value={fbText}
+          onChange={(e) => setFbText(e.target.value)}
+          disabled={post.status === 'posted'}
+          rows={6}
+          style={{
+            width: '100%', padding: '10px 14px', background: '#0F0F1A',
+            border: '1px solid #252540',
             borderRadius: '8px', color: '#F1F5F9', fontSize: '14px',
             marginBottom: '16px', resize: 'vertical', fontFamily: 'Inter, system-ui, sans-serif',
             boxSizing: 'border-box',
