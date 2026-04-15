@@ -4,18 +4,32 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
 }
 
-const { title, description = "Train like a warrior. Transform like a legend. The fitness RPG that actually tracks your workouts." } = Astro.props;
+const SITE_URL = 'https://departure.engagequalia.com';
+const {
+  title,
+  description = "Departure is a fitness RPG that tracks real workouts — sets, reps, weight — and turns them into XP, ranks, equipment, and team monster battles. Free to play. Built for adults.",
+  ogImage = '/social/home-screen.jpg'
+} = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, SITE_URL).href;
+const ogImageUrl = new URL(ogImage, SITE_URL).href;
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/png" href="/icon-circle.png" />
+    <link rel="apple-touch-icon" href="/icon-circle.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0F0F1A" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -25,7 +39,40 @@ const { title, description = "Train like a warrior. Transform like a legend. The
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/screenshots/home-screen.png" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Departure: Fitness Quest" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:site" content="@departure_fitness" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Departure: Fitness Quest",
+      "operatingSystem": "iOS, Android",
+      "applicationCategory": "HealthApplication",
+      "description": "A fitness RPG that tracks real workouts and turns them into XP, ranks, equipment, and team monster battles. Dark Souls aesthetic. Free to play.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "Qualia AI",
+        "url": "https://engagequalia.com"
+      },
+      "url": "https://departure.engagequalia.com"
+    })} />
   </head>
   <body class="min-h-screen bg-bg text-text">
     <nav class="fixed top-0 w-full z-50 bg-bg/80 backdrop-blur-lg border-b border-surface-light/50">
