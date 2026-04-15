@@ -1,0 +1,33 @@
+---
+// Admin dashboard — client-only React app (no SSR)
+// Auth-gated via Supabase, restricted to @engagequalia.com
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Departure — Marketing Dashboard</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/png" href="/icon.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #0F0F1A; font-family: Inter, system-ui, sans-serif; }
+    </style>
+  </head>
+  <body>
+    <div id="admin-root">
+      <div style="min-height: 100vh; background: #0F0F1A; display: flex; align-items: center; justify-content: center;">
+        <p style="color: #94A3B8; font-size: 16px; font-family: Inter, system-ui, sans-serif;">Loading dashboard...</p>
+      </div>
+    </div>
+    <script>
+      import { createElement } from 'react';
+      import { createRoot } from 'react-dom/client';
+      import AdminApp from '../components/admin/AdminApp';
+
+      const root = createRoot(document.getElementById('admin-root')!);
+      root.render(createElement(AdminApp));
+    </script>
+  </body>
+</html>

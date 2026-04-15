@@ -3,10 +3,8 @@ name: Daily Social Media Post
 on:
   schedule:
     # Run daily at 10:03 AM EST (14:03 UTC)
-    # Off-minute to avoid API congestion
     - cron: '3 14 * * *'
   workflow_dispatch:
-    # Allow manual trigger from GitHub Actions UI
     inputs:
       date:
         description: 'Override date (YYYY-MM-DD), leave empty for today'
@@ -19,7 +17,7 @@ on:
         default: false
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   post:
@@ -34,7 +32,7 @@ jobs:
           node-version: '22'
 
       - name: Install dependencies
-        run: npm install dotenv twitter-api-v2
+        run: npm install dotenv twitter-api-v2 @supabase/supabase-js
 
       - name: Post to social media
         env:
@@ -44,6 +42,8 @@ jobs:
           X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
           IG_BUSINESS_ACCOUNT_ID: ${{ secrets.IG_BUSINESS_ACCOUNT_ID }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
           DATE_ARG=""
           if [ -n "${{ github.event.inputs.date }}" ]; then
@@ -54,12 +54,3 @@ jobs:
             DRY_ARG="--dry-run"
           fi
           node scripts/post-daily.cjs $DATE_ARG $DRY_ARG
-
-      - name: Commit updated queue
-        if: ${{ github.event.inputs.dry_run != 'true' }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add content-queue.json
-          git diff --staged --quiet || git commit -m "Mark post as completed [$(date +%Y-%m-%d)]"
-          git push

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Daily social media posting script.
- * Reads content-queue.json, finds today's post, posts to X and Instagram,
- * then marks it as posted.
+ * Reads from Supabase social_posts table, finds today's post, posts to X and Instagram,
+ * then updates the row status.
  *
  * Usage:
  *   node scripts/post-daily.cjs              # Post today's content
@@ -13,26 +13,21 @@
 const path = require("path");
 const fs = require("fs");
 const { execFileSync } = require("child_process");
+const { createClient } = require("@supabase/supabase-js");
 
 // Load env
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
-const QUEUE_PATH = path.resolve(__dirname, "../content-queue.json");
 const SITE_BASE = "https://departure.engagequalia.com";
 
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
 function getToday() {
-  // Format as YYYY-MM-DD in local timezone
   const now = new Date();
   return now.toISOString().split("T")[0];
-}
-
-function loadQueue() {
-  const raw = fs.readFileSync(QUEUE_PATH, "utf-8");
-  return JSON.parse(raw);
-}
-
-function saveQueue(queue) {
-  fs.writeFileSync(QUEUE_PATH, JSON.stringify(queue, null, 2) + "\n");
 }
 
 function postToX(text, localImagePath) {
@@ -49,10 +44,10 @@ function postToX(text, localImagePath) {
       env: process.env,
     });
     console.log(result);
-    return true;
+    return { success: true, output: result };
   } catch (err) {
     console.error("X post failed:", err.stderr || err.message);
-    return false;
+    return { success: false, error: err.stderr || err.message };
   }
 }
 
@@ -70,10 +65,10 @@ function postToInstagram(text, imageUrl) {
       env: process.env,
     });
     console.log(result);
-    return true;
+    return { success: true, output: result };
   } catch (err) {
     console.error("Instagram post failed:", err.stderr || err.message);
-    return false;
+    return { success: false, error: err.stderr || err.message };
   }
 }
 
@@ -86,33 +81,68 @@ async function main() {
   console.log(`Looking for post scheduled for: ${targetDate}`);
   if (dryRun) console.log("(DRY RUN — will not actually post)\n");
 
-  const queue = loadQueue();
-  const postIdx = queue.findIndex(
-    (p) => p.date === targetDate && !p.posted && !p.skip
-  );
+  // Check if posting is paused
+  const { data: schedule } = await supabase
+    .from("posting_schedule")
+    .select("paused, frequency, custom_days")
+    .eq("id", 1)
+    .single();
 
-  if (postIdx === -1) {
-    console.log("No unposted content found for this date.");
+  if (schedule?.paused) {
+    console.log("Posting is PAUSED. Exiting.");
+    return;
+  }
 
-    // Show next upcoming post
-    const upcoming = queue
-      .filter((p) => !p.posted && !p.skip && p.date > targetDate)
-      .sort((a, b) => a.date.localeCompare(b.date));
+  // Check frequency
+  if (schedule) {
+    const dayOfWeek = new Date(targetDate + "T12:00:00").getDay();
+    if (schedule.frequency === "weekdays" && (dayOfWeek === 0 || dayOfWeek === 6)) {
+      console.log("Weekday-only schedule — skipping weekend.");
+      return;
+    }
+    if (schedule.frequency === "custom" && !schedule.custom_days.includes(dayOfWeek)) {
+      console.log(`Custom schedule — day ${dayOfWeek} not in posting days.`);
+      return;
+    }
+  }
 
-    if (upcoming.length > 0) {
-      console.log(`Next scheduled post: ${upcoming[0].date} (${upcoming[0].type})`);
+  // Fetch today's upcoming post
+  const { data: post, error } = await supabase
+    .from("social_posts")
+    .select("*")
+    .eq("scheduled_date", targetDate)
+    .eq("status", "upcoming")
+    .order("scheduled_time", { ascending: true })
+    .limit(1)
+    .single();
+
+  if (error || !post) {
+    console.log("No upcoming post found for this date.");
+
+    // Show next upcoming
+    const { data: upcoming } = await supabase
+      .from("social_posts")
+      .select("scheduled_date, post_type")
+      .eq("status", "upcoming")
+      .gt("scheduled_date", targetDate)
+      .order("scheduled_date", { ascending: true })
+      .limit(1);
+
+    if (upcoming?.length) {
+      console.log(`Next scheduled post: ${upcoming[0].scheduled_date} (${upcoming[0].post_type})`);
     } else {
       console.log("No more posts in queue!");
     }
     return;
   }
 
-  const post = queue[postIdx];
-  const imageUrl = `${SITE_BASE}/${post.image}`;
-  const localImagePath = path.resolve(__dirname, "..", "public", post.image);
+  const imageUrl = post.image_path ? `${SITE_BASE}/${post.image_path}` : null;
+  const localImagePath = post.image_path
+    ? path.resolve(__dirname, "..", "public", post.image_path)
+    : null;
 
-  console.log(`Found post: ${post.type}`);
-  console.log(`Image: ${post.image}`);
+  console.log(`Found post: ${post.post_type}`);
+  console.log(`Image: ${post.image_path}`);
   console.log(`\nX text:\n${post.x_text}`);
   console.log(`\nIG text:\n${post.ig_text}`);
   console.log(`\nImage URL: ${imageUrl}`);
@@ -122,29 +152,50 @@ async function main() {
     return;
   }
 
-  let xSuccess = false;
-  let igSuccess = false;
+  let xResult = { success: false };
+  let igResult = { success: false };
 
   // Post to X (uses local image)
   if (post.x_text) {
-    xSuccess = postToX(post.x_text, localImagePath);
+    xResult = postToX(post.x_text, localImagePath);
   }
 
   // Post to Instagram (uses public URL)
-  if (post.ig_text && post.image) {
-    igSuccess = postToInstagram(post.ig_text, imageUrl);
+  if (post.ig_text && imageUrl) {
+    igResult = postToInstagram(post.ig_text, imageUrl);
   }
 
-  // Mark as posted if at least one platform succeeded
-  if (xSuccess || igSuccess) {
-    queue[postIdx].posted = true;
-    queue[postIdx].posted_at = new Date().toISOString();
-    queue[postIdx].x_posted = xSuccess;
-    queue[postIdx].ig_posted = igSuccess;
-    saveQueue(queue);
-    console.log("\n--- Post marked as completed in queue ---");
+  // Update Supabase
+  if (xResult.success || igResult.success) {
+    await supabase
+      .from("social_posts")
+      .update({
+        status: "posted",
+        posted_at: new Date().toISOString(),
+        x_posted: xResult.success,
+        ig_posted: igResult.success,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", post.id);
+
+    console.log("\n--- Post marked as completed in Supabase ---");
   } else {
-    console.error("\n--- Both platforms failed! Post NOT marked as completed ---");
+    const errorMsg = [
+      xResult.error ? `X: ${xResult.error}` : null,
+      igResult.error ? `IG: ${igResult.error}` : null,
+    ].filter(Boolean).join('; ');
+
+    await supabase
+      .from("social_posts")
+      .update({
+        status: "failed",
+        error_message: errorMsg.substring(0, 500),
+        retry_count: (post.retry_count || 0) + 1,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", post.id);
+
+    console.error("\n--- Both platforms failed! Post marked as FAILED ---");
     process.exit(1);
   }
 }
