@@ -3,8 +3,9 @@ import { usePosts } from './usePosts';
 import { PostList } from './PostList';
 import { PostCalendar } from './PostCalendar';
 import { ScheduleSettings } from './ScheduleSettings';
+import { EngagementDigest } from './EngagementDigest';
 
-type View = 'list' | 'calendar' | 'schedule';
+type View = 'list' | 'calendar' | 'schedule' | 'engage';
 
 interface Props {
   userEmail: string;
@@ -101,6 +102,7 @@ export function Dashboard({ userEmail, onSignOut }: Props) {
             { key: 'list', label: 'List View' },
             { key: 'calendar', label: 'Calendar' },
             { key: 'schedule', label: 'Schedule' },
+            { key: 'engage', label: 'Engage' },
           ] as const).map(({ key, label }) => (
             <button
               key={key}
@@ -128,6 +130,9 @@ export function Dashboard({ userEmail, onSignOut }: Props) {
         )}
         {view === 'schedule' && (
           <ScheduleSettings schedule={schedule} onUpdate={updateSchedule} />
+        )}
+        {view === 'engage' && (
+          <EngagementDigest />
         )}
       </div>
     </div>
