@@ -183,6 +183,7 @@ import PhoneMockup from '../components/PhoneMockup.astro';
         </button>
       </form>
       <p id="signup-success" class="text-green text-sm hidden">You're in! We'll notify you at launch.</p>
+      <p id="signup-error" class="text-red text-sm hidden">Something went wrong. Try again or email departure@engagequalia.com</p>
       <p class="text-text-muted text-xs mb-12">No spam. Just a one-time launch notification.</p>
 
       <!-- Discord -->
@@ -203,19 +204,50 @@ import PhoneMockup from '../components/PhoneMockup.astro';
   </section>
 
   <script>
+    import { createClient } from '@supabase/supabase-js';
+
+    const supabase = createClient(
+      'https://xutgzsdqhacbkhmxsinr.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh1dGd6c2RxaGFjYmtobXhzaW5yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NzQ2MzcsImV4cCI6MjA5MDU1MDYzN30.nCNQvhfG1NzlWEO4UvwRHdhYRVvn2-YaAKrGR7FFUA8'
+    );
+
     const form = document.getElementById('signup-form');
     const success = document.getElementById('signup-success');
-    form?.addEventListener('submit', (e) => {
+    const button = form?.querySelector('button');
+    const errorEl = document.getElementById('signup-error');
+
+    form?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = (document.getElementById('email-input') as HTMLInputElement)?.value;
-      if (email) {
-        // Store in localStorage for now — will connect to Tally/Supabase later
-        const emails = JSON.parse(localStorage.getItem('departure_signups') || '[]');
-        emails.push({ email, date: new Date().toISOString() });
-        localStorage.setItem('departure_signups', JSON.stringify(emails));
-        form.classList.add('hidden');
-        success?.classList.remove('hidden');
+      const email = (document.getElementById('email-input') as HTMLInputElement)?.value?.trim();
+      if (!email) return;
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Saving...';
       }
+      errorEl?.classList.add('hidden');
+
+      const { error } = await supabase
+        .from('waitlist_signups')
+        .insert({ email, source: 'website' });
+
+      if (error) {
+        if (button) {
+          button.disabled = false;
+          button.textContent = 'Notify Me';
+        }
+        if (error.code === '23505') {
+          // Duplicate email — treat as success
+          form.classList.add('hidden');
+          success?.classList.remove('hidden');
+        } else {
+          errorEl?.classList.remove('hidden');
+        }
+        return;
+      }
+
+      form.classList.add('hidden');
+      success?.classList.remove('hidden');
     });
   </script>
 </Layout>
