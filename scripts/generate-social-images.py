@@ -251,54 +251,55 @@ def create_monster_card(slug, data, output_path):
     print(f"  Created: {os.path.basename(output_path)}")
 
 def create_screenshot_post(screenshot_name, output_name, title=None, subtitle=None):
-    """Create a branded screenshot post."""
+    """Create a branded screenshot post — screenshot fills most of the frame."""
     img = Image.new("RGB", (W, H), BG_COLOR)
     draw = ImageDraw.Draw(img)
 
-    font_brand = get_font(42)
-    font_sub = get_font(24)
-    font_url = get_font(18)
+    font_brand = get_font(36)
+    font_sub = get_font(22)
+    font_url = get_font(16)
 
-    # Load screenshot
+    # Reserve space for branding
+    top_margin = 75 if title else 20
+    bottom_margin = 50
+    available_h = H - top_margin - bottom_margin
+
+    # Load screenshot and scale to fill the available space
     ss_path = os.path.join(SCREENSHOTS_DIR, screenshot_name)
     if os.path.exists(ss_path):
         ss = Image.open(ss_path).convert("RGBA")
         sw, sh = ss.size
-        target_w = 400
-        scale = target_w / sw
-        target_h = int(sh * scale)
-        ss = ss.resize((target_w, target_h), Image.LANCZOS)
 
-        x = (W - target_w) // 2
-        y_offset = 80 if title else 30
-        y = (H - target_h) // 2 + y_offset
+        # Scale to fit width (with small padding) or height, whichever is constraining
+        max_w = W - 60  # 30px padding each side
+        scale_w = max_w / sw
+        scale_h = available_h / sh
+        scale = min(scale_w, scale_h)
+
+        new_w = int(sw * scale)
+        new_h = int(sh * scale)
+        ss = ss.resize((new_w, new_h), Image.LANCZOS)
+
+        # Center horizontally, position below title
+        x = (W - new_w) // 2
+        y = top_margin + (available_h - new_h) // 2
         img.paste(ss, (x, y), ss)
         draw = ImageDraw.Draw(img)
 
-    # Title
+    # Title — compact at top
     if title:
-        bbox = draw.textbbox((0, 0), title, font=font_brand)
+        title_text = f"{title}"
+        if subtitle:
+            title_text = f"{title} — {subtitle}"
+        bbox = draw.textbbox((0, 0), title_text, font=font_brand)
         tw = bbox[2] - bbox[0]
-        draw.text(((W - tw) // 2, 40), title, fill=PRIMARY, font=font_brand)
-
-    if subtitle:
-        bbox = draw.textbbox((0, 0), subtitle, font=font_sub)
-        sw = bbox[2] - bbox[0]
-        draw.text(((W - sw) // 2, 90), subtitle, fill=PRIMARY_LIGHT, font=font_sub)
+        draw.text(((W - tw) // 2, 20), title_text, fill=PRIMARY, font=font_brand)
 
     # Bottom URL
     url = "departure.engagequalia.com"
     bbox = draw.textbbox((0, 0), url, font=font_url)
     uw = bbox[2] - bbox[0]
-    draw.text(((W - uw) // 2, H - 45), url, fill=TEXT_MUTED, font=font_url)
-
-    # Corner decorations
-    corner_len = 40
-    for corners in [((30, 30), (1, 1)), ((W-30, 30), (-1, 1)), ((30, H-30), (1, -1)), ((W-30, H-30), (-1, -1))]:
-        cx, cy = corners[0]
-        dx, dy = corners[1]
-        draw.line([(cx, cy), (cx + corner_len * dx, cy)], fill=PRIMARY, width=3)
-        draw.line([(cx, cy), (cx, cy + corner_len * dy)], fill=PRIMARY, width=3)
+    draw.text(((W - uw) // 2, H - 30), url, fill=TEXT_MUTED, font=font_url)
 
     output_path = os.path.join(SOCIAL_DIR, output_name)
     img.save(output_path, "JPEG", quality=92)
