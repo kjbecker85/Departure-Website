@@ -12,7 +12,7 @@
 
 const path = require("path");
 const fs = require("fs");
-const { execSync } = require("child_process");
+const { execFileSync } = require("child_process");
 
 // Load env
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
@@ -36,13 +36,13 @@ function saveQueue(queue) {
 }
 
 function postToX(text, localImagePath) {
-  const args = ["node", path.resolve(__dirname, "post-x.cjs"), "--text", text];
+  const scriptArgs = ["--text", text];
   if (localImagePath && fs.existsSync(localImagePath)) {
-    args.push("--image", localImagePath);
+    scriptArgs.push("--image", localImagePath);
   }
   console.log("\n--- Posting to X ---");
   try {
-    const result = execSync(args.join(" "), {
+    const result = execFileSync("node", [path.resolve(__dirname, "post-x.cjs"), ...scriptArgs], {
       cwd: path.resolve(__dirname, ".."),
       encoding: "utf-8",
       timeout: 30000,
@@ -51,23 +51,19 @@ function postToX(text, localImagePath) {
     console.log(result);
     return true;
   } catch (err) {
-    console.error("X post failed:", err.message);
+    console.error("X post failed:", err.stderr || err.message);
     return false;
   }
 }
 
 function postToInstagram(text, imageUrl) {
-  const args = [
-    "node",
-    path.resolve(__dirname, "post-instagram.cjs"),
-    "--text",
-    text,
-    "--image",
-    imageUrl,
-  ];
   console.log("\n--- Posting to Instagram ---");
   try {
-    const result = execSync(args.join(" "), {
+    const result = execFileSync("node", [
+      path.resolve(__dirname, "post-instagram.cjs"),
+      "--text", text,
+      "--image", imageUrl,
+    ], {
       cwd: path.resolve(__dirname, ".."),
       encoding: "utf-8",
       timeout: 120000,
@@ -76,7 +72,7 @@ function postToInstagram(text, imageUrl) {
     console.log(result);
     return true;
   } catch (err) {
-    console.error("Instagram post failed:", err.message);
+    console.error("Instagram post failed:", err.stderr || err.message);
     return false;
   }
 }
