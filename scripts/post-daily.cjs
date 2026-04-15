@@ -72,6 +72,30 @@ function postToInstagram(text, imageUrl) {
   }
 }
 
+function postToFacebook(text, imageUrl) {
+  console.log("\n--- Posting to Facebook ---");
+  const scriptArgs = ["--text", text];
+  if (imageUrl) {
+    scriptArgs.push("--image", imageUrl);
+  }
+  try {
+    const result = execFileSync("node", [
+      path.resolve(__dirname, "post-facebook.cjs"),
+      ...scriptArgs,
+    ], {
+      cwd: path.resolve(__dirname, ".."),
+      encoding: "utf-8",
+      timeout: 30000,
+      env: process.env,
+    });
+    console.log(result);
+    return { success: true, output: result };
+  } catch (err) {
+    console.error("Facebook post failed:", err.stderr || err.message);
+    return { success: false, error: err.stderr || err.message };
+  }
+}
+
 async function main() {
   const args = process.argv.slice(2);
   const dryRun = args.includes("--dry-run");
@@ -154,6 +178,7 @@ async function main() {
 
   let xResult = { success: false };
   let igResult = { success: false };
+  let fbResult = { success: false };
 
   // Post to X (uses local image)
   if (post.x_text) {
@@ -165,8 +190,13 @@ async function main() {
     igResult = postToInstagram(post.ig_text, imageUrl);
   }
 
+  // Post to Facebook (uses public URL)
+  if (post.fb_text || post.ig_text) {
+    fbResult = postToFacebook(post.fb_text || post.ig_text, imageUrl);
+  }
+
   // Update Supabase
-  if (xResult.success || igResult.success) {
+  if (xResult.success || igResult.success || fbResult.success) {
     await supabase
       .from("social_posts")
       .update({
@@ -174,6 +204,7 @@ async function main() {
         posted_at: new Date().toISOString(),
         x_posted: xResult.success,
         ig_posted: igResult.success,
+        fb_posted: fbResult.success,
         updated_at: new Date().toISOString(),
       })
       .eq("id", post.id);
@@ -183,6 +214,7 @@ async function main() {
     const errorMsg = [
       xResult.error ? `X: ${xResult.error}` : null,
       igResult.error ? `IG: ${igResult.error}` : null,
+      fbResult.error ? `FB: ${fbResult.error}` : null,
     ].filter(Boolean).join('; ');
 
     await supabase
