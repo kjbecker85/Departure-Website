@@ -50,7 +50,9 @@ export function EngagementDigest() {
 
   const filtered = filter === 'all' ? targets : targets.filter((t) => t.status === filter);
   const newCount = targets.filter((t) => t.status === 'new').length;
-  const engagedCount = targets.filter((t) => t.status === 'engaged').length;
+  const today = new Date().toISOString().split('T')[0];
+  const engagedTodayCount = targets.filter((t) => t.status === 'engaged' && t.created_at?.startsWith(today)).length;
+  const totalEngagedCount = targets.filter((t) => t.status === 'engaged').length;
 
   if (loading) return <p style={{ color: '#94A3B8' }}>Loading engagement targets...</p>;
 
@@ -72,8 +74,12 @@ export function EngagementDigest() {
             <span style={{ color: '#94A3B8', fontSize: '12px', marginLeft: '6px' }}>new</span>
           </div>
           <div style={{ background: '#10B98122', borderRadius: '8px', padding: '8px 16px' }}>
-            <span style={{ color: '#10B981', fontSize: '20px', fontWeight: 700 }}>{engagedCount}</span>
-            <span style={{ color: '#94A3B8', fontSize: '12px', marginLeft: '6px' }}>engaged</span>
+            <span style={{ color: '#10B981', fontSize: '20px', fontWeight: 700 }}>{engagedTodayCount}</span>
+            <span style={{ color: '#94A3B8', fontSize: '12px', marginLeft: '6px' }}>engaged today</span>
+          </div>
+          <div style={{ background: '#06B6D422', borderRadius: '8px', padding: '8px 16px' }}>
+            <span style={{ color: '#06B6D4', fontSize: '20px', fontWeight: 700 }}>{totalEngagedCount}</span>
+            <span style={{ color: '#94A3B8', fontSize: '12px', marginLeft: '6px' }}>total engaged</span>
           </div>
         </div>
 
