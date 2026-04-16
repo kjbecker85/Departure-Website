@@ -251,55 +251,85 @@ def create_monster_card(slug, data, output_path):
     print(f"  Created: {os.path.basename(output_path)}")
 
 def create_screenshot_post(screenshot_name, output_name, title=None, subtitle=None):
-    """Create a branded screenshot post — screenshot fills most of the frame."""
+    """Create a branded screenshot post — crop and fill the frame, minimal blank space."""
     img = Image.new("RGB", (W, H), BG_COLOR)
     draw = ImageDraw.Draw(img)
 
-    font_brand = get_font(36)
-    font_sub = get_font(22)
-    font_url = get_font(16)
+    font_brand = get_font(32)
+    font_url = get_font(14)
 
-    # Reserve space for branding
-    top_margin = 75 if title else 20
-    bottom_margin = 50
-    available_h = H - top_margin - bottom_margin
+    top_margin = 55
+    bottom_margin = 35
 
-    # Load screenshot and scale to fill the available space
     ss_path = os.path.join(SCREENSHOTS_DIR, screenshot_name)
     if os.path.exists(ss_path):
         ss = Image.open(ss_path).convert("RGBA")
         sw, sh = ss.size
 
-        # Scale to fit width (with small padding) or height, whichever is constraining
-        max_w = W - 60  # 30px padding each side
-        scale_w = max_w / sw
-        scale_h = available_h / sh
-        scale = min(scale_w, scale_h)
+        # Crop the screenshot to remove status bar (top ~120px) and nav bar (bottom ~180px)
+        crop_top = int(sh * 0.05)   # Skip status bar
+        crop_bottom = int(sh * 0.07) # Skip bottom nav
+        ss = ss.crop((0, crop_top, sw, sh - crop_bottom))
+        sw, sh = ss.size
 
-        new_w = int(sw * scale)
+        # Scale to FILL the width, then crop height to fit
+        available_h = H - top_margin - bottom_margin
+        scale = W / sw  # Fill width completely
+        new_w = W
         new_h = int(sh * scale)
+
         ss = ss.resize((new_w, new_h), Image.LANCZOS)
 
-        # Center horizontally, position below title
-        x = (W - new_w) // 2
-        y = top_margin + (available_h - new_h) // 2
-        img.paste(ss, (x, y), ss)
+        # If taller than available space, crop from center
+        if new_h > available_h:
+            crop_y = (new_h - available_h) // 3  # Bias toward top (show the good stuff)
+            ss = ss.crop((0, crop_y, new_w, crop_y + available_h))
+
+        # Flatten alpha onto dark background
+        bg_layer = Image.new("RGB", ss.size, BG_COLOR)
+        if ss.mode == "RGBA":
+            bg_layer.paste(ss, (0, 0), ss)
+        else:
+            bg_layer.paste(ss, (0, 0))
+
+        img.paste(bg_layer, (0, top_margin))
         draw = ImageDraw.Draw(img)
 
-    # Title — compact at top
+    # Title overlay at top with dark gradient background
     if title:
-        title_text = f"{title}"
+        # Dark gradient at top for text readability
+        for y in range(top_margin + 40):
+            alpha = max(0, 1.0 - y / (top_margin + 40))
+            for x in range(W):
+                r, g, b = img.getpixel((x, y))
+                r = int(r * (1 - alpha * 0.8) + BG_COLOR[0] * alpha * 0.8)
+                g = int(g * (1 - alpha * 0.8) + BG_COLOR[1] * alpha * 0.8)
+                b = int(b * (1 - alpha * 0.8) + BG_COLOR[2] * alpha * 0.8)
+                img.putpixel((x, y), (r, g, b))
+        draw = ImageDraw.Draw(img)
+
+        title_text = title
         if subtitle:
-            title_text = f"{title} — {subtitle}"
+            title_text = f"{title}. {subtitle}"
         bbox = draw.textbbox((0, 0), title_text, font=font_brand)
         tw = bbox[2] - bbox[0]
-        draw.text(((W - tw) // 2, 20), title_text, fill=PRIMARY, font=font_brand)
+        draw.text(((W - tw) // 2, 12), title_text, fill=PRIMARY, font=font_brand)
 
-    # Bottom URL
+    # Bottom dark gradient + URL
+    for y in range(H - bottom_margin - 20, H):
+        alpha = min(1.0, (y - (H - bottom_margin - 20)) / (bottom_margin + 20))
+        for x in range(W):
+            r, g, b = img.getpixel((x, y))
+            r = int(r * (1 - alpha * 0.8) + BG_COLOR[0] * alpha * 0.8)
+            g = int(g * (1 - alpha * 0.8) + BG_COLOR[1] * alpha * 0.8)
+            b = int(b * (1 - alpha * 0.8) + BG_COLOR[2] * alpha * 0.8)
+            img.putpixel((x, y), (r, g, b))
+    draw = ImageDraw.Draw(img)
+
     url = "departure.engagequalia.com"
     bbox = draw.textbbox((0, 0), url, font=font_url)
     uw = bbox[2] - bbox[0]
-    draw.text(((W - uw) // 2, H - 30), url, fill=TEXT_MUTED, font=font_url)
+    draw.text(((W - uw) // 2, H - 22), url, fill=TEXT_MUTED, font=font_url)
 
     output_path = os.path.join(SOCIAL_DIR, output_name)
     img.save(output_path, "JPEG", quality=92)

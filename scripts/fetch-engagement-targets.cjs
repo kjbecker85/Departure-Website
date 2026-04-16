@@ -22,16 +22,23 @@ const supabase = createClient(
 // Exclude our own accounts from results
 const EXCLUDED_ACCOUNTS = ["DepartureFit", "departure_fitness"];
 
-// Search queries — rotate through these to find engagement opportunities
+// Search queries — broad pool, rotate 4 per run
 const SEARCH_QUERIES = [
   '"fitness app" -from:DepartureFit -is:retweet lang:en',
   '"workout tracker" -from:DepartureFit -is:retweet lang:en',
   '"fitness rpg" OR "gamified fitness" -from:DepartureFit -is:retweet lang:en',
-  '"workout motivation" looking for -from:DepartureFit -is:retweet lang:en',
-  '"gym app" recommend -from:DepartureFit -is:retweet lang:en',
+  '"gym app" -from:DepartureFit -is:retweet lang:en',
   '"fitness game" -from:DepartureFit -is:retweet lang:en',
   '"workout app" -from:DepartureFit -is:retweet lang:en',
-  '"level up" gym OR fitness OR workout -from:DepartureFit -is:retweet lang:en',
+  'fitness motivation gym gains -from:DepartureFit -is:retweet lang:en',
+  'new fitness app launch -from:DepartureFit -is:retweet lang:en',
+  'best gym app 2026 -from:DepartureFit -is:retweet lang:en',
+  'workout challenge accountability -from:DepartureFit -is:retweet lang:en',
+  'gym buddy partner workout -from:DepartureFit -is:retweet lang:en',
+  'fitness tech wearable app -from:DepartureFit -is:retweet lang:en',
+  'personal record PR gym -from:DepartureFit -is:retweet lang:en',
+  'bodybuilding app track -from:DepartureFit -is:retweet lang:en',
+  'CrossFit WOD app -from:DepartureFit -is:retweet lang:en',
 ];
 
 async function searchTweets(query) {
@@ -239,9 +246,9 @@ function generateReply(tweetText, query, authorUsername) {
 async function main() {
   console.log("Fetching engagement targets...\n");
 
-  // Pick 3 random queries to avoid rate limits
+  // Pick 4 random queries to maximize results
   const shuffled = SEARCH_QUERIES.sort(() => Math.random() - 0.5);
-  const queries = shuffled.slice(0, 3);
+  const queries = shuffled.slice(0, 4);
 
   let allTweets = [];
   for (const query of queries) {
@@ -258,6 +265,11 @@ async function main() {
     seen.add(t.tweet_id);
     return true;
   });
+
+  // Filter out low-follower accounts (minimum 100 followers)
+  const MIN_FOLLOWERS = 100;
+  allTweets = allTweets.filter((t) => t.author_followers >= MIN_FOLLOWERS);
+  console.log(`After follower filter (${MIN_FOLLOWERS}+): ${allTweets.length} tweets`);
 
   // Sort by engagement potential (followers + likes)
   allTweets.sort((a, b) => (b.author_followers + b.likes * 10) - (a.author_followers + a.likes * 10));
