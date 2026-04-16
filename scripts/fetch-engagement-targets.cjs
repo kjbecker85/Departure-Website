@@ -19,16 +19,19 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+// Exclude our own accounts from results
+const EXCLUDED_ACCOUNTS = ["DepartureFit", "departure_fitness"];
+
 // Search queries — rotate through these to find engagement opportunities
 const SEARCH_QUERIES = [
-  '"fitness app" -is:retweet lang:en',
-  '"workout tracker" -is:retweet lang:en',
-  '"fitness rpg" OR "gamified fitness" -is:retweet lang:en',
-  '"workout motivation" looking for -is:retweet lang:en',
-  '"gym app" recommend -is:retweet lang:en',
-  '"fitness game" -is:retweet lang:en',
-  '"workout app" -is:retweet lang:en',
-  '"level up" gym OR fitness OR workout -is:retweet lang:en',
+  '"fitness app" -from:DepartureFit -is:retweet lang:en',
+  '"workout tracker" -from:DepartureFit -is:retweet lang:en',
+  '"fitness rpg" OR "gamified fitness" -from:DepartureFit -is:retweet lang:en',
+  '"workout motivation" looking for -from:DepartureFit -is:retweet lang:en',
+  '"gym app" recommend -from:DepartureFit -is:retweet lang:en',
+  '"fitness game" -from:DepartureFit -is:retweet lang:en',
+  '"workout app" -from:DepartureFit -is:retweet lang:en',
+  '"level up" gym OR fitness OR workout -from:DepartureFit -is:retweet lang:en',
 ];
 
 async function searchTweets(query) {
@@ -265,8 +268,11 @@ async function main() {
     .select("tweet_id");
   const previousIds = new Set((previousTargets || []).map((t) => t.tweet_id));
 
-  // Filter out previously seen tweets
-  allTweets = allTweets.filter((t) => !previousIds.has(t.tweet_id));
+  // Filter out previously seen tweets and our own accounts
+  allTweets = allTweets.filter((t) =>
+    !previousIds.has(t.tweet_id) &&
+    !EXCLUDED_ACCOUNTS.some((a) => a.toLowerCase() === t.author_username.toLowerCase())
+  );
   console.log(`After dedup with history: ${allTweets.length} new tweets`);
 
   // Take top 15
