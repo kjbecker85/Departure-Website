@@ -259,16 +259,26 @@ async function main() {
   // Sort by engagement potential (followers + likes)
   allTweets.sort((a, b) => (b.author_followers + b.likes * 10) - (a.author_followers + a.likes * 10));
 
+  // Get previously seen tweet IDs (engaged, skipped, or already shown)
+  const { data: previousTargets } = await supabase
+    .from("engagement_targets")
+    .select("tweet_id");
+  const previousIds = new Set((previousTargets || []).map((t) => t.tweet_id));
+
+  // Filter out previously seen tweets
+  allTweets = allTweets.filter((t) => !previousIds.has(t.tweet_id));
+  console.log(`After dedup with history: ${allTweets.length} new tweets`);
+
   // Take top 15
   const top = allTweets.slice(0, 15);
 
   if (top.length === 0) {
-    console.log("\nNo tweets found. API might be rate-limited.");
+    console.log("\nNo new tweets found. All results were previously shown.");
     return;
   }
 
-  // Clear old targets and insert new ones
-  await supabase.from("engagement_targets").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+  // Delete old "new" targets only (keep engaged/skipped as history)
+  await supabase.from("engagement_targets").delete().eq("status", "new");
 
   const rows = top.map((t) => ({
     tweet_id: t.tweet_id,

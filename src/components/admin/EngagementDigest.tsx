@@ -229,6 +229,16 @@ export function EngagementDigest() {
                       Mark Engaged
                     </button>
                     <button
+                      onClick={() => markAs(target.id, 'engaged')}
+                      style={{
+                        padding: '6px 14px', background: '#F59E0B22', border: '1px solid #F59E0B44',
+                        borderRadius: '6px', color: '#F59E0B', fontSize: '12px', fontWeight: 600,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Already Replied
+                    </button>
+                    <button
                       onClick={() => markAs(target.id, 'skipped')}
                       style={{
                         padding: '6px 14px', background: '#252540', border: 'none',
