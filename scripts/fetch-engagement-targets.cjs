@@ -119,8 +119,8 @@ const REPLY_IMAGES = {
     "social/equipment.jpg", "social/team-journey.jpg",
   ],
   team: [
-    "social/team-journey.jpg", "social/battle-results.jpg", "social/monster-kraken.jpg",
-    "social/monster-lich-king.jpg", "social/monster-orc-berserker.jpg",
+    "social/team-walkers.jpg", "social/team-walkers.jpg", "social/team-walkers.jpg",
+    "social/team-journey.jpg", "social/battle-results.jpg",
   ],
   loot: [
     "social/equipment.jpg", "social/shop-armory.jpg", "social/premium-store.jpg",
