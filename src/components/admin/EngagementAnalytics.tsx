@@ -14,19 +14,38 @@ interface Target {
   created_at: string;
 }
 
+interface PostMetrics {
+  id: string;
+  scheduled_date: string;
+  post_type: string;
+  x_likes: number;
+  x_retweets: number;
+  x_replies: number;
+  ig_likes: number;
+  ig_comments: number;
+  fb_likes: number;
+  fb_comments: number;
+  fb_shares: number;
+  x_post_id: string | null;
+  ig_post_id: string | null;
+  fb_post_id: string | null;
+  image_path: string | null;
+}
+
 export function EngagementAnalytics() {
   const [targets, setTargets] = useState<Target[]>([]);
+  const [postMetrics, setPostMetrics] = useState<PostMetrics[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase
-      .from('engagement_targets')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .then(({ data }) => {
-        if (data) setTargets(data);
-        setLoading(false);
-      });
+    Promise.all([
+      supabase.from('engagement_targets').select('*').order('created_at', { ascending: false }),
+      supabase.from('social_posts').select('id, scheduled_date, post_type, x_likes, x_retweets, x_replies, ig_likes, ig_comments, fb_likes, fb_comments, fb_shares, x_post_id, ig_post_id, fb_post_id, image_path').eq('status', 'posted').order('scheduled_date', { ascending: false }),
+    ]).then(([targetRes, metricsRes]) => {
+      if (targetRes.data) setTargets(targetRes.data);
+      if (metricsRes.data) setPostMetrics(metricsRes.data);
+      setLoading(false);
+    });
   }, []);
 
   if (loading) return <p style={{ color: '#94A3B8' }}>Loading analytics...</p>;
@@ -92,7 +111,128 @@ export function EngagementAnalytics() {
 
   return (
     <div>
-      {/* Summary cards */}
+      {/* Post Performance by Platform */}
+      {postMetrics.length > 0 && (() => {
+        const xTotal = { likes: 0, retweets: 0, replies: 0 };
+        const igTotal = { likes: 0, comments: 0 };
+        const fbTotal = { likes: 0, comments: 0, shares: 0 };
+        for (const p of postMetrics) {
+          xTotal.likes += p.x_likes || 0;
+          xTotal.retweets += p.x_retweets || 0;
+          xTotal.replies += p.x_replies || 0;
+          igTotal.likes += p.ig_likes || 0;
+          igTotal.comments += p.ig_comments || 0;
+          fbTotal.likes += p.fb_likes || 0;
+          fbTotal.comments += p.fb_comments || 0;
+          fbTotal.shares += p.fb_shares || 0;
+        }
+        const allLikes = xTotal.likes + igTotal.likes + fbTotal.likes;
+        const allComments = xTotal.replies + igTotal.comments + fbTotal.comments;
+
+        return (
+          <div style={{ marginBottom: '28px' }}>
+            <h4 style={{ color: '#F1F5F9', fontSize: '16px', fontWeight: 600, margin: '0 0 16px' }}>
+              Post Performance by Platform
+            </h4>
+
+            {/* Total engagement summary */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '16px' }}>
+              <div style={{ background: '#1A1A2E', border: '1px solid #252540', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
+                <p style={{ color: '#EF4444', fontSize: '24px', fontWeight: 700, margin: 0 }}>❤️ {allLikes}</p>
+                <p style={{ color: '#94A3B8', fontSize: '11px', margin: '4px 0 0', textTransform: 'uppercase' }}>Total Likes</p>
+              </div>
+              <div style={{ background: '#1A1A2E', border: '1px solid #252540', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
+                <p style={{ color: '#06B6D4', fontSize: '24px', fontWeight: 700, margin: 0 }}>💬 {allComments}</p>
+                <p style={{ color: '#94A3B8', fontSize: '11px', margin: '4px 0 0', textTransform: 'uppercase' }}>Total Comments</p>
+              </div>
+              <div style={{ background: '#1A1A2E', border: '1px solid #252540', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
+                <p style={{ color: '#10B981', fontSize: '24px', fontWeight: 700, margin: 0 }}>📊 {postMetrics.length}</p>
+                <p style={{ color: '#94A3B8', fontSize: '11px', margin: '4px 0 0', textTransform: 'uppercase' }}>Posts Published</p>
+              </div>
+            </div>
+
+            {/* Platform breakdown */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '16px' }}>
+              {/* X */}
+              <div style={{ background: '#1A1A2E', border: '1px solid #252540', borderRadius: '12px', padding: '16px' }}>
+                <h5 style={{ color: '#F1F5F9', fontSize: '14px', fontWeight: 600, margin: '0 0 12px' }}>𝕏 Twitter</h5>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#94A3B8', fontSize: '12px' }}>Likes</span>
+                    <span style={{ color: '#EF4444', fontSize: '13px', fontWeight: 600 }}>{xTotal.likes}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#94A3B8', fontSize: '12px' }}>Retweets</span>
+                    <span style={{ color: '#10B981', fontSize: '13px', fontWeight: 600 }}>{xTotal.retweets}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#94A3B8', fontSize: '12px' }}>Replies</span>
+                    <span style={{ color: '#06B6D4', fontSize: '13px', fontWeight: 600 }}>{xTotal.replies}</span>
+                  </div>
+                </div>
+              </div>
+              {/* Instagram */}
+              <div style={{ background: '#1A1A2E', border: '1px solid #252540', borderRadius: '12px', padding: '16px' }}>
+                <h5 style={{ color: '#F1F5F9', fontSize: '14px', fontWeight: 600, margin: '0 0 12px' }}>📸 Instagram</h5>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#94A3B8', fontSize: '12px' }}>Likes</span>
+                    <span style={{ color: '#EF4444', fontSize: '13px', fontWeight: 600 }}>{igTotal.likes}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#94A3B8', fontSize: '12px' }}>Comments</span>
+                    <span style={{ color: '#06B6D4', fontSize: '13px', fontWeight: 600 }}>{igTotal.comments}</span>
+                  </div>
+                </div>
+              </div>
+              {/* Facebook */}
+              <div style={{ background: '#1A1A2E', border: '1px solid #252540', borderRadius: '12px', padding: '16px' }}>
+                <h5 style={{ color: '#F1F5F9', fontSize: '14px', fontWeight: 600, margin: '0 0 12px' }}>📘 Facebook</h5>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#94A3B8', fontSize: '12px' }}>Likes</span>
+                    <span style={{ color: '#EF4444', fontSize: '13px', fontWeight: 600 }}>{fbTotal.likes}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#94A3B8', fontSize: '12px' }}>Comments</span>
+                    <span style={{ color: '#06B6D4', fontSize: '13px', fontWeight: 600 }}>{fbTotal.comments}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#94A3B8', fontSize: '12px' }}>Shares</span>
+                    <span style={{ color: '#7C3AED', fontSize: '13px', fontWeight: 600 }}>{fbTotal.shares}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Per-post metrics table */}
+            <div style={{ background: '#1A1A2E', border: '1px solid #252540', borderRadius: '12px', padding: '16px' }}>
+              <h5 style={{ color: '#F1F5F9', fontSize: '14px', fontWeight: 600, margin: '0 0 12px' }}>Per Post Breakdown</h5>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {postMetrics.map((p) => (
+                  <div key={p.id} style={{
+                    display: 'flex', alignItems: 'center', gap: '12px',
+                    padding: '8px 10px', borderRadius: '6px', background: '#252540',
+                  }}>
+                    {p.image_path && (
+                      <img src={`https://departure.engagequalia.com/${p.image_path}`} alt="" style={{ width: '36px', height: '45px', borderRadius: '4px', objectFit: 'cover' }} />
+                    )}
+                    <span style={{ color: '#94A3B8', fontSize: '11px', width: '70px', flexShrink: 0 }}>{p.scheduled_date}</span>
+                    <span style={{ color: '#F1F5F9', fontSize: '12px', width: '70px', flexShrink: 0, textTransform: 'capitalize' }}>{p.post_type}</span>
+                    <div style={{ flex: 1, display: 'flex', gap: '16px', justifyContent: 'flex-end' }}>
+                      <span style={{ color: '#94A3B8', fontSize: '11px' }}>𝕏 {p.x_likes}❤ {p.x_retweets}🔁 {p.x_replies}💬</span>
+                      <span style={{ color: '#94A3B8', fontSize: '11px' }}>📸 {p.ig_likes}❤ {p.ig_comments}💬</span>
+                      <span style={{ color: '#94A3B8', fontSize: '11px' }}>📘 {p.fb_likes}❤ {p.fb_comments}💬 {p.fb_shares}↗</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* Outreach Summary cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '28px' }}>
         {[
           { label: 'Total Engaged', value: engaged.length, color: '#10B981' },

@@ -195,6 +195,17 @@ async function main() {
     fbResult = postToFacebook(post.fb_text || post.ig_text, imageUrl);
   }
 
+  // Parse post IDs from output
+  function extractId(output, pattern) {
+    if (!output) return null;
+    const match = output.match(pattern);
+    return match ? match[1] : null;
+  }
+
+  const xPostId = extractId(xResult.output, /ID:\s*(\d+)/);
+  const igPostId = extractId(igResult.output, /Media ID:\s*(\d+)/);
+  const fbPostId = extractId(fbResult.output, /Post ID:\s*(\S+)/);
+
   // Update Supabase
   if (xResult.success || igResult.success || fbResult.success) {
     await supabase
@@ -205,6 +216,9 @@ async function main() {
         x_posted: xResult.success,
         ig_posted: igResult.success,
         fb_posted: fbResult.success,
+        x_post_id: xPostId,
+        ig_post_id: igPostId,
+        fb_post_id: fbPostId,
         updated_at: new Date().toISOString(),
       })
       .eq("id", post.id);
