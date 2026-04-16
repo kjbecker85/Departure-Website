@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { EngagementAnalytics } from './EngagementAnalytics';
 
 interface Target {
   id: string;
@@ -30,6 +31,7 @@ export function EngagementDigest() {
   const [targets, setTargets] = useState<Target[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'new' | 'engaged' | 'skipped'>('new');
+  const [subView, setSubView] = useState<'digest' | 'analytics'>('digest');
 
   async function fetchTargets() {
     const { data } = await supabase
@@ -58,13 +60,37 @@ export function EngagementDigest() {
 
   return (
     <div>
+      {/* Sub-tabs */}
+      <div style={{ display: 'flex', gap: '4px', marginBottom: '20px' }}>
+        {([
+          { key: 'digest' as const, label: 'Daily Digest', icon: '📬' },
+          { key: 'analytics' as const, label: 'Analytics', icon: '📊' },
+        ]).map(({ key, label, icon }) => (
+          <button
+            key={key}
+            onClick={() => setSubView(key)}
+            style={{
+              padding: '8px 18px', background: subView === key ? '#7C3AED' : '#252540',
+              border: 'none', borderRadius: '8px',
+              color: subView === key ? '#fff' : '#94A3B8',
+              fontSize: '13px', fontWeight: 600, cursor: 'pointer',
+            }}
+          >
+            {icon} {label}
+          </button>
+        ))}
+      </div>
+
+      {subView === 'analytics' && <EngagementAnalytics />}
+
+      {subView === 'digest' && <div>
       <div style={{ marginBottom: '20px' }}>
         <h3 style={{ color: '#F1F5F9', fontSize: '18px', fontWeight: 600, margin: '0 0 4px' }}>
           Daily Engagement Digest
         </h3>
         <p style={{ color: '#94A3B8', fontSize: '13px', margin: '0 0 16px' }}>
           People talking about fitness apps, RPGs, and gamified workouts. Reply to these for organic growth.
-          Spend 5 minutes — it makes a difference.
+          Spend 5 minutes.
         </p>
 
         {/* Stats */}
@@ -267,6 +293,7 @@ export function EngagementDigest() {
           </p>
         )}
       </div>
+    </div>}
     </div>
   );
 }
