@@ -216,8 +216,8 @@ async function main() {
     return true;
   });
 
-  // Filter out very low-follower accounts (minimum 50 followers)
-  const MIN_FOLLOWERS = 50;
+  // Only suggest accounts with real audiences (minimum 500 followers)
+  const MIN_FOLLOWERS = 500;
   allTweets = allTweets.filter((t) => t.author_followers >= MIN_FOLLOWERS);
   console.log(`After follower filter (${MIN_FOLLOWERS}+): ${allTweets.length} tweets`);
 
@@ -248,24 +248,36 @@ async function main() {
   // Delete old "new" targets only (keep engaged/skipped as history)
   await supabase.from("engagement_targets").delete().eq("status", "new");
 
-  const rows = top.map((t) => ({
-    tweet_id: t.tweet_id,
-    tweet_text: t.text.substring(0, 500),
-    author_username: t.author_username,
-    author_name: t.author_name,
-    author_followers: t.author_followers,
-    likes: t.likes,
-    retweets: t.retweets,
-    replies: t.replies,
-    tweet_url: t.tweet_url,
-    search_query: t.search_query,
-    tweeted_at: t.created_at,
-    status: "new",
-    ...(() => {
-      const { reply, image } = generateReply(t.text, t.search_query, t.author_username);
-      return { suggested_reply: reply, suggested_image: image };
-    })(),
-  }));
+  // Generate replies with image dedup (no two targets get the same image in one batch)
+  const usedImages = new Set();
+  const rows = top.map((t) => {
+    let reply, image;
+    // Try up to 5 times to get a unique image
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const result = generateReply(t.text, t.search_query, t.author_username);
+      reply = result.reply;
+      image = result.image;
+      if (!usedImages.has(image)) break;
+    }
+    usedImages.add(image);
+
+    return {
+      tweet_id: t.tweet_id,
+      tweet_text: t.text.substring(0, 500),
+      author_username: t.author_username,
+      author_name: t.author_name,
+      author_followers: t.author_followers,
+      likes: t.likes,
+      retweets: t.retweets,
+      replies: t.replies,
+      tweet_url: t.tweet_url,
+      search_query: t.search_query,
+      tweeted_at: t.created_at,
+      status: "new",
+      suggested_reply: reply,
+      suggested_image: image,
+    };
+  });
 
   const { data, error } = await supabase.from("engagement_targets").insert(rows);
 
