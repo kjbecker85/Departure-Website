@@ -32,6 +32,7 @@ export function EngagementDigest() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'new' | 'engaged' | 'skipped'>('new');
   const [subView, setSubView] = useState<'digest' | 'analytics'>('digest');
+  const [refreshing, setRefreshing] = useState(false);
 
   async function fetchTargets() {
     const { data } = await supabase
@@ -56,12 +57,51 @@ export function EngagementDigest() {
   const engagedTodayCount = targets.filter((t) => t.status === 'engaged' && t.created_at?.startsWith(today)).length;
   const totalEngagedCount = targets.filter((t) => t.status === 'engaged').length;
 
+  async function refreshDigest() {
+    setRefreshing(true);
+    try {
+      const { data: config } = await supabase
+        .from('posting_schedule')
+        .select('github_token')
+        .eq('id', 1)
+        .single();
+
+      const token = (config as any)?.github_token;
+      if (!token) {
+        alert('GitHub token not configured. Add it in Settings.');
+        setRefreshing(false);
+        return;
+      }
+
+      const res = await fetch(
+        'https://api.github.com/repos/kjbecker85/Departure-Website/actions/workflows/engagement-digest.yml/dispatches',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/vnd.github.v3+json',
+          },
+          body: JSON.stringify({ ref: 'main' }),
+        }
+      );
+
+      if (res.ok) {
+        alert('Digest refresh triggered. New targets will appear in about 1 minute. Refresh the page after.');
+      } else {
+        alert('Failed to trigger refresh. Check GitHub token.');
+      }
+    } catch (err) {
+      alert('Error triggering refresh.');
+    }
+    setRefreshing(false);
+  }
+
   if (loading) return <p style={{ color: '#94A3B8' }}>Loading engagement targets...</p>;
 
   return (
     <div>
-      {/* Sub-tabs */}
-      <div style={{ display: 'flex', gap: '4px', marginBottom: '20px' }}>
+      {/* Sub-tabs + refresh */}
+      <div style={{ display: 'flex', gap: '4px', marginBottom: '20px', alignItems: 'center' }}>
         {([
           { key: 'digest' as const, label: 'Daily Digest', icon: '📬' },
           { key: 'analytics' as const, label: 'Analytics', icon: '📊' },
@@ -79,6 +119,18 @@ export function EngagementDigest() {
             {icon} {label}
           </button>
         ))}
+        <div style={{ flex: 1 }} />
+        <button
+          onClick={refreshDigest}
+          disabled={refreshing}
+          style={{
+            padding: '8px 18px', background: '#10B98122', border: '1px solid #10B98144',
+            borderRadius: '8px', color: '#10B981',
+            fontSize: '13px', fontWeight: 600, cursor: 'pointer',
+          }}
+        >
+          {refreshing ? 'Refreshing...' : '🔄 Refresh Digest'}
+        </button>
       </div>
 
       {subView === 'analytics' && <EngagementAnalytics />}
