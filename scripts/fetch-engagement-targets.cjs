@@ -91,51 +91,82 @@ async function searchTweets(query) {
   }
 }
 
-// Full image pool by category. Every social image is used somewhere.
+// Full image pool by category. Pulls from both social/ and social_2/ (latest app screenshots).
 const REPLY_IMAGES = {
   recommendation: [
-    "social/home-screen.jpg", "social/workout-log.jpg", "social/exercise-picker.jpg",
-    "social/training-log.jpg", "social/onboarding.jpg", "social/challenges.jpg",
+    "social_2/new-workout-back-and-bis-exercise-list.png",
+    "social_2/training-log-heatmap-calendar.png",
+    "social_2/workout-details-back-and-bis-planned.png",
+    "social_2/how-scoring-works-xp-rules.png",
+    "social_2/equipment-arsenal-warrior-loadout.png",
+    "social/home-screen.jpg",
   ],
   gamified: [
-    "social/monster-lich-king.jpg", "social/monster-kraken.jpg", "social/monster-orc-berserker.jpg",
-    "social/monster-frost-giant.jpg", "social/monster-dark-sorcerer.jpg", "social/monster-bone-colossus.jpg",
-    "social/monster-minotaur-champion.jpg", "social/team-journey.jpg", "social/ranks.jpg",
+    "social_2/team-warpath-journey-map-goblin-horde.png",
+    "social_2/battle-victory-dark-sorcerer-rewards.png",
+    "social_2/battle-victory-orc-berserker-rewards.png",
+    "social_2/journey-map-tier-2-rabid-goblin-horde.png",
+    "social_2/monster-art-gear-grinder-fullscreen.png",
+    "social_2/training-grounds-challenge-buffs-overview.png",
+    "social/monster-lich-king.jpg", "social/monster-kraken.jpg",
   ],
   motivation: [
-    "social/transformation.jpg", "social/home-warlord.jpg", "social/ranks.jpg",
-    "social/monster-dire-wolf-pack.jpg", "social/monster-orc-warchief.jpg", "social/challenges.jpg",
+    "social_2/battle-history-record-wins-losses.png",
+    "social_2/strength-challenge-spartan-courtyard-daily-weekly.png",
+    "social_2/resilience-challenge-storm-peak-daily-weekly.png",
+    "social_2/training-log-heatmap-calendar.png",
+    "social/transformation.jpg", "social/home-warlord.jpg",
   ],
   app: [
-    "social/home-screen.jpg", "social/exercise-picker.jpg", "social/training-log.jpg",
-    "social/workout-log.jpg", "social/onboarding.jpg", "social/anti-cheat.jpg",
-    "social/challenges.jpg",
+    "social_2/new-workout-back-and-bis-exercise-list.png",
+    "social_2/training-log-heatmap-calendar.png",
+    "social_2/workout-details-back-and-bis-planned.png",
+    "social_2/how-scoring-works-xp-rules.png",
+    "social_2/settings-profile-privacy-discord.png",
+    "social_2/workout-reminder-notifications-settings.png",
+    "social/home-screen.jpg",
   ],
   fitness_game: [
-    "social/monster-goblin-scout.jpg", "social/monster-skeleton-warrior.jpg",
-    "social/monster-dire-wolf-pack.jpg", "social/monster-goblin-shaman.jpg",
-    "social/monster-forest-spider.jpg", "social/monster-stone-golem.jpg",
-    "social/monster-swamp-rat.jpg", "social/battle-results.jpg",
-    "social/equipment.jpg", "social/team-journey.jpg",
+    "social_2/team-warpath-journey-map-goblin-horde.png",
+    "social_2/battle-victory-dark-sorcerer-rewards.png",
+    "social_2/monster-ambush-clockwork-syndicate-fight.png",
+    "social_2/monster-art-gear-grinder-fullscreen.png",
+    "social_2/journey-map-treasure-chest-undead-legion.png",
+    "social_2/equipment-arsenal-warrior-loadout.png",
+    "social/monster-lich-king.jpg", "social/monster-kraken.jpg",
   ],
   team: [
-    "social/team-walkers.jpg", "social/team-walkers.jpg", "social/team-walkers.jpg",
-    "social/team-journey.jpg", "social/battle-results.jpg",
+    "social/team-walkers.jpg",
+    "social_2/team-overview-walkers-stats-challenge.png",
+    "social_2/team-combat-stats-radar-chart.png",
+    "social_2/team-gallery-battle-scenes.png",
+    "social_2/arena-teams-tab-walkers-team.png",
   ],
   loot: [
-    "social/equipment.jpg", "social/shop-armory.jpg", "social/premium-store.jpg",
-    "social/monster-minotaur-champion.jpg",
+    "social_2/equipment-arsenal-warrior-loadout.png",
+    "social_2/shop-swords-epic-legendary.png",
+    "social_2/shop-capes-rare-epic-legendary.png",
+    "social_2/shop-body-armor-common-to-rare.png",
+    "social_2/shop-gauntlets-epic-legendary.png",
+    "social_2/shop-rings-rare-epic-legendary.png",
+    "social_2/shop-two-handed-weapons-rare-epic-legendary.png",
+    "social_2/shop-amulets-common-to-epic.png",
   ],
   generic: [
-    "social/home-screen.jpg", "social/monster-lich-king.jpg", "social/team-journey.jpg",
-    "social/transformation.jpg", "social/monster-kraken.jpg", "social/ranks.jpg",
-    "social/monster-frost-giant.jpg", "social/exercise-picker.jpg", "social/battle-results.jpg",
-    "social/equipment.jpg", "social/home-warlord.jpg", "social/monster-orc-berserker.jpg",
+    "social_2/team-warpath-journey-map-goblin-horde.png",
+    "social_2/battle-victory-dark-sorcerer-rewards.png",
+    "social_2/equipment-arsenal-warrior-loadout.png",
+    "social_2/training-log-heatmap-calendar.png",
+    "social_2/new-workout-back-and-bis-exercise-list.png",
+    "social_2/arena-leaderboard-global-rankings.png",
+    "social_2/premium-store-bundles-featured.png",
+    "social/home-screen.jpg", "social/monster-lich-king.jpg",
+    "social/transformation.jpg", "social/monster-kraken.jpg",
   ],
 };
 
-// ~75% of replies get an image
-const IMAGE_PROBABILITY = 0.75;
+// Every reply gets an image
+const IMAGE_PROBABILITY = 1.0;
 
 /**
  * Generate a contextual reply suggestion based on tweet content.
