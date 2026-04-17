@@ -196,9 +196,9 @@ function generateReply(tweetText, query, authorUsername) {
 async function main() {
   console.log("Fetching engagement targets...\n");
 
-  // Pick 4 random queries to maximize results
+  // Pick 5 random queries to maximize results
   const shuffled = SEARCH_QUERIES.sort(() => Math.random() - 0.5);
-  const queries = shuffled.slice(0, 4);
+  const queries = shuffled.slice(0, 5);
 
   let allTweets = [];
   for (const query of queries) {
@@ -216,8 +216,8 @@ async function main() {
     return true;
   });
 
-  // Filter out low-follower accounts (minimum 100 followers)
-  const MIN_FOLLOWERS = 100;
+  // Filter out very low-follower accounts (minimum 50 followers)
+  const MIN_FOLLOWERS = 50;
   allTweets = allTweets.filter((t) => t.author_followers >= MIN_FOLLOWERS);
   console.log(`After follower filter (${MIN_FOLLOWERS}+): ${allTweets.length} tweets`);
 
