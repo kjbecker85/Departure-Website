@@ -234,22 +234,33 @@ import PhoneMockup from '../components/PhoneMockup.astro';
       }
       errorEl?.classList.add('hidden');
 
-      const { error } = await supabase
-        .from('waitlist_signups')
-        .insert({ email, source: 'website' });
+      try {
+        const { error } = await supabase
+          .from('waitlist_signups')
+          .insert({ email, source: 'website' });
 
-      if (error) {
+        if (error) {
+          if (button) {
+            button.disabled = false;
+            button.textContent = 'Notify Me';
+          }
+          // Treat duplicate/conflict as success
+          if (error.code === '23505' || error.message?.includes('duplicate') || error.message?.includes('unique')) {
+            form.classList.add('hidden');
+            success?.classList.remove('hidden');
+          } else {
+            console.error('Waitlist signup error:', JSON.stringify(error));
+            errorEl?.classList.remove('hidden');
+          }
+          return;
+        }
+      } catch (err) {
+        console.error('Waitlist signup exception:', err);
         if (button) {
           button.disabled = false;
           button.textContent = 'Notify Me';
         }
-        if (error.code === '23505') {
-          // Duplicate email — treat as success
-          form.classList.add('hidden');
-          success?.classList.remove('hidden');
-        } else {
-          errorEl?.classList.remove('hidden');
-        }
+        errorEl?.classList.remove('hidden');
         return;
       }
 
