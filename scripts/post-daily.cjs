@@ -170,6 +170,42 @@ async function main() {
     ? path.resolve(__dirname, "..", "public", post.image_path)
     : null;
 
+  // Preflight: verify the image file exists in the repo. If not, the URL will
+  // 404 (or worse, serve an HTML page that IG/FB rejects as "not a photo").
+  // Rather than post to X with a broken IG/FB post, abort early.
+  if (localImagePath && !fs.existsSync(localImagePath)) {
+    const msg = `Image file missing from public/: ${post.image_path}`;
+    console.error(`\n--- Preflight FAIL: ${msg} ---`);
+    await supabase
+      .from("social_posts")
+      .update({
+        status: "failed",
+        error_message: msg.substring(0, 500),
+        retry_count: (post.retry_count || 0) + 1,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", post.id);
+    process.exit(1);
+  }
+
+  // Preflight: sanity check that text and image are consistent. For monster
+  // posts, the caption always starts with the monster name, and the image
+  // file should contain that monster's slug. Mismatch = a prior drift.
+  if (post.post_type === "monster" && post.image_path && post.x_text) {
+    const nameMatch = post.x_text.match(/Monster reveal:\s*([^\n]+)/i) ||
+                      post.x_text.match(/^([A-Z][a-z]+(?: [A-Z][a-z]+)*)/);
+    const name = nameMatch ? nameMatch[1].trim() : null;
+    if (name) {
+      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      const imgLower = post.image_path.toLowerCase();
+      if (!imgLower.includes(slug.split("-")[0]) && !imgLower.includes(slug)) {
+        console.error(`\n--- Preflight WARNING: monster "${name}" vs image "${post.image_path}" ---`);
+        console.error("    text/image appear mismatched. Run scripts/sync-queue.cjs to audit.");
+        // warn but don't abort — may be intentional
+      }
+    }
+  }
+
   console.log(`Found post: ${post.post_type}`);
   console.log(`Image: ${post.image_path}`);
   console.log(`\nX text:\n${post.x_text}`);

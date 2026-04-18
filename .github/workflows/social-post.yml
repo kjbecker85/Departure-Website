@@ -38,6 +38,16 @@ jobs:
       - name: Install dependencies
         run: npm install dotenv twitter-api-v2 @supabase/supabase-js
 
+      - name: Audit queue vs DB (image_path drift)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          # Audit-only (no --apply). Exits non-zero if any DB row's image_path
+          # has drifted from content-queue.json, which would surface the kind
+          # of bulk-edit bug that silently broke multiple monster posts.
+          node scripts/sync-queue.cjs || echo "::warning::Queue drift detected — today's post still runs, but inspect the log and run sync-queue.cjs --apply."
+
       - name: Post to social media
         env:
           X_API_KEY: ${{ secrets.X_API_KEY }}
