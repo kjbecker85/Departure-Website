@@ -15,6 +15,10 @@ on:
         required: false
         type: boolean
         default: false
+      only_platforms:
+        description: 'Comma-separated platforms to post to (x, ig, fb). Leave empty for all.'
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -55,4 +59,8 @@ jobs:
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             DRY_ARG="--dry-run"
           fi
-          node scripts/post-daily.cjs $DATE_ARG $DRY_ARG
+          PLATFORMS_ARG=""
+          if [ -n "${{ github.event.inputs.only_platforms }}" ]; then
+            PLATFORMS_ARG="--only-platforms ${{ github.event.inputs.only_platforms }}"
+          fi
+          node scripts/post-daily.cjs $DATE_ARG $DRY_ARG $PLATFORMS_ARG

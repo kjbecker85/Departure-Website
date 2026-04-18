@@ -101,6 +101,10 @@ async function main() {
   const dryRun = args.includes("--dry-run");
   const dateIdx = args.indexOf("--date");
   const targetDate = dateIdx !== -1 ? args[dateIdx + 1] : getToday();
+  const platformsIdx = args.indexOf("--only-platforms");
+  const onlyPlatforms = platformsIdx !== -1
+    ? args[platformsIdx + 1].split(",").map((p) => p.trim().toLowerCase())
+    : null; // null = post to all platforms
 
   console.log(`Looking for post scheduled for: ${targetDate}`);
   if (dryRun) console.log("(DRY RUN — will not actually post)\n");
@@ -130,12 +134,13 @@ async function main() {
     }
   }
 
-  // Fetch today's upcoming post
+  // Fetch today's post — accept "upcoming" or "posted" (for partial retries via --only-platforms)
+  const statusFilter = onlyPlatforms ? ["upcoming", "posted"] : ["upcoming"];
   const { data: post, error } = await supabase
     .from("social_posts")
     .select("*")
     .eq("scheduled_date", targetDate)
-    .eq("status", "upcoming")
+    .in("status", statusFilter)
     .order("scheduled_time", { ascending: true })
     .limit(1)
     .single();
@@ -180,18 +185,21 @@ async function main() {
   let igResult = { success: false };
   let fbResult = { success: false };
 
+  const shouldPost = (platform) => !onlyPlatforms || onlyPlatforms.includes(platform);
+  if (onlyPlatforms) console.log(`Posting only to: ${onlyPlatforms.join(", ")}`);
+
   // Post to X (uses local image)
-  if (post.x_text) {
+  if (shouldPost("x") && post.x_text) {
     xResult = postToX(post.x_text, localImagePath);
   }
 
   // Post to Instagram (uses public URL)
-  if (post.ig_text && imageUrl) {
+  if (shouldPost("ig") && post.ig_text && imageUrl) {
     igResult = postToInstagram(post.ig_text, imageUrl);
   }
 
   // Post to Facebook (uses public URL)
-  if (post.fb_text || post.ig_text) {
+  if (shouldPost("fb") && (post.fb_text || post.ig_text)) {
     fbResult = postToFacebook(post.fb_text || post.ig_text, imageUrl);
   }
 
