@@ -134,8 +134,8 @@ async function main() {
     }
   }
 
-  // Fetch today's post — accept "upcoming" or "posted" (for partial retries via --only-platforms)
-  const statusFilter = onlyPlatforms ? ["upcoming", "posted"] : ["upcoming"];
+  // Fetch today's post — accept any status when retrying specific platforms
+  const statusFilter = onlyPlatforms ? ["upcoming", "posted", "failed"] : ["upcoming"];
   const { data: post, error } = await supabase
     .from("social_posts")
     .select("*")
@@ -214,21 +214,20 @@ async function main() {
   const igPostId = extractId(igResult.output, /Media ID:\s*(\d+)/);
   const fbPostId = extractId(fbResult.output, /Post ID:\s*(\S+)/);
 
-  // Update Supabase
+  // Update Supabase — only overwrite platform fields that were actually attempted,
+  // so partial retries don't clobber a prior successful platform (e.g. X).
   if (xResult.success || igResult.success || fbResult.success) {
+    const updates = {
+      status: "posted",
+      posted_at: post.posted_at ?? new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    if (shouldPost("x"))  { updates.x_posted  = xResult.success;  if (xPostId)  updates.x_post_id  = xPostId; }
+    if (shouldPost("ig")) { updates.ig_posted = igResult.success; if (igPostId) updates.ig_post_id = igPostId; }
+    if (shouldPost("fb")) { updates.fb_posted = fbResult.success; if (fbPostId) updates.fb_post_id = fbPostId; }
     await supabase
       .from("social_posts")
-      .update({
-        status: "posted",
-        posted_at: new Date().toISOString(),
-        x_posted: xResult.success,
-        ig_posted: igResult.success,
-        fb_posted: fbResult.success,
-        x_post_id: xPostId,
-        ig_post_id: igPostId,
-        fb_post_id: fbPostId,
-        updated_at: new Date().toISOString(),
-      })
+      .update(updates)
       .eq("id", post.id);
 
     console.log("\n--- Post marked as completed in Supabase ---");

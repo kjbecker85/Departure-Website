@@ -59,8 +59,8 @@ jobs:
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             DRY_ARG="--dry-run"
           fi
-          PLATFORMS_ARG=""
           if [ -n "${{ github.event.inputs.only_platforms }}" ]; then
-            PLATFORMS_ARG="--only-platforms ${{ github.event.inputs.only_platforms }}"
+            node scripts/post-daily.cjs $DATE_ARG $DRY_ARG --only-platforms "${{ github.event.inputs.only_platforms }}"
+          else
+            node scripts/post-daily.cjs $DATE_ARG $DRY_ARG
           fi
-          node scripts/post-daily.cjs $DATE_ARG $DRY_ARG $PLATFORMS_ARG
