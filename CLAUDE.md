@@ -28,3 +28,13 @@ Currently in pre-launch: Google Play beta live, iOS coming soon.
 - Email capture currently uses localStorage (TODO: connect to Tally/Supabase)
 - `.env` is gitignored — needed for social posting scripts (X/Instagram API keys)
 - No test framework configured
+
+## Social Posting Pipeline
+- `content-queue.json` is source of truth for `image_path`; DB `x_text`/`ig_text`/`fb_text` differ (CTA appended) — never overwrite text from queue
+- IG tokens prefixed `IGAAZ` only work on `graph.instagram.com`, NOT `graph.facebook.com`
+- IG container creation requires explicit `media_type: "IMAGE"` in POST body or API rejects with "Only photo or video"
+- X posting uses local file path; IG/FB require public URL (`SITE_BASE + "/" + image_path`)
+- Retry a failed platform without re-posting X: use `--only-platforms ig,fb` (no spaces in value)
+- `scripts/sync-queue.cjs` audits image_path drift between queue and DB — run after any bulk edit; `--apply` fixes upcoming/failed rows
+- Supabase row marked "posted" if ANY platform succeeds — check `x_posted`/`ig_posted`/`fb_posted` bool columns for per-platform status
+- GitHub Actions workflow supports `only_platforms` input for partial retries; always quote the value in shell: `"${{ github.event.inputs.only_platforms }}"`
