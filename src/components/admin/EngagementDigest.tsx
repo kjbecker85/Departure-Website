@@ -15,6 +15,7 @@ interface Target {
   tweet_url: string;
   search_query: string;
   tweeted_at: string;
+  created_at: string;
   status: 'new' | 'engaged' | 'skipped';
   suggested_reply: string | null;
   suggested_image: string | null;
@@ -33,6 +34,7 @@ export function EngagementDigest() {
   const [filter, setFilter] = useState<'all' | 'new' | 'engaged' | 'skipped'>('new');
   const [subView, setSubView] = useState<'digest' | 'analytics'>('digest');
   const [refreshing, setRefreshing] = useState(false);
+  const [reloading, setReloading] = useState(false);
 
   async function fetchTargets() {
     const { data } = await supabase
@@ -45,6 +47,12 @@ export function EngagementDigest() {
   }
 
   useEffect(() => { fetchTargets(); }, []);
+
+  async function reloadTargets() {
+    setReloading(true);
+    await fetchTargets();
+    setReloading(false);
+  }
 
   async function markAs(id: string, status: 'engaged' | 'skipped') {
     await supabase.from('engagement_targets').update({ status }).eq('id', id);
@@ -86,7 +94,13 @@ export function EngagementDigest() {
       );
 
       if (res.ok) {
-        alert('Digest refresh triggered. New targets will appear in about 1 minute. Refresh the page after.');
+        // Auto-reload after 75s — enough time for the GH Actions workflow to finish
+        setTimeout(async () => {
+          await fetchTargets();
+          setRefreshing(false);
+        }, 75000);
+        alert('Digest refresh triggered. New targets will load automatically in ~75 seconds.');
+        return; // keep refreshing=true until auto-reload fires
       } else {
         alert('Failed to trigger refresh. Check GitHub token.');
       }
@@ -121,6 +135,17 @@ export function EngagementDigest() {
         ))}
         <div style={{ flex: 1 }} />
         <button
+          onClick={reloadTargets}
+          disabled={reloading}
+          style={{
+            padding: '8px 18px', background: '#252540', border: '1px solid #7C3AED44',
+            borderRadius: '8px', color: '#A78BFA',
+            fontSize: '13px', fontWeight: 600, cursor: 'pointer', marginRight: '6px',
+          }}
+        >
+          {reloading ? 'Loading...' : '⟳ Reload'}
+        </button>
+        <button
           onClick={refreshDigest}
           disabled={refreshing}
           style={{
@@ -129,7 +154,7 @@ export function EngagementDigest() {
             fontSize: '13px', fontWeight: 600, cursor: 'pointer',
           }}
         >
-          {refreshing ? 'Refreshing...' : '🔄 Refresh Digest'}
+          {refreshing ? 'Running (~75s)...' : '🔄 Fetch Fresh Targets'}
         </button>
       </div>
 
