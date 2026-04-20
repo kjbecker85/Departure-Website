@@ -22,7 +22,7 @@ const supabase = createClient(
 // Exclude our own accounts from results
 const EXCLUDED_ACCOUNTS = ["DepartureFit", "departure_fitness"];
 
-// Search queries — broad pool, rotate 4 per run
+// Search queries — all 25 run each day (10 per batch × 3 batches)
 const SEARCH_QUERIES = [
   '"fitness app" -from:DepartureFit -is:retweet lang:en',
   '"workout tracker" -from:DepartureFit -is:retweet lang:en',
@@ -39,6 +39,16 @@ const SEARCH_QUERIES = [
   'personal record PR gym -from:DepartureFit -is:retweet lang:en',
   'bodybuilding app track -from:DepartureFit -is:retweet lang:en',
   'CrossFit WOD app -from:DepartureFit -is:retweet lang:en',
+  'gym streak consistency workout -from:DepartureFit -is:retweet lang:en',
+  'fitness accountability partner app -from:DepartureFit -is:retweet lang:en',
+  'leveling up gym progress -from:DepartureFit -is:retweet lang:en',
+  'team workout challenge fitness -from:DepartureFit -is:retweet lang:en',
+  'weightlifting strength training app -from:DepartureFit -is:retweet lang:en',
+  'gym progress tracking results -from:DepartureFit -is:retweet lang:en',
+  'fitness app iOS Android -from:DepartureFit -is:retweet lang:en',
+  'workout RPG game fitness -from:DepartureFit -is:retweet lang:en',
+  'gym habit building streak -from:DepartureFit -is:retweet lang:en',
+  'fitness community workout together -from:DepartureFit -is:retweet lang:en',
 ];
 
 async function searchTweets(query) {
@@ -97,69 +107,69 @@ async function searchTweets(query) {
  */
 const PAIRED_REPLIES = {
   recommendation: [
-    { text: `We're building exactly this. A fitness RPG where your workouts earn XP, you rank up, and your team fights monsters. Free to play. departure.engagequalia.com`, image: "social/home-screen.jpg" },
-    { text: `You might want to check out Departure. Real workout tracking with RPG progression, team monster battles, and loot drops. Launching soon 🗡️`, image: "social_2/team-warpath-journey-map-goblin-horde.jpg" },
-    { text: `If you're looking for something that makes the gym actually fun, we got you. Departure tracks real sets/reps/weight and turns it into an RPG adventure.`, image: "social_2/new-workout-back-and-bis-exercise-list.jpg" },
-    { text: `Sounds like you'd love what we're building. Departure is a fitness RPG. Your workouts earn XP, you rank up, and your team battles through 24 monsters together.`, image: "social_2/battle-victory-dark-sorcerer-rewards.jpg" },
-    { text: `Dropping this here because it sounds like what you need. Departure: real workout tracker + RPG progression + team battles. departure.engagequalia.com`, image: "social_2/training-log-heatmap-calendar.jpg" },
-    { text: `We built Departure for exactly this. 88+ exercises, auto PR detection, XP system, 24 rank tiers, team monster battles. All free. Coming soon to iOS & Android.`, image: "social_2/how-scoring-works-xp-rules.jpg" },
-    { text: `Have you tried turning your workouts into a literal RPG? That's what Departure does. Real tracking, real progression, real monster fights with your team.`, image: "social_2/equipment-arsenal-warrior-loadout.jpg" },
+    { text: `We built exactly this. Departure: a fitness RPG where your workouts earn XP, you rank up, and your team fights monsters. Free on iOS & Android. departure.engagequalia.com`, image: "social/home-screen.jpg" },
+    { text: `Check out Departure. Real workout tracking with RPG progression, team monster battles, and loot drops. Free on the App Store now 🗡️`, image: "social_2/team-warpath-journey-map-goblin-horde.jpg" },
+    { text: `If you want something that makes the gym actually fun, Departure is live on iOS & Android. Tracks real sets/reps/weight and turns it into an RPG adventure.`, image: "social_2/new-workout-back-and-bis-exercise-list.jpg" },
+    { text: `You'd love Departure. Fitness RPG, free on the App Store. Your workouts earn XP, you rank up through 24 tiers, and your team battles through monsters together.`, image: "social_2/battle-victory-dark-sorcerer-rewards.jpg" },
+    { text: `Dropping this because it sounds like what you need. Departure: real workout tracker + RPG progression + team battles. Free on iOS & Android now.`, image: "social_2/training-log-heatmap-calendar.jpg" },
+    { text: `Departure was built for exactly this. 88+ exercises, auto PR detection, XP system, 24 rank tiers, team monster battles. All free on the App Store.`, image: "social_2/how-scoring-works-xp-rules.jpg" },
+    { text: `Have you tried turning your workouts into a literal RPG? That's what Departure does. Real tracking, real progression, real monster fights with your team. Live now.`, image: "social_2/equipment-arsenal-warrior-loadout.jpg" },
   ],
   gamified: [
-    { text: `Love seeing gamified fitness grow! We're taking it further with Departure. 24 monsters to fight, team battles, equipment drops, and AI body transformation 🗡️`, image: "social_2/team-warpath-journey-map-goblin-horde.jpg" },
-    { text: `This is exactly why we built Departure. Real workout tracking meets RPG progression. 24 rank tiers, team battles, loot drops. Coming soon.`, image: "social_2/training-grounds-challenge-buffs-overview.jpg" },
-    { text: `Gamified fitness is the move. We went all in on it. Departure has XP, ranks, monster battles, loot drops, team combat. Powered by your actual workouts.`, image: "social_2/battle-victory-orc-berserker-rewards.jpg" },
-    { text: `The intersection of fitness and gaming is where it's at. Departure turns your gym sessions into boss fights. 24 monsters, 6 worlds, your team vs the journey.`, image: "social_2/journey-map-treasure-chest-undead-legion.jpg" },
-    { text: `Yes! More of this. We built an entire RPG around real workouts. Your bench press literally fuels your team's combat power. departure.engagequalia.com`, image: "social_2/team-combat-stats-radar-chart.jpg" },
+    { text: `Love seeing gamified fitness grow! We went all in on it with Departure. 24 monsters to fight, team battles, equipment drops, AI body transformation. Live now 🗡️`, image: "social_2/team-warpath-journey-map-goblin-horde.jpg" },
+    { text: `This is exactly why we built Departure. Real workout tracking meets RPG progression. 24 rank tiers, team battles, loot drops. Free on iOS & Android.`, image: "social_2/training-grounds-challenge-buffs-overview.jpg" },
+    { text: `Gamified fitness is the move. Departure has XP, ranks, monster battles, loot drops, team combat. All powered by your actual workouts. Free on the App Store.`, image: "social_2/battle-victory-orc-berserker-rewards.jpg" },
+    { text: `The intersection of fitness and gaming is where it's at. Departure turns your gym sessions into boss fights. 24 monsters, 6 worlds. Live on iOS & Android.`, image: "social_2/journey-map-treasure-chest-undead-legion.jpg" },
+    { text: `Yes! We built an entire RPG around real workouts. Your bench press literally fuels your team's combat power. Departure is free on the App Store now.`, image: "social_2/team-combat-stats-radar-chart.jpg" },
     { text: `Gamified fitness done right means the game can't exist without the workout. That's Departure. No fake reps, no shortcuts. Your gym time IS the gameplay.`, image: "social_2/monster-ambush-clockwork-syndicate-fight.jpg" },
   ],
   motivation: [
-    { text: `That's the energy 💪 We built an app where that motivation turns into XP, rank ups, and monster kills with your team. Departure is launching soon.`, image: "social_2/battle-victory-dark-sorcerer-rewards.jpg" },
-    { text: `Love this. Every rep should feel like progress. In Departure, it literally is. XP, PRs, rank progression, and team monster battles. departure.engagequalia.com`, image: "social_2/training-log-heatmap-calendar.jpg" },
-    { text: `This is what it's about. We built Departure to make every workout count. Earn XP, rank up through 24 tiers, battle monsters with your team 🗡️`, image: "social_2/strength-challenge-spartan-courtyard-daily-weekly.jpg" },
+    { text: `That's the energy 💪 Departure turns that motivation into XP, rank ups, and monster kills with your team. Free on iOS & Android now.`, image: "social_2/battle-victory-dark-sorcerer-rewards.jpg" },
+    { text: `Love this. Every rep should feel like progress. In Departure, it literally is. XP, PRs, rank progression, team monster battles. Free on the App Store.`, image: "social_2/training-log-heatmap-calendar.jpg" },
+    { text: `This is what it's about. Departure makes every workout count. Earn XP, rank up through 24 tiers, battle monsters with your team 🗡️`, image: "social_2/strength-challenge-spartan-courtyard-daily-weekly.jpg" },
     { text: `That grind mentality is exactly what Departure rewards. Every set, every rep earns XP. Your team needs you showing up. 24 bosses won't beat themselves.`, image: "social_2/team-warpath-journey-map-goblin-horde.jpg" },
-    { text: `Keep that energy. We built Departure so your workouts actually lead somewhere. XP, ranks, team battles, equipment drops. Your consistency is your weapon.`, image: "social_2/equipment-arsenal-warrior-loadout.jpg" },
-    { text: `Respect the dedication. We're building Departure to turn that effort into something tangible. RPG progression powered by your real training.`, image: "social_2/battle-history-record-wins-losses.jpg" },
-    { text: `The gym is already a boss fight. We just made it official. Departure tracks your workouts and turns them into an actual RPG adventure with your friends.`, image: "social_2/monster-art-gear-grinder-fullscreen.jpg" },
+    { text: `Keep that energy. Departure turns that effort into something real. XP, ranks, team battles, equipment drops. Free on iOS & Android. Your consistency is your weapon.`, image: "social_2/equipment-arsenal-warrior-loadout.jpg" },
+    { text: `Respect the dedication. Departure turns that effort into tangible RPG progression powered by your real training. Free on the App Store.`, image: "social_2/battle-history-record-wins-losses.jpg" },
+    { text: `The gym is already a boss fight. Departure made it official. Tracks your workouts and turns them into an actual RPG adventure with your friends. Live now.`, image: "social_2/monster-art-gear-grinder-fullscreen.jpg" },
   ],
   app: [
-    { text: `We're building something you might like. Departure turns real workouts into an RPG. Track sets/reps/weight, earn XP, fight monsters with your team. Free to play.`, image: "social_2/new-workout-back-and-bis-exercise-list.jpg" },
-    { text: `If you want a workout tracker that's actually fun, check out Departure. RPG progression, team monster battles, AI body transformation. departure.engagequalia.com`, image: "social/home-screen.jpg" },
-    { text: `Real tracking (88+ exercises, auto PR detection) + RPG mechanics (XP, ranks, battles, loot). That's Departure. Coming soon to iOS & Android.`, image: "social_2/how-scoring-works-xp-rules.jpg" },
-    { text: `Most fitness apps are either good trackers or good games. We're building both. Departure: real sets/reps/weight + XP, ranks, team battles, equipment drops.`, image: "social_2/workout-details-back-and-bis-planned.jpg" },
-    { text: `We track the boring stuff (sets, reps, weight, PRs, training splits) and make it not boring (XP, monster battles, loot drops, team combat). departure.engagequalia.com`, image: "social_2/training-log-heatmap-calendar.jpg" },
-    { text: `Departure does the tracking right. 88+ exercises, 10 categories, auto PR detection, training calendar. But also: XP, 24 rank tiers, and team monster battles.`, image: "social_2/new-workout-back-and-bis-exercise-list.jpg" },
-    { text: `Workout tracking shouldn't feel like homework. Departure tracks everything you need and wraps it in an RPG where your team fights through 24 bosses together.`, image: "social_2/team-warpath-journey-map-goblin-horde.jpg" },
+    { text: `Check out Departure. Turns real workouts into an RPG. Track sets/reps/weight, earn XP, fight monsters with your team. Free on iOS & Android now.`, image: "social_2/new-workout-back-and-bis-exercise-list.jpg" },
+    { text: `If you want a workout tracker that's actually fun, Departure is live. RPG progression, team monster battles, AI body transformation. Free on the App Store.`, image: "social/home-screen.jpg" },
+    { text: `Real tracking (88+ exercises, auto PR detection) + RPG mechanics (XP, ranks, battles, loot). That's Departure. Free on iOS & Android.`, image: "social_2/how-scoring-works-xp-rules.jpg" },
+    { text: `Most fitness apps are either good trackers or good games. We built both. Departure: real sets/reps/weight + XP, ranks, team battles, equipment drops. Free now.`, image: "social_2/workout-details-back-and-bis-planned.jpg" },
+    { text: `We track the boring stuff (sets, reps, weight, PRs, training splits) and make it not boring (XP, monster battles, loot drops, team combat). Free on the App Store.`, image: "social_2/training-log-heatmap-calendar.jpg" },
+    { text: `Departure does the tracking right. 88+ exercises, 10 categories, auto PR detection. But also: XP, 24 rank tiers, and team monster battles. Free on iOS & Android.`, image: "social_2/new-workout-back-and-bis-exercise-list.jpg" },
+    { text: `Workout tracking shouldn't feel like homework. Departure tracks everything you need and wraps it in an RPG where your team fights through 24 bosses. Free now.`, image: "social_2/team-warpath-journey-map-goblin-horde.jpg" },
   ],
   fitness_game: [
-    { text: `Making fitness a game is literally what we do 🎮💪 Your workouts earn XP, your team fights 24 bosses, you equip legendary gear. departure.engagequalia.com`, image: "social_2/equipment-arsenal-warrior-loadout.jpg" },
-    { text: `Fitness as a game > fitness as a chore. Departure has RPG progression, team battles, equipment drops, all powered by your real workouts.`, image: "social_2/battle-victory-orc-berserker-rewards.jpg" },
-    { text: `The best fitness game is the one that actually makes you go to the gym. That's what we're building. departure.engagequalia.com`, image: "social_2/training-grounds-challenge-buffs-overview.jpg" },
-    { text: `We turned the gym into a 24 boss RPG. Your workouts are the combat. Your team needs you to show up. Departure is coming soon to iOS & Android.`, image: "social_2/journey-map-tier-2-rabid-goblin-horde.jpg" },
-    { text: `Fitness + gaming = Departure. Real workout tracking, real XP, real monster battles with your friends. Not a gimmick. An actual RPG powered by your training.`, image: "social_2/monster-ambush-clockwork-syndicate-fight.jpg" },
-    { text: `Every leg day is a boss fight. Every PR is a rank up. Every gym session drops loot. That's Departure. departure.engagequalia.com`, image: "social_2/shop-swords-epic-legendary.jpg" },
-    { text: `We didn't just gamify fitness. We built a full RPG around it. 24 monsters, 6 worlds, team combat, equipment crafting. All fueled by your actual workouts.`, image: "social_2/team-warpath-journey-map-goblin-horde.jpg" },
+    { text: `Making fitness a game is literally what we do 🎮💪 Your workouts earn XP, your team fights 24 bosses, you equip legendary gear. Free on the App Store.`, image: "social_2/equipment-arsenal-warrior-loadout.jpg" },
+    { text: `Fitness as a game > fitness as a chore. Departure has RPG progression, team battles, equipment drops. All powered by your real workouts. Free now.`, image: "social_2/battle-victory-orc-berserker-rewards.jpg" },
+    { text: `The best fitness game is the one that actually makes you go to the gym. That's Departure. Free on iOS & Android. departure.engagequalia.com`, image: "social_2/training-grounds-challenge-buffs-overview.jpg" },
+    { text: `We turned the gym into a 24 boss RPG. Your workouts are the combat. Your team needs you to show up. Departure is free on iOS & Android now.`, image: "social_2/journey-map-tier-2-rabid-goblin-horde.jpg" },
+    { text: `Fitness + gaming = Departure. Real workout tracking, real XP, real monster battles with your friends. Not a gimmick. An actual RPG. Free on the App Store.`, image: "social_2/monster-ambush-clockwork-syndicate-fight.jpg" },
+    { text: `Every leg day is a boss fight. Every PR is a rank up. Every gym session drops loot. That's Departure. Free now. departure.engagequalia.com`, image: "social_2/shop-swords-epic-legendary.jpg" },
+    { text: `We didn't just gamify fitness. We built a full RPG around it. 24 monsters, 6 worlds, team combat, equipment drops. Free on iOS & Android.`, image: "social_2/team-warpath-journey-map-goblin-horde.jpg" },
   ],
   team: [
-    { text: `The gym is better with a squad. Departure lets your team fight through 24 monsters together. Every member's workouts contribute to combat power.`, image: "social/team-walkers.jpg" },
-    { text: `Your gym partner is about to become your raid partner. Departure: team monster battles powered by real workouts. departure.engagequalia.com`, image: "social_2/team-overview-walkers-stats-challenge.jpg" },
-    { text: `We built Departure for gym crews. Your team picks a genre (Barbarian, Samurai, Cyberpunk), then battles through 24 bosses. Everyone's workouts fuel the fight.`, image: "social_2/arena-teams-tab-walkers-team.jpg" },
-    { text: `Solo grind or team mode. Departure works both ways, but the team battles are where it gets real. 24 bosses, your squad's workouts vs the monster.`, image: "social_2/team-combat-stats-radar-chart.jpg" },
+    { text: `The gym is better with a squad. Departure lets your team fight through 24 monsters together. Every member's workouts contribute to combat power. Free now.`, image: "social/team-walkers.jpg" },
+    { text: `Your gym partner is about to become your raid partner. Departure: team monster battles powered by real workouts. Free on iOS & Android. departure.engagequalia.com`, image: "social_2/team-overview-walkers-stats-challenge.jpg" },
+    { text: `Departure was built for gym crews. Your team picks a genre (Barbarian, Samurai, Cyberpunk), then battles 24 bosses. Everyone's workouts fuel the fight. Free now.`, image: "social_2/arena-teams-tab-walkers-team.jpg" },
+    { text: `Solo grind or team mode. Departure works both ways, but the team battles are where it gets real. 24 bosses, your squad's workouts vs the monster. Free on App Store.`, image: "social_2/team-combat-stats-radar-chart.jpg" },
   ],
   loot: [
-    { text: `Imagine getting a legendary equipment drop after leg day. That's Departure. Your workouts have a chance to drop gear across 5 rarity tiers.`, image: "social_2/shop-swords-epic-legendary.jpg" },
-    { text: `We added loot drops to gym sessions. 5 rarity tiers, 9 gear slots, each piece boosts your team's combat power. Departure is launching soon 🗡️`, image: "social_2/equipment-arsenal-warrior-loadout.jpg" },
-    { text: `The best loot system in fitness. Your workouts drop equipment. Common to Legendary. Each piece makes your team hit harder in monster battles.`, image: "social_2/shop-two-handed-weapons-rare-epic-legendary.jpg" },
+    { text: `Getting a legendary equipment drop after leg day is real in Departure. Your workouts drop gear across 5 rarity tiers. Free on iOS & Android now.`, image: "social_2/shop-swords-epic-legendary.jpg" },
+    { text: `We added loot drops to gym sessions. 5 rarity tiers, 9 gear slots, each piece boosts your team's combat power. Departure is free on the App Store 🗡️`, image: "social_2/equipment-arsenal-warrior-loadout.jpg" },
+    { text: `The best loot system in fitness. Your workouts drop equipment. Common to Legendary. Each piece makes your team hit harder. Free on iOS & Android.`, image: "social_2/shop-two-handed-weapons-rare-epic-legendary.jpg" },
   ],
   generic: [
-    { text: `This caught our eye 👀 We're building Departure, a fitness RPG where your real workouts power the adventure. 24 monsters, team battles, AI transformation.`, image: "social_2/team-warpath-journey-map-goblin-horde.jpg" },
-    { text: `Love the fitness energy here. We're building Departure. It turns real workouts into RPG progression with team monster battles. Coming soon 🗡️`, image: "social_2/battle-victory-dark-sorcerer-rewards.jpg" },
-    { text: `The fitness community never stops inspiring. We're adding RPG fuel to the fire with Departure. XP, ranks, monster battles, all powered by real workouts.`, image: "social_2/training-log-heatmap-calendar.jpg" },
-    { text: `Dropping by because the vibes are right. We built Departure to make fitness feel like an adventure. Your workouts earn XP, your team fights monsters.`, image: "social_2/equipment-arsenal-warrior-loadout.jpg" },
-    { text: `Big fan of this. We're building something in this space. Departure is a fitness RPG where your real gym sessions power team monster battles. departure.engagequalia.com`, image: "social_2/arena-leaderboard-global-rankings.jpg" },
-    { text: `Respect 💪 If you're into fitness and gaming, check out what we're building. Departure turns workouts into an RPG with 24 bosses and team combat.`, image: "social_2/monster-ambush-clockwork-syndicate-fight.jpg" },
-    { text: `This is the content we love to see. We're building Departure to bring this energy into a full RPG experience. Your workouts, your team, your journey.`, image: "social/home-screen.jpg" },
-    { text: `We're out here building the gym RPG nobody asked for but everybody needs. 24 monsters, team battles, loot drops, all powered by real workouts. departure.engagequalia.com`, image: "social_2/new-workout-back-and-bis-exercise-list.jpg" },
+    { text: `This caught our eye 👀 Departure is a fitness RPG where your real workouts power the adventure. 24 monsters, team battles, AI transformation. Free on iOS & Android.`, image: "social_2/team-warpath-journey-map-goblin-horde.jpg" },
+    { text: `Love the fitness energy here. Departure turns real workouts into RPG progression with team monster battles. Free on the App Store now 🗡️`, image: "social_2/battle-victory-dark-sorcerer-rewards.jpg" },
+    { text: `The fitness community never stops inspiring. Departure adds RPG fuel to the fire. XP, ranks, monster battles, all powered by real workouts. Free now.`, image: "social_2/training-log-heatmap-calendar.jpg" },
+    { text: `Dropping by because the vibes are right. Departure makes fitness feel like an adventure. Your workouts earn XP, your team fights monsters. Free on iOS & Android.`, image: "social_2/equipment-arsenal-warrior-loadout.jpg" },
+    { text: `Big fan of this. Departure is a fitness RPG where your real gym sessions power team monster battles. Free on the App Store. departure.engagequalia.com`, image: "social_2/arena-leaderboard-global-rankings.jpg" },
+    { text: `Respect 💪 If you're into fitness and gaming, Departure is live. Turns workouts into an RPG with 24 bosses, team combat, and loot drops. Free on iOS & Android.`, image: "social_2/monster-ambush-clockwork-syndicate-fight.jpg" },
+    { text: `This is the content we love to see. Departure is live now if you want to channel this into a full RPG experience. Your workouts, your team, your journey.`, image: "social/home-screen.jpg" },
+    { text: `The gym RPG you didn't know you needed is here. 24 monsters, team battles, loot drops, all powered by real workouts. Free on iOS & Android. departure.engagequalia.com`, image: "social_2/new-workout-back-and-bis-exercise-list.jpg" },
   ],
 };
 
@@ -196,9 +206,9 @@ function generateReply(tweetText, query, authorUsername) {
 async function main() {
   console.log("Fetching engagement targets...\n");
 
-  // Pick 5 random queries to maximize results
+  // Run 12 of the 25 queries each day — enough raw tweets to reliably hit 15 after filtering
   const shuffled = SEARCH_QUERIES.sort(() => Math.random() - 0.5);
-  const queries = shuffled.slice(0, 5);
+  const queries = shuffled.slice(0, 12);
 
   let allTweets = [];
   for (const query of queries) {
@@ -216,8 +226,8 @@ async function main() {
     return true;
   });
 
-  // Only suggest accounts with real audiences (minimum 500 followers)
-  const MIN_FOLLOWERS = 500;
+  // Minimum follower count — 200 keeps quality while giving enough volume for 15 targets
+  const MIN_FOLLOWERS = 200;
   allTweets = allTweets.filter((t) => t.author_followers >= MIN_FOLLOWERS);
   console.log(`After follower filter (${MIN_FOLLOWERS}+): ${allTweets.length} tweets`);
 
