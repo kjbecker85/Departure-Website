@@ -96,6 +96,30 @@ function postToFacebook(text, imageUrl) {
   }
 }
 
+function postToDiscord(text, imageUrl) {
+  console.log("\n--- Posting to Discord ---");
+  const scriptArgs = ["--text", text];
+  if (imageUrl) {
+    scriptArgs.push("--image", imageUrl);
+  }
+  try {
+    const result = execFileSync("node", [
+      path.resolve(__dirname, "post-discord.cjs"),
+      ...scriptArgs,
+    ], {
+      cwd: path.resolve(__dirname, ".."),
+      encoding: "utf-8",
+      timeout: 30000,
+      env: process.env,
+    });
+    console.log(result);
+    return { success: true, output: result };
+  } catch (err) {
+    console.error("Discord post failed:", err.stderr || err.message);
+    return { success: false, error: err.stderr || err.message };
+  }
+}
+
 async function main() {
   const args = process.argv.slice(2);
   const dryRun = args.includes("--dry-run");
@@ -220,6 +244,7 @@ async function main() {
   let xResult = { success: false };
   let igResult = { success: false };
   let fbResult = { success: false };
+  let discordResult = { success: false };
 
   const shouldPost = (platform) => !onlyPlatforms || onlyPlatforms.includes(platform);
   if (onlyPlatforms) console.log(`Posting only to: ${onlyPlatforms.join(", ")}`);
@@ -239,6 +264,11 @@ async function main() {
     fbResult = postToFacebook(post.fb_text || post.ig_text, imageUrl);
   }
 
+  // Post to Discord (uses public URL + x_text for concise embed copy)
+  if (shouldPost("discord") && process.env.DISCORD_WEBHOOK_URL && post.x_text) {
+    discordResult = postToDiscord(post.x_text, imageUrl);
+  }
+
   // Parse post IDs from output
   function extractId(output, pattern) {
     if (!output) return null;
@@ -246,21 +276,23 @@ async function main() {
     return match ? match[1] : null;
   }
 
-  const xPostId = extractId(xResult.output, /ID:\s*(\d+)/);
-  const igPostId = extractId(igResult.output, /Media ID:\s*(\d+)/);
-  const fbPostId = extractId(fbResult.output, /Post ID:\s*(\S+)/);
+  const xPostId       = extractId(xResult.output,       /ID:\s*(\d+)/);
+  const igPostId      = extractId(igResult.output,      /Media ID:\s*(\d+)/);
+  const fbPostId      = extractId(fbResult.output,      /Post ID:\s*(\S+)/);
+  const discordPostId = extractId(discordResult.output, /Message ID:\s*(\S+)/);
 
   // Update Supabase — only overwrite platform fields that were actually attempted,
   // so partial retries don't clobber a prior successful platform (e.g. X).
-  if (xResult.success || igResult.success || fbResult.success) {
+  if (xResult.success || igResult.success || fbResult.success || discordResult.success) {
     const updates = {
       status: "posted",
       posted_at: post.posted_at ?? new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
-    if (shouldPost("x"))  { updates.x_posted  = xResult.success;  if (xPostId)  updates.x_post_id  = xPostId; }
-    if (shouldPost("ig")) { updates.ig_posted = igResult.success; if (igPostId) updates.ig_post_id = igPostId; }
-    if (shouldPost("fb")) { updates.fb_posted = fbResult.success; if (fbPostId) updates.fb_post_id = fbPostId; }
+    if (shouldPost("x"))       { updates.x_posted       = xResult.success;       if (xPostId)       updates.x_post_id       = xPostId; }
+    if (shouldPost("ig"))      { updates.ig_posted      = igResult.success;      if (igPostId)      updates.ig_post_id      = igPostId; }
+    if (shouldPost("fb"))      { updates.fb_posted      = fbResult.success;      if (fbPostId)      updates.fb_post_id      = fbPostId; }
+    if (shouldPost("discord")) { updates.discord_posted = discordResult.success; if (discordPostId) updates.discord_post_id = discordPostId; }
     await supabase
       .from("social_posts")
       .update(updates)
@@ -269,9 +301,10 @@ async function main() {
     console.log("\n--- Post marked as completed in Supabase ---");
   } else {
     const errorMsg = [
-      xResult.error ? `X: ${xResult.error}` : null,
-      igResult.error ? `IG: ${igResult.error}` : null,
-      fbResult.error ? `FB: ${fbResult.error}` : null,
+      xResult.error       ? `X: ${xResult.error}`           : null,
+      igResult.error      ? `IG: ${igResult.error}`          : null,
+      fbResult.error      ? `FB: ${fbResult.error}`          : null,
+      discordResult.error ? `Discord: ${discordResult.error}` : null,
     ].filter(Boolean).join('; ');
 
     await supabase
@@ -284,7 +317,7 @@ async function main() {
       })
       .eq("id", post.id);
 
-    console.error("\n--- Both platforms failed! Post marked as FAILED ---");
+    console.error("\n--- All platforms failed! Post marked as FAILED ---");
     process.exit(1);
   }
 }
