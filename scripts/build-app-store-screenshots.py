@@ -40,7 +40,12 @@ GLOW_COLOR = (124, 58, 237)  # primary #7C3AED
 TEXT_COLOR = (255, 255, 255)
 SUB_COLOR = (167, 139, 250)  # primary-light #A78BFA — used for accent line
 
-FONT_BOLD = "/System/Library/Fonts/SFNS.ttf"
+# Brand font — Inter, matching the Departure website. Black for headlines,
+# ExtraBold for sublines (lighter visual weight without going too thin).
+FONT_HEAD = str(Path(__file__).parent / "fonts" / "Inter-Black.ttf")
+FONT_SUB = str(Path(__file__).parent / "fonts" / "Inter-ExtraBold.ttf")
+# Letter-spacing applied to headlines as a fraction of font size (negative = tighter).
+HEAD_TRACKING = -0.035
 
 
 def make_background() -> Image.Image:
@@ -66,16 +71,38 @@ def make_background() -> Image.Image:
     return bg
 
 
-def fit_font(text: str, max_width: int, max_size: int = 130, min_size: int = 70) -> ImageFont.FreeTypeFont:
-    """Pick the largest size that fits text within max_width."""
+def fit_font(font_path: str, text: str, max_width: int, tracking: float, max_size: int, min_size: int) -> ImageFont.FreeTypeFont:
+    """Pick the largest size that fits text + tracking within max_width."""
     size = max_size
     while size > min_size:
-        font = ImageFont.truetype(FONT_BOLD, size)
-        bbox = font.getbbox(text)
-        if (bbox[2] - bbox[0]) <= max_width:
+        font = ImageFont.truetype(font_path, size)
+        if measure_tracked(text, font, tracking) <= max_width:
             return font
         size -= 4
-    return ImageFont.truetype(FONT_BOLD, min_size)
+    return ImageFont.truetype(font_path, min_size)
+
+
+def _advance(ch: str, font: ImageFont.FreeTypeFont) -> int:
+    """Horizontal advance width of a single character."""
+    return font.getlength(ch)
+
+
+def measure_tracked(text: str, font: ImageFont.FreeTypeFont, tracking: float) -> int:
+    """Measure rendered width of `text` with per-character tracking applied."""
+    track_px = round(font.size * tracking)
+    total = 0.0
+    for ch in text:
+        total += _advance(ch, font) + track_px
+    return max(0, int(total - track_px))
+
+
+def draw_tracked(draw: ImageDraw.ImageDraw, x: int, y: int, text: str, font: ImageFont.FreeTypeFont, fill, tracking: float) -> None:
+    """Draw `text` with per-character tracking. (x, y) is the top-left, matching Pillow's default 'la' anchor."""
+    track_px = round(font.size * tracking)
+    cursor = float(x)
+    for ch in text:
+        draw.text((round(cursor), y), ch, font=font, fill=fill)
+        cursor += _advance(ch, font) + track_px
 
 
 def draw_caption(img: Image.Image, headline: str, subline: str | None = None) -> None:
@@ -83,27 +110,24 @@ def draw_caption(img: Image.Image, headline: str, subline: str | None = None) ->
     draw = ImageDraw.Draw(img)
     max_text_width = W - 160  # 80px margin each side
 
-    head_font = fit_font(headline, max_text_width)
-    head_bbox = head_font.getbbox(headline)
-    head_w = head_bbox[2] - head_bbox[0]
-    head_h = head_bbox[3] - head_bbox[1]
+    head_font = fit_font(FONT_HEAD, headline, max_text_width, HEAD_TRACKING, max_size=140, min_size=72)
+    head_w = measure_tracked(headline, head_font, HEAD_TRACKING)
+    # Visual cap-height for centering — use the font's "Hg" extent so ascenders/descenders are captured.
+    head_h = head_font.getbbox("Hg")[3]
 
     if subline:
-        sub_font = fit_font(subline, max_text_width, max_size=60, min_size=40)
-        sub_bbox = sub_font.getbbox(subline)
-        sub_w = sub_bbox[2] - sub_bbox[0]
-        sub_h = sub_bbox[3] - sub_bbox[1]
-        gap = 32
+        sub_font = fit_font(FONT_SUB, subline, max_text_width, 0.0, max_size=58, min_size=38)
+        sub_w = measure_tracked(subline, sub_font, 0.0)
+        sub_h = sub_font.getbbox("Hg")[3]
+        gap = 36
         total_h = head_h + gap + sub_h
         y0 = CAP_TOP + (CAP_HEIGHT - total_h) // 2
-        # Headline
-        draw.text(((W - head_w) // 2, y0 - head_bbox[1]), headline, font=head_font, fill=TEXT_COLOR)
-        # Subline (lighter)
-        sy = y0 + head_h + gap - sub_bbox[1]
-        draw.text(((W - sub_w) // 2, sy), subline, font=sub_font, fill=SUB_COLOR)
+        draw_tracked(draw, (W - head_w) // 2, y0, headline, head_font, TEXT_COLOR, HEAD_TRACKING)
+        sy = y0 + head_h + gap
+        draw_tracked(draw, (W - sub_w) // 2, sy, subline, sub_font, SUB_COLOR, 0.0)
     else:
         y0 = CAP_TOP + (CAP_HEIGHT - head_h) // 2
-        draw.text(((W - head_w) // 2, y0 - head_bbox[1]), headline, font=head_font, fill=TEXT_COLOR)
+        draw_tracked(draw, (W - head_w) // 2, y0, headline, head_font, TEXT_COLOR, HEAD_TRACKING)
 
 
 def round_corners(img: Image.Image, radius: int) -> Image.Image:
