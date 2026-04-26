@@ -19,19 +19,22 @@ DOWNLOADS = Path.home() / "Downloads"
 OUT = ROOT / "app-store-screenshots"
 OUT.mkdir(exist_ok=True)
 
-# Output: iPhone 6.9" portrait
-W, H = 1290, 2796
+# Output: iPhone 6.5" portrait — the only size App Store Connect's media
+# manager reliably accepts for "iPhone 6.5"" and "iPhone 6.9"" slots.
+# (Despite the docs naming 1290×2796, the validator rejects it; 1242×2688 JPEG works.)
+W, H = 1242, 2688
 
 # Caption block (top zone)
-CAP_TOP = 110          # top padding
-CAP_HEIGHT = 360       # available text height
-CAP_BOTTOM = CAP_TOP + CAP_HEIGHT  # = 470
+CAP_TOP = 100          # top padding
+CAP_HEIGHT = 340       # available text height
+CAP_BOTTOM = CAP_TOP + CAP_HEIGHT  # = 440
 
-# Phone screenshot (centered below caption)
-PHONE_W, PHONE_H = 1050, 2276   # preserves 1179:2556 aspect
-PHONE_X = (W - PHONE_W) // 2     # = 120
-PHONE_Y = CAP_BOTTOM + 30        # = 500
-CORNER_RADIUS = 60
+# Phone screenshot (centered below caption) — preserves 1179:2556 aspect
+PHONE_W = 1010
+PHONE_H = round(PHONE_W * 2556 / 1179)  # = 2190
+PHONE_X = (W - PHONE_W) // 2             # = 116
+PHONE_Y = CAP_BOTTOM + 20                # = 460
+CORNER_RADIUS = 56
 
 # Brand palette — matches tailwind.config.js
 BG_TOP = (15, 15, 26)        # #0F0F1A
@@ -160,22 +163,23 @@ def composite(source_path: Path, headline: str, subline: str | None, out_name: s
     bg.paste(shadow, (PHONE_X - 40, PHONE_Y - 20), shadow)
     bg.paste(src, (PHONE_X, PHONE_Y), src)
 
+    # Save as JPEG with sRGB profile — Apple's validator is picky about both.
     out_path = OUT / out_name
-    bg.convert("RGB").save(out_path, "PNG", optimize=True)
+    bg.convert("RGB").save(out_path, "JPEG", quality=92, optimize=True, progressive=True)
     print(f"  ✓ {out_name}")
 
 
 # ── Frame plan ──────────────────────────────────────────────────────────
 FRAMES = [
-    (SHOTS / "onboarding.png",      "Your Fitness is a Quest",        None,                              "01_quest.png"),
-    (SHOTS / "transformation.png",  "Start as Your Current Self",     None,                              "02_current_self.png"),
-    (SHOTS / "Goals.png",           "Choose Your Goal",               "Real fitness, real ambition.",    "03a_goal.png"),
-    (SHOTS / "Disciplines.png",     "Choose Your Disciplines",        "Train how you actually train.",   "03b_disciplines.png"),
-    (SHOTS / "home-screen.png",     "See Your Future Self",           "AI-rendered. Earned, not faked.", "04_future_self.png"),
-    (SHOTS / "team-overview.png",   "Rally Your Team",                None,                              "05_team.png"),
-    (SHOTS / "Workout_1.png",       "Every Workout Earns XP",         None,                              "06a_workout_xp.png"),
-    (SHOTS / "Workout_2.png",       "Score Loot, Coins, and PRs",     None,                              "06b_workout_loot.png"),
-    (DOWNLOADS / "Team_slay_1.png", "Slay Monsters Together",         None,                              "07_slay.png"),
+    (SHOTS / "onboarding.png",      "Your Fitness is a Quest",        None,                              "01_quest.jpg"),
+    (SHOTS / "transformation.png",  "Start as Your Current Self",     None,                              "02_current_self.jpg"),
+    (SHOTS / "Goals.png",           "Choose Your Goal",               "Real fitness, real ambition.",    "03a_goal.jpg"),
+    (SHOTS / "Disciplines.png",     "Choose Your Disciplines",        "Train how you actually train.",   "03b_disciplines.jpg"),
+    (SHOTS / "home-screen.png",     "See Your Future Self",           "AI-rendered. Earned, not faked.", "04_future_self.jpg"),
+    (SHOTS / "team-overview.png",   "Rally Your Team",                None,                              "05_team.jpg"),
+    (SHOTS / "Workout_1.png",       "Every Workout Earns XP",         None,                              "06a_workout_xp.jpg"),
+    (SHOTS / "Workout_2.png",       "Score Loot, Coins, and PRs",     None,                              "06b_workout_loot.jpg"),
+    (DOWNLOADS / "Team_slay_1.png", "Slay Monsters Together",         None,                              "07_slay.jpg"),
 ]
 
 
