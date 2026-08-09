@@ -1,0 +1,106 @@
+---
+/*
+  Smart app-store redirect.
+  Usage: departure.engagequalia.com/get?utm_source=meta&utm_campaign=prelaunch
+  - iOS user-agents redirect to the App Store listing.
+  - Android user-agents redirect to the Play Store (prod URL once live, beta URL in the meantime).
+  - Desktop / unknown clients get a static page with both store links.
+  - UTM params forwarded into the store URL campaign fields so Apple Search Ads
+    and Play Console can attribute installs.
+*/
+import Layout from '../layouts/Layout.astro';
+
+const APP_STORE_URL = import.meta.env.PUBLIC_APP_STORE_URL
+  || 'https://apps.apple.com/us/app/departure-fitness-quest/id0000000000';
+const PLAY_STORE_URL = import.meta.env.PUBLIC_PLAY_STORE_URL
+  || 'https://play.google.com/apps/testing/com.qualia.fitness';
+---
+
+<Layout title="Get Departure — Download the App" description="Download Departure: Fitness Quest on iOS or Android.">
+  <section class="min-h-[60vh] flex items-center justify-center px-4">
+    <div class="max-w-md text-center">
+      <div class="w-20 h-20 rounded-2xl bg-primary/10 border border-primary/30 mx-auto mb-6 flex items-center justify-center">
+        <img src="/icon-circle.png" alt="Departure" class="w-12 h-12 rounded-xl" />
+      </div>
+      <h1 class="text-3xl font-bold mb-3">Get Departure</h1>
+      <p class="text-text-muted mb-8">Redirecting you to the store…</p>
+      <div class="flex flex-col gap-3 max-w-xs mx-auto">
+        <a id="ios-link" href={APP_STORE_URL} class="bg-primary hover:bg-primary-light text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+          App Store (iOS)
+        </a>
+        <a id="android-link" href={PLAY_STORE_URL} class="bg-surface-light hover:bg-surface border border-surface-light text-text px-6 py-3 rounded-xl font-semibold transition-colors">
+          Play Store (Android)
+        </a>
+      </div>
+      <p class="text-text-muted text-xs mt-6">Not redirecting? Use the buttons above.</p>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ APP_STORE_URL, PLAY_STORE_URL }}>
+    (function () {
+      function readAttribution() {
+        try {
+          var raw = sessionStorage.getItem('departure_attribution');
+          return raw ? JSON.parse(raw) : {};
+        } catch { return {}; }
+      }
+
+      function appendParams(url, params) {
+        try {
+          var u = new URL(url);
+          Object.keys(params).forEach(function (k) {
+            if (params[k]) u.searchParams.set(k, params[k]);
+          });
+          return u.toString();
+        } catch { return url; }
+      }
+
+      // Merge live URL params with first-touch sessionStorage attribution.
+      var urlParams = new URLSearchParams(window.location.search);
+      var attr = readAttribution();
+      var merged = {};
+      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid','fbclid','ttclid'].forEach(function (k) {
+        merged[k] = urlParams.get(k) || attr[k] || null;
+      });
+
+      // Play Store: pass UTMs as `referrer` param (install_referrer API).
+      // https://developer.android.com/google/play/installreferrer/igetinstallreferrerservice
+      var referrerParts = [];
+      Object.keys(merged).forEach(function (k) {
+        if (merged[k]) referrerParts.push(encodeURIComponent(k) + '=' + encodeURIComponent(merged[k]));
+      });
+      var playUrl = PLAY_STORE_URL;
+      if (referrerParts.length) {
+        playUrl = appendParams(playUrl, { referrer: referrerParts.join('&') });
+      }
+
+      // App Store: use `pt` / `ct` campaign params for Apple attribution.
+      var appStoreUrl = appendParams(APP_STORE_URL, {
+        pt: merged.utm_source || 'website',
+        ct: merged.utm_campaign || 'organic',
+        mt: '8',
+      });
+
+      // Update button hrefs so manual clicks also carry UTMs.
+      var iosBtn = document.getElementById('ios-link');
+      var androidBtn = document.getElementById('android-link');
+      if (iosBtn) iosBtn.href = appStoreUrl;
+      if (androidBtn) androidBtn.href = playUrl;
+
+      // Fire conversion events before redirecting.
+      try { window.fbq && window.fbq('track', 'Contact'); } catch {}
+      try { window.gtag && window.gtag('event', 'app_store_click', { utm_source: merged.utm_source || 'direct' }); } catch {}
+      try { window.ttq && window.ttq.track && window.ttq.track('ClickButton'); } catch {}
+
+      // Redirect by UA. Desktop users see the two buttons instead.
+      var ua = navigator.userAgent || '';
+      var isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+      var isAndroid = /Android/i.test(ua);
+      if (isIOS) {
+        window.location.replace(appStoreUrl);
+      } else if (isAndroid) {
+        window.location.replace(playUrl);
+      }
+    })();
+  </script>
+</Layout>

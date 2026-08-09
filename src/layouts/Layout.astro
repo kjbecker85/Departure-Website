@@ -16,6 +16,12 @@ const {
 
 const canonicalUrl = new URL(Astro.url.pathname, SITE_URL).href;
 const ogImageUrl = new URL(ogImage, SITE_URL).href;
+
+// Ad pixel IDs — all optional. Scripts render only when the corresponding ID is present.
+const META_PIXEL_ID = import.meta.env.PUBLIC_META_PIXEL_ID;
+const GA4_ID = import.meta.env.PUBLIC_GA4_ID;
+const TIKTOK_PIXEL_ID = import.meta.env.PUBLIC_TIKTOK_PIXEL_ID;
+const REDDIT_PIXEL_ID = import.meta.env.PUBLIC_REDDIT_PIXEL_ID;
 ---
 
 <html lang="en">
@@ -74,6 +80,70 @@ const ogImageUrl = new URL(ogImage, SITE_URL).href;
       },
       "url": "https://departure.engagequalia.com"
     })} />
+
+    {/*
+      First-touch UTM + click-id capture.
+      Runs on every page load, stashes params into sessionStorage once per session.
+      Read back by form submit handlers (waitlist, /get redirect) so attribution
+      survives cross-page navigation before conversion.
+    */}
+    <script is:inline>
+      (function () {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var keys = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid','fbclid','ttclid','rdt_cid'];
+          var stash = {};
+          var hadAny = false;
+          keys.forEach(function (k) {
+            var v = params.get(k);
+            if (v) { stash[k] = v; hadAny = true; }
+          });
+          if (hadAny && !sessionStorage.getItem('departure_attribution')) {
+            stash._landing_page = window.location.pathname + window.location.search;
+            stash._referrer = document.referrer || '';
+            stash._captured_at = new Date().toISOString();
+            sessionStorage.setItem('departure_attribution', JSON.stringify(stash));
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    {META_PIXEL_ID && (
+      <script is:inline define:vars={{ METAID: META_PIXEL_ID }}>
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', METAID);
+        fbq('track', 'PageView');
+      </script>
+    )}
+
+    {GA4_ID && (
+      <>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}></script>
+        <script is:inline define:vars={{ GAID: GA4_ID }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', GAID, { send_page_view: true });
+        </script>
+      </>
+    )}
+
+    {TIKTOK_PIXEL_ID && (
+      <script is:inline define:vars={{ TTID: TIKTOK_PIXEL_ID }}>
+        !function (w, d, t) {w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e};ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+          ttq.load(TTID);
+          ttq.page();
+        }(window, document, 'ttq');
+      </script>
+    )}
+
+    {REDDIT_PIXEL_ID && (
+      <script is:inline define:vars={{ RDTID: REDDIT_PIXEL_ID }}>
+        !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);
+        rdt('init', RDTID);
+        rdt('track', 'PageVisit');
+      </script>
+    )}
   </head>
   <body class="min-h-screen bg-bg text-text">
     <nav class="fixed top-0 w-full z-50 bg-bg/80 backdrop-blur-lg border-b border-surface-light/50">

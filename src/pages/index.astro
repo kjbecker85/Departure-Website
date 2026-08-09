@@ -223,6 +223,13 @@ import PhoneMockup from '../components/PhoneMockup.astro';
     const button = form?.querySelector('button');
     const errorEl = document.getElementById('signup-error');
 
+    function readAttribution() {
+      try {
+        const raw = sessionStorage.getItem('departure_attribution');
+        return raw ? JSON.parse(raw) : {};
+      } catch { return {}; }
+    }
+
     form?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = (document.getElementById('email-input') as HTMLInputElement)?.value?.trim();
@@ -234,10 +241,26 @@ import PhoneMockup from '../components/PhoneMockup.astro';
       }
       errorEl?.classList.add('hidden');
 
+      const attr = readAttribution();
+      const payload: Record<string, any> = {
+        email,
+        source: attr.utm_source || 'website',
+        utm_source: attr.utm_source ?? null,
+        utm_medium: attr.utm_medium ?? null,
+        utm_campaign: attr.utm_campaign ?? null,
+        utm_content: attr.utm_content ?? null,
+        utm_term: attr.utm_term ?? null,
+        gclid: attr.gclid ?? null,
+        fbclid: attr.fbclid ?? null,
+        ttclid: attr.ttclid ?? null,
+        referrer: attr._referrer ?? (document.referrer || null),
+        landing_page: attr._landing_page ?? null,
+      };
+
       try {
         const { error } = await supabase
           .from('waitlist_signups')
-          .insert({ email, source: 'website' });
+          .insert(payload);
 
         if (error) {
           if (button) {
@@ -248,7 +271,20 @@ import PhoneMockup from '../components/PhoneMockup.astro';
           if (error.code === '23505' || error.message?.includes('duplicate') || error.message?.includes('unique')) {
             form.classList.add('hidden');
             success?.classList.remove('hidden');
+            fireConversionEvents();
           } else {
+            // If the new UTM columns don't exist yet (migration not run), retry with minimal payload.
+            if (error.code === 'PGRST204' || /column|schema cache/i.test(error.message || '')) {
+              const retry = await supabase
+                .from('waitlist_signups')
+                .insert({ email, source: payload.source });
+              if (!retry.error) {
+                form.classList.add('hidden');
+                success?.classList.remove('hidden');
+                fireConversionEvents();
+                return;
+              }
+            }
             console.error('Waitlist signup error:', JSON.stringify(error));
             errorEl?.classList.remove('hidden');
           }
@@ -266,6 +302,14 @@ import PhoneMockup from '../components/PhoneMockup.astro';
 
       form.classList.add('hidden');
       success?.classList.remove('hidden');
+      fireConversionEvents();
     });
+
+    function fireConversionEvents() {
+      try { (window as any).fbq?.('track', 'Lead'); } catch {}
+      try { (window as any).gtag?.('event', 'generate_lead', { method: 'waitlist' }); } catch {}
+      try { (window as any).ttq?.track?.('CompleteRegistration'); } catch {}
+      try { (window as any).rdt?.('track', 'Lead'); } catch {}
+    }
   </script>
 </Layout>
