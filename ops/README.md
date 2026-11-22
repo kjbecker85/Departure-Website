@@ -66,6 +66,28 @@ Only `version` is required. In order, the job:
 
 Read `ops/reports/app-store/last-release.json`: `steps` lists each step with its status and any Apple error text, `finalVersionState` and `reviewSubmissionState` show where it ended. The request file is deleted once tried; it is kept only when the job could not sign in. A version already waiting for or in review is left alone.
 
+Failed Apple calls keep Apple's full error objects in `apiErrors` (including `meta.associatedErrors`, which says why a version cannot be reviewed).
+
+## Diagnose a blocked submission
+
+Commit `ops/requests/app-store/diagnose.json` (`{ "version": "1.0.4" }`, optional `reviewSubmissionId`) and push. Nothing is changed except one retry of adding the version to the open review submission, which Apple accepts only when the version is valid; diagnose never submits. Read `ops/reports/app-store/last-diagnose.json`: the retry with its associated errors, the age rating declaration (`nullFields` are unanswered), app info and categories, app fields such as `contentRightsDeclaration`, availability, the price schedule (read only), the App Review details of the version, localizations with screenshot counts, and the build.
+
+## Answer compliance questions
+
+Commit `ops/requests/app-store/compliance.json` and push. All keys are optional:
+
+```json
+{
+  "version": "1.0.4",
+  "ageRatingDeclaration": { "messagingAndChat": true },
+  "reviewDetail": { "contactFirstName": "...", "contactEmail": "..." },
+  "contentRightsDeclaration": "DOES_NOT_USE_THIRD_PARTY_CONTENT",
+  "primaryCategory": "HEALTH_AND_FITNESS"
+}
+```
+
+Result in `ops/reports/app-store/last-compliance.json`. Each answer and its reason is recorded in `ops/app-store-answers.md`. It runs before a release request in the same push. It never changes the name, prices, availability or in-app purchases.
+
 ## iOS release (qualia-fitness repo)
 
 Workflow: `qualia-fitness/.github/workflows/release-ios.yml`.

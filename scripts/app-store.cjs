@@ -32,6 +32,8 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const REQUEST_FILE = path.join(ROOT, 'ops/requests/app-store/listing.json');
 const RELEASE_FILE = path.join(ROOT, 'ops/requests/app-store/release.json');
+const DIAGNOSE_FILE = path.join(ROOT, 'ops/requests/app-store/diagnose.json');
+const COMPLIANCE_FILE = path.join(ROOT, 'ops/requests/app-store/compliance.json');
 const REPORT_DIR = path.join(ROOT, 'ops/reports/app-store');
 const API = 'https://api.appstoreconnect.apple.com';
 const APP_ID = process.env.ASC_APP_ID || '6761634387';
@@ -103,9 +105,21 @@ async function asc(method, urlPath, body) {
       : text.slice(0, 500);
     const err = new Error(`${method} ${urlPath} -> ${res.status} ${detail}`);
     err.status = res.status;
+    // Full error body, so reports keep errors[].meta.associatedErrors and source pointers.
+    err.apiErrors = json && json.errors ? json.errors : null;
+    if (!err.apiErrors && text) err.body = text.slice(0, 4000);
     throw err;
   }
   return json;
+}
+
+// Error text plus Apple's full error objects (including meta.associatedErrors).
+function errorRecord(base, e) {
+  const out = { ...base, error: e && e.message ? e.message : String(e) };
+  if (e && e.apiErrors) out.apiErrors = e.apiErrors;
+  if (e && e.body) out.body = e.body;
+  if (e && e.status) out.httpStatus = e.status;
+  return out;
 }
 
 // Runs a section and records errors instead of failing the whole snapshot.
@@ -113,7 +127,7 @@ async function section(errors, name, fn) {
   try {
     return await fn();
   } catch (e) {
-    errors.push({ section: name, error: e.message });
+    errors.push(errorRecord({ section: name }, e));
     return null;
   }
 }
@@ -287,7 +301,7 @@ async function applyRequest(request, versions, appInfos) {
           });
         }
       } catch (e) {
-        result.errors.push({ target: 'appStoreVersionLocalization', fields: Object.keys(fields), error: e.message });
+        result.errors.push(errorRecord({ target: 'appStoreVersionLocalization', fields: Object.keys(fields) }, e));
       }
     }
   }
@@ -320,7 +334,7 @@ async function applyRequest(request, versions, appInfos) {
           });
         }
       } catch (e) {
-        result.errors.push({ target: 'appInfoLocalization', fields: Object.keys(appInfoChanges), error: e.message });
+        result.errors.push(errorRecord({ target: 'appInfoLocalization', fields: Object.keys(appInfoChanges) }, e));
       }
     }
   }
@@ -383,7 +397,11 @@ async function processRelease(req) {
     console.log(`release ${name}: ${status}${details && details.error ? ' ' + details.error : ''}`);
     return s;
   };
-  const fail = (name, e, extra) => step(name, 'error', { error: e.message || String(e), ...extra });
+  const fail = (name, e, extra) => {
+    const r = errorRecord({}, e);
+    delete r.error;
+    return step(name, 'error', { error: e.message || String(e), ...r, ...extra });
+  };
 
   const version = typeof req.version === 'string' ? req.version.trim() : '';
   const buildNumber = req.build === undefined || req.build === null ? '' : String(req.build).trim();
@@ -667,6 +685,252 @@ async function processRelease(req) {
   return out;
 }
 
+// ---------------------------------------------------------------------------
+// Diagnose request: ops/requests/app-store/diagnose.json  (read only, except one call)
+//   { "version": "1.0.4", "reviewSubmissionId": "optional" }
+// Records what blocks a version from review. The only write is a retry of
+// POST /v1/reviewSubmissionItems, which Apple accepts only when the version is valid;
+// it never submits. Result in last-diagnose.json.
+// ---------------------------------------------------------------------------
+
+function nullFields(attrs) {
+  return Object.entries(attrs || {}).filter(([, v]) => v === null || v === undefined).map(([k]) => k);
+}
+
+async function editableAppInfo() {
+  const infos = await getAppInfos();
+  return { infos, info: infos.find((i) => i.editable) || infos[0] || null };
+}
+
+async function processDiagnose(req) {
+  const out = { startedAt: new Date().toISOString(), request: req, checks: {}, errors: [] };
+  const check = async (name, fn) => {
+    try {
+      out.checks[name] = await fn();
+    } catch (e) {
+      out.errors.push(errorRecord({ check: name }, e));
+      out.checks[name] = { error: e.message, apiErrors: e.apiErrors || null };
+    }
+  };
+
+  let ver = null;
+  await check('version', async () => {
+    if (req.version) ver = await findVersion(String(req.version));
+    if (!ver) {
+      const vs = await getVersions();
+      const ed = vs.find((v) => v.editable);
+      if (ed) ver = (await asc('GET', `/v1/appStoreVersions/${ed.id}?include=build`)).data;
+    }
+    if (!ver) return { found: false };
+    return { id: ver.id, attributes: ver.attributes, buildId: ver.relationships && ver.relationships.build && ver.relationships.build.data ? ver.relationships.build.data.id : null };
+  });
+
+  // Retry the item: Apple returns the associated errors that block review.
+  let submissionId = req.reviewSubmissionId || null;
+  await check('reviewSubmission', async () => {
+    const subs = await asc('GET', `/v1/reviewSubmissions?filter[app]=${APP_ID}&filter[platform]=IOS&limit=20`);
+    const list = (subs.data || []).map((x) => ({ id: x.id, ...x.attributes }));
+    if (!submissionId) {
+      const open = list.find((x) => OPEN_SUBMISSION_STATES.has(x.state));
+      submissionId = open ? open.id : null;
+    }
+    let items = null;
+    if (submissionId) {
+      const it = await asc('GET', `/v1/reviewSubmissions/${submissionId}/items?include=appStoreVersion&limit=50`);
+      items = (it.data || []).map((x) => ({ id: x.id, ...x.attributes, appStoreVersionId: x.relationships && x.relationships.appStoreVersion && x.relationships.appStoreVersion.data ? x.relationships.appStoreVersion.data.id : null }));
+    }
+    return { submissions: list, usedSubmissionId: submissionId, items };
+  });
+  if (ver && submissionId) {
+    const items = (out.checks.reviewSubmission && out.checks.reviewSubmission.items) || [];
+    if (items.some((x) => x.appStoreVersionId === ver.id)) {
+      out.checks.reviewSubmissionItemRetry = { status: 'already added', note: 'not submitted by diagnose' };
+    } else {
+      try {
+        const item = await asc('POST', '/v1/reviewSubmissionItems', {
+          data: {
+            type: 'reviewSubmissionItems',
+            relationships: {
+              reviewSubmission: { data: { type: 'reviewSubmissions', id: submissionId } },
+              appStoreVersion: { data: { type: 'appStoreVersions', id: ver.id } },
+            },
+          },
+        });
+        out.checks.reviewSubmissionItemRetry = { status: 'added', id: item.data.id, attributes: item.data.attributes, note: 'item is valid now; diagnose did not submit' };
+      } catch (e) {
+        out.checks.reviewSubmissionItemRetry = errorRecord({ status: 'error' }, e);
+      }
+    }
+  }
+
+  let info = null;
+  await check('appInfo', async () => {
+    const r = await editableAppInfo();
+    info = r.info;
+    if (!info) return { appInfos: r.infos };
+    const full = await asc('GET', `/v1/appInfos/${info.id}?include=primaryCategory,secondaryCategory,ageRatingDeclaration`);
+    const rel = full.data.relationships || {};
+    const id = (k) => (rel[k] && rel[k].data ? rel[k].data.id : null);
+    return { appInfos: r.infos, usedAppInfoId: info.id, attributes: full.data.attributes, primaryCategory: id('primaryCategory'), secondaryCategory: id('secondaryCategory') };
+  });
+  await check('ageRatingDeclaration', async () => {
+    if (!info) return { error: 'no app info' };
+    const a = await asc('GET', `/v1/appInfos/${info.id}/ageRatingDeclaration`);
+    return { id: a.data.id, attributes: a.data.attributes, nullFields: nullFields(a.data.attributes) };
+  });
+  await check('app', async () => {
+    const a = await asc('GET', `/v1/apps/${APP_ID}`);
+    return { attributes: a.data.attributes, nullFields: nullFields(a.data.attributes) };
+  });
+  await check('availability', async () => {
+    try {
+      const a = await asc('GET', `/v1/apps/${APP_ID}/appAvailabilityV2`);
+      const t = await asc('GET', `/v2/appAvailabilities/${a.data.id}/territoryAvailabilities?limit=200`);
+      const avail = (t.data || []).filter((x) => x.attributes && x.attributes.available);
+      return { id: a.data.id, attributes: a.data.attributes, territoriesListed: (t.data || []).length, territoriesAvailable: avail.length, usAvailable: avail.some((x) => /USA/.test(Buffer.from(x.id, 'base64').toString('utf8')) || /USA/.test(x.id)) };
+    } catch (e) {
+      if (e.status === 404) return { exists: false, note: 'no app availability set' };
+      throw e;
+    }
+  });
+  await check('priceSchedule', async () => {
+    try {
+      const p = await asc('GET', `/v1/apps/${APP_ID}/appPriceSchedule?include=manualPrices,baseTerritory`);
+      return { id: p.data.id, baseTerritory: p.data.relationships && p.data.relationships.baseTerritory && p.data.relationships.baseTerritory.data ? p.data.relationships.baseTerritory.data.id : null, manualPrices: (p.included || []).filter((x) => x.type === 'appPrices').length, note: 'read only' };
+    } catch (e) {
+      if (e.status === 404) return { exists: false };
+      throw e;
+    }
+  });
+  if (ver) {
+    await check('reviewDetail', async () => {
+      try {
+        const d = await asc('GET', `/v1/appStoreVersions/${ver.id}/appStoreReviewDetail`);
+        if (!d || !d.data) return { exists: false };
+        const attrs = { ...d.data.attributes };
+        if (attrs.demoAccountPassword) attrs.demoAccountPassword = '(set, hidden)';
+        return { exists: true, id: d.data.id, attributes: attrs, nullFields: nullFields(d.data.attributes) };
+      } catch (e) {
+        if (e.status === 404) return { exists: false };
+        throw e;
+      }
+    });
+    await check('localizationsAndScreenshots', async () => {
+      const locs = await getVersionLocalizations(ver.id);
+      const res = [];
+      for (const l of locs) {
+        const sets = await asc('GET', `/v1/appStoreVersionLocalizations/${l.id}/appScreenshotSets?include=appScreenshots&limit=50`);
+        res.push({
+          locale: l.locale,
+          nullFields: nullFields({ description: l.description, keywords: l.keywords, supportUrl: l.supportUrl, marketingUrl: l.marketingUrl, whatsNew: l.whatsNew }),
+          supportUrl: l.supportUrl ?? null,
+          screenshotSets: (sets.data || []).map((x) => ({ displayType: x.attributes.screenshotDisplayType, count: x.relationships && x.relationships.appScreenshots && x.relationships.appScreenshots.data ? x.relationships.appScreenshots.data.length : null })),
+        });
+      }
+      return res;
+    });
+    await check('build', async () => {
+      const b = await asc('GET', `/v1/appStoreVersions/${ver.id}/build`);
+      return b && b.data ? { id: b.data.id, attributes: b.data.attributes } : { attached: false };
+    });
+  }
+  await check('appInfoLocalizations', async () => {
+    if (!info) return null;
+    return getAppInfoLocalizations(info.id);
+  });
+
+  out.ok = out.errors.length === 0;
+  return out;
+}
+
+// ---------------------------------------------------------------------------
+// Compliance request: ops/requests/app-store/compliance.json
+//   { "version": "1.0.4",
+//     "ageRatingDeclaration": { <ageRatingDeclarations attributes> },
+//     "reviewDetail": { contactFirstName, contactLastName, contactEmail, contactPhone,
+//                       demoAccountRequired, demoAccountName, demoAccountPassword, notes },
+//     "contentRightsDeclaration": "DOES_NOT_USE_THIRD_PARTY_CONTENT" | "USES_THIRD_PARTY_CONTENT",
+//     "primaryCategory": "HEALTH_AND_FITNESS", "secondaryCategory": "GAMES_..." }
+// Sets the answers App Review needs. Never touches name, prices, availability or in-app purchases.
+// Result in last-compliance.json.
+// ---------------------------------------------------------------------------
+
+const COMPLIANCE_KNOWN = ['version', 'ageRatingDeclaration', 'reviewDetail', 'contentRightsDeclaration', 'primaryCategory', 'secondaryCategory', 'note', 'requestedAt'];
+
+async function processCompliance(req) {
+  const out = { startedAt: new Date().toISOString(), request: { ...req }, steps: [] };
+  if (req.reviewDetail && req.reviewDetail.demoAccountPassword) out.request.reviewDetail = { ...req.reviewDetail, demoAccountPassword: '(hidden)' };
+  const step = (name, status, details) => { out.steps.push({ step: name, status, at: new Date().toISOString(), ...details }); };
+  const fail = (name, e) => out.steps.push(errorRecord({ step: name, status: 'error', at: new Date().toISOString() }, e));
+  const unknown = Object.keys(req).filter((k) => !COMPLIANCE_KNOWN.includes(k));
+  if (unknown.length) step('validate', 'ignored fields', { fields: unknown });
+
+  let info = null;
+  try { info = (await editableAppInfo()).info; } catch (e) { fail('appInfo', e); }
+
+  if (req.ageRatingDeclaration && info) {
+    try {
+      const a = await asc('GET', `/v1/appInfos/${info.id}/ageRatingDeclaration`);
+      const before = Object.fromEntries(Object.keys(req.ageRatingDeclaration).map((k) => [k, a.data.attributes[k] ?? null]));
+      const r = await asc('PATCH', `/v1/ageRatingDeclarations/${a.data.id}`, {
+        data: { type: 'ageRatingDeclarations', id: a.data.id, attributes: req.ageRatingDeclaration },
+      });
+      step('ageRatingDeclaration', 'ok', { id: a.data.id, before, after: r.data.attributes, stillNull: nullFields(r.data.attributes) });
+    } catch (e) { fail('ageRatingDeclaration', e); }
+  }
+
+  if (req.contentRightsDeclaration) {
+    try {
+      const r = await asc('PATCH', `/v1/apps/${APP_ID}`, {
+        data: { type: 'apps', id: APP_ID, attributes: { contentRightsDeclaration: req.contentRightsDeclaration } },
+      });
+      step('contentRightsDeclaration', 'ok', { after: r.data.attributes.contentRightsDeclaration });
+    } catch (e) { fail('contentRightsDeclaration', e); }
+  }
+
+  if ((req.primaryCategory || req.secondaryCategory) && info) {
+    try {
+      const relationships = {};
+      if (req.primaryCategory) relationships.primaryCategory = { data: { type: 'appCategories', id: req.primaryCategory } };
+      if (req.secondaryCategory) relationships.secondaryCategory = { data: { type: 'appCategories', id: req.secondaryCategory } };
+      await asc('PATCH', `/v1/appInfos/${info.id}`, { data: { type: 'appInfos', id: info.id, relationships } });
+      step('categories', 'ok', { primaryCategory: req.primaryCategory || null, secondaryCategory: req.secondaryCategory || null });
+    } catch (e) { fail('categories', e); }
+  }
+
+  if (req.reviewDetail) {
+    try {
+      let ver = req.version ? await findVersion(String(req.version)) : null;
+      if (!ver) {
+        const ed = (await getVersions()).find((v) => v.editable);
+        ver = ed ? { id: ed.id } : null;
+      }
+      if (!ver) throw new Error('no version found for reviewDetail');
+      let existing = null;
+      try {
+        const d = await asc('GET', `/v1/appStoreVersions/${ver.id}/appStoreReviewDetail`);
+        existing = d && d.data ? d.data : null;
+      } catch (e) { if (e.status !== 404) throw e; }
+      let r;
+      if (existing) {
+        r = await asc('PATCH', `/v1/appStoreReviewDetails/${existing.id}`, {
+          data: { type: 'appStoreReviewDetails', id: existing.id, attributes: req.reviewDetail },
+        });
+      } else {
+        r = await asc('POST', '/v1/appStoreReviewDetails', {
+          data: { type: 'appStoreReviewDetails', attributes: req.reviewDetail, relationships: { appStoreVersion: { data: { type: 'appStoreVersions', id: ver.id } } } },
+        });
+      }
+      const after = { ...r.data.attributes };
+      if (after.demoAccountPassword) after.demoAccountPassword = '(set, hidden)';
+      step('reviewDetail', existing ? 'updated' : 'created', { id: r.data.id, after, stillNull: nullFields(r.data.attributes) });
+    } catch (e) { fail('reviewDetail', e); }
+  }
+
+  out.ok = out.steps.every((s) => s.status !== 'error');
+  return out;
+}
+
 async function snapshot(errors) {
   const snap = { appId: APP_ID };
 
@@ -764,6 +1028,28 @@ async function main() {
     applyResult = { appliedAt: new Date().toISOString(), ok: false, errors: [{ error: requestError }], note: 'Invalid request file was removed.' };
   }
 
+  // Compliance answers first (age rating, review contact, content rights), then diagnose, then release.
+  const extraResults = [];
+  for (const [file, name, fn] of [
+    [COMPLIANCE_FILE, 'last-compliance.json', processCompliance],
+    [DIAGNOSE_FILE, 'last-diagnose.json', processDiagnose],
+  ]) {
+    if (!fs.existsSync(file)) continue;
+    let r;
+    let consume = true;
+    try {
+      const req = JSON.parse(fs.readFileSync(file, 'utf8')) || {};
+      if (TOKEN) r = await fn(req);
+      else { r = { ok: false, requestKept: true, errors: [{ error: 'not authenticated, nothing done' }] }; consume = false; }
+    } catch (e) {
+      r = errorRecord({ ok: false, fatal: true }, e);
+    }
+    r.finishedAt = new Date().toISOString();
+    writeJson(path.join(REPORT_DIR, name), r);
+    extraResults.push({ file: `ops/reports/app-store/${name}`, ok: r.ok });
+    if (consume) fs.unlinkSync(file);
+  }
+
   // Release request (version, build, listing text, review submission).
   let releaseResult = null;
   let consumeRelease = false;
@@ -809,6 +1095,7 @@ async function main() {
     errors,
     applied: applyResult ? { ok: applyResult.ok, file: 'ops/reports/app-store/last-apply.json' } : null,
     release: releaseResult ? { ok: releaseResult.ok, file: 'ops/reports/app-store/last-release.json' } : null,
+    otherRequests: extraResults.length ? extraResults : null,
     ...snap,
   };
 
