@@ -1,67 +1,39 @@
 {
-  "startedAt": "2026-11-22T15:33:10.327Z",
+  "startedAt": "2026-11-22T15:50:15.201Z",
   "request": {
-    "note": "Take 1.0.4 back from review and send 1.1.0 (build 30) in its place. Kyle approved publishing 1.1.0 on 2026-11-22 after testing it in TestFlight. This first pass prepares the version; screenshots and the submission follow.",
+    "note": "Second pass for 1.1.0: listing text (keywords fixed to fit 100 characters), eight new iPhone screenshots of a fictional demo player (the old set had Kyle's photos), the iPad set removed because the app is iPhone only, then submit for review. Kyle approved publishing 1.1.0 on 2026-11-22.",
     "version": "1.1.0",
-    "fromVersion": "1.0.4",
-    "withdraw": true,
     "build": "30",
     "whatsNew": "Logging a workout is rebuilt. Repeat your last workout in three taps, or start from a saved routine. Each exercise shows what you did last time, and one tap fills it in. Step buttons add a rep or five pounds without the keyboard. Routines now keep every set. Search finds what you type, and you can add your own exercises.\n\nA new Home puts your warrior up top with the Recruit's Trials: five first steps that pay coins. The app opens faster, saves faster and is a much smaller download. Reminders warn you before a streak is lost.\n\nFixed: runs and holds with seconds that would not save, and the daily bonus for new players. You can now report and block other players.",
     "promotionalText": "New: repeat your last workout in three taps and keep every set in your routines. Your lifts earn XP. Your team fights bosses. Free, no ads.",
-    "keywords": "workout,tracker,lifting,weightlifting,strength,exercise,game,gamified,rpg,xp,level,habit,team,monster,raid,1rm,routine",
+    "keywords": "workout,tracker,lifting,weightlifting,strength,exercise,game,gamified,rpg,xp,habit,team,monster,raid",
     "description": "Log real sets, reps and weight. Every set earns XP.\nRank up through 24 ranks and fight 24 bosses with your team.\nFree to play. No ads.\n\nA REAL WORKOUT LOG\n• Strength, cardio, timed holds, heavy bag rounds, classes and sports\n• See what you lifted last time and repeat it in one tap\n• Repeat your last workout, or start from a saved routine\n• Runs and rides keep distance, time and pace\n• Personal records found for you, with bonuses for beating your last session\n\nA GAME THAT REWARDS SHOWING UP\n• Every workout pays XP and coins\n• 24 ranks, from Recruit to Legend\n• Gear drops that make your warrior stronger\n• Weekly goals and streak bonuses for training on schedule\n\nTRAIN WITH A TEAM\n• Make or join a team and pick one of 18 themes\n• Your workouts power team battles against 24 bosses, from goblins to titans\n• A team feed with reactions, and a team rank you climb together\n\nSEE YOUR FUTURE SELF\n• Add a photo and get an AI image of the body your plan is building\n\nFAIR PLAY\n• Clear scoring rules and honest weight limits, so every rank is earned\n\nDeparture is free to download and play. Optional purchases include coin packs, XP boosts, equipment slots and banners.",
+    "screenshots": {
+      "APP_IPHONE_65": "ops/app-store/screenshots/iphone-65",
+      "APP_IPAD_PRO_3GEN_129": null
+    },
     "releaseType": "AFTER_APPROVAL",
-    "submitForReview": false
+    "submitForReview": true
   },
   "locale": "en-US",
   "steps": [
     {
       "step": "validate",
       "status": "ok",
-      "at": "2026-11-22T15:33:10.327Z"
-    },
-    {
-      "step": "fromVersion",
-      "status": "found",
-      "at": "2026-11-22T15:33:10.923Z",
-      "id": "4d905e7e-0744-4907-bc77-59f8333298e7",
-      "versionString": "1.0.4",
-      "state": "WAITING_FOR_REVIEW"
-    },
-    {
-      "step": "withdraw",
-      "status": "requested",
-      "at": "2026-11-22T15:33:12.612Z",
-      "reviewSubmissionId": "d442d11b-c41f-4b49-a6bb-6a82988c1760",
-      "state": "CANCELING"
-    },
-    {
-      "step": "withdrawWait",
-      "status": "ok",
-      "at": "2026-11-22T15:33:33.072Z",
-      "state": "DEVELOPER_REJECTED",
-      "polls": 1
-    },
-    {
-      "step": "rename",
-      "status": "ok",
-      "at": "2026-11-22T15:33:34.635Z",
-      "id": "4d905e7e-0744-4907-bc77-59f8333298e7",
-      "before": "1.0.4",
-      "after": "1.1.0"
+      "at": "2026-11-22T15:50:15.201Z"
     },
     {
       "step": "version",
       "status": "found",
-      "at": "2026-11-22T15:33:35.442Z",
+      "at": "2026-11-22T15:50:15.554Z",
       "id": "4d905e7e-0744-4907-bc77-59f8333298e7",
-      "state": "DEVELOPER_REJECTED",
+      "state": "PREPARE_FOR_SUBMISSION",
       "releaseType": "AFTER_APPROVAL"
     },
     {
       "step": "build",
       "status": "valid",
-      "at": "2026-11-22T15:33:35.662Z",
+      "at": "2026-11-22T15:50:15.638Z",
       "id": "5403930a-8b8c-4514-a0d7-3619d80d04e5",
       "uploadedDate": "2026-11-21T22:34:07-08:00",
       "usesNonExemptEncryption": false,
@@ -70,62 +42,143 @@
     {
       "step": "exportCompliance",
       "status": "already set",
-      "at": "2026-11-22T15:33:35.662Z",
+      "at": "2026-11-22T15:50:15.638Z",
       "usesNonExemptEncryption": false
     },
     {
       "step": "attachBuild",
-      "status": "ok",
-      "at": "2026-11-22T15:33:39.857Z",
-      "buildId": "5403930a-8b8c-4514-a0d7-3619d80d04e5",
-      "replaced": "fef4ef6f-133e-4148-ab01-5a9a133d3406"
+      "status": "already attached",
+      "at": "2026-11-22T15:50:15.638Z",
+      "buildId": "5403930a-8b8c-4514-a0d7-3619d80d04e5"
     },
     {
       "step": "versionLocalization",
-      "status": "error",
-      "at": "2026-11-22T15:33:40.310Z",
-      "error": "PATCH /v1/appStoreVersionLocalizations/5e77fb9c-0f57-4594-b138-e93566b5b587 -> 409 ENTITY_ERROR.ATTRIBUTE.INVALID.TOO_LONG An attribute value is too long.: Keywords for English (U.S.) cannot be longer than 100 characters.",
-      "apiErrors": [
-        {
-          "id": "38961aaa-8171-46da-bca5-fb6e6728d268",
-          "status": "409",
-          "code": "ENTITY_ERROR.ATTRIBUTE.INVALID.TOO_LONG",
-          "title": "An attribute value is too long.",
-          "detail": "Keywords for English (U.S.) cannot be longer than 100 characters.",
-          "source": {
-            "pointer": "/data/attributes/keywords"
-          }
-        }
-      ],
-      "httpStatus": 409
+      "status": "ok",
+      "at": "2026-11-22T15:50:15.997Z",
+      "id": "5e77fb9c-0f57-4594-b138-e93566b5b587",
+      "before": {
+        "whatsNew": "Onboarding is shorter to get through, with a Skip button and a clearer order. A workout in progress is no longer lost while the app refreshes your sign in. XP and ranks are rebalanced, and Home shows your weekly streak. New players start with a set of common gear, and duplicate gear drops now pay coins. Fixes for double purchase grants and a projection graph crash.",
+        "keywords": "workout,tracker,game,weightlifting,exercise,strength,gamified,level,habit,raid,team,monster,1rm,xp",
+        "promotionalText": "Turn every workout into a quest. Log real lifts, earn XP, rank up from Recruit to Legend, and fight monsters with your team. Free to play.",
+        "description": "Departure: Fitness Quest makes working out feel like a game. Log your workouts across arms, legs, core, and cardio — and earn XP for every session. The more consistent and varied your training, the higher you rank through 12 tiers from Thrall to Allfather.                                                    \n                                                  \nSee your transformation before it happens. Upload a selfie and our AI generates an image of your future physique based on your workout plan, giving you a powerful visual of where you're headed.    \n                                                                                                  \nTeam up with friends and compete together. Create or join a team, pick a genre theme (Barbarian, Cyberpunk, Samurai, and more), set group goals, and climb the team leaderboard. Your individual effort contributes to your team's score.                                                       \n                                                                                                      \n  Features:                                                                                           \n  - Log workouts with detailed exercise tracking\n  - XP scoring system with streak and variety bonuses                                                 \n  - 24 rank tiers to progress through                                                              \n  - AI-powered future body transformation images\n  - Team creation with 18 unique genre themes   \n  - Team goals and group scoring              \n  - Social features to find and compete with friends  "
+      },
+      "after": {
+        "whatsNew": "Logging a workout is rebuilt. Repeat your last workout in three taps, or start from a saved routine. Each exercise shows what you did last time, and one tap fills it in. Step buttons add a rep or five pounds without the keyboard. Routines now keep every set. Search finds what you type, and you can add your own exercises.\n\nA new Home puts your warrior up top with the Recruit's Trials: five first steps that pay coins. The app opens faster, saves faster and is a much smaller download. Reminders warn you before a streak is lost.\n\nFixed: runs and holds with seconds that would not save, and the daily bonus for new players. You can now report and block other players.",
+        "keywords": "workout,tracker,lifting,weightlifting,strength,exercise,game,gamified,rpg,xp,habit,team,monster,raid",
+        "promotionalText": "New: repeat your last workout in three taps and keep every set in your routines. Your lifts earn XP. Your team fights bosses. Free, no ads.",
+        "description": "Log real sets, reps and weight. Every set earns XP.\nRank up through 24 ranks and fight 24 bosses with your team.\nFree to play. No ads.\n\nA REAL WORKOUT LOG\n• Strength, cardio, timed holds, heavy bag rounds, classes and sports\n• See what you lifted last time and repeat it in one tap\n• Repeat your last workout, or start from a saved routine\n• Runs and rides keep distance, time and pace\n• Personal records found for you, with bonuses for beating your last session\n\nA GAME THAT REWARDS SHOWING UP\n• Every workout pays XP and coins\n• 24 ranks, from Recruit to Legend\n• Gear drops that make your warrior stronger\n• Weekly goals and streak bonuses for training on schedule\n\nTRAIN WITH A TEAM\n• Make or join a team and pick one of 18 themes\n• Your workouts power team battles against 24 bosses, from goblins to titans\n• A team feed with reactions, and a team rank you climb together\n\nSEE YOUR FUTURE SELF\n• Add a photo and get an AI image of the body your plan is building\n\nFAIR PLAY\n• Clear scoring rules and honest weight limits, so every rank is earned\n\nDeparture is free to download and play. Optional purchases include coin packs, XP boosts, equipment slots and banners."
+      }
     },
     {
       "step": "appInfoLocalization",
       "status": "skipped",
-      "at": "2026-11-22T15:33:40.310Z",
+      "at": "2026-11-22T15:50:15.997Z",
       "reason": "no subtitle or privacyPolicyUrl in the request"
     },
     {
-      "step": "screenshots",
-      "status": "skipped",
-      "at": "2026-11-22T15:33:40.310Z",
-      "reason": "not in the request"
+      "step": "screenshots APP_IPHONE_65",
+      "status": "ok",
+      "at": "2026-11-22T15:51:13.923Z",
+      "setId": "baca76c6-f67f-4d14-9c72-0125af4337bc",
+      "removed": 10,
+      "uploaded": [
+        {
+          "id": "6b800019-3065-8a53-8014-feb80daa8d17",
+          "fileName": "01-log-list.png",
+          "bytes": 1420188,
+          "state": "COMPLETE",
+          "errors": []
+        },
+        {
+          "id": "b2800019-3065-8a53-801d-499720546f26",
+          "fileName": "02-team.png",
+          "bytes": 2683473,
+          "state": "COMPLETE",
+          "errors": []
+        },
+        {
+          "id": "24000019-3065-8a53-801c-0eab24a5de9d",
+          "fileName": "03-summary.png",
+          "bytes": 1445253,
+          "state": "COMPLETE",
+          "errors": []
+        },
+        {
+          "id": "38800019-3065-8a53-8009-907b47f283b0",
+          "fileName": "04-home.png",
+          "bytes": 1821049,
+          "state": "COMPLETE",
+          "errors": []
+        },
+        {
+          "id": "ec400019-3065-8a53-802f-58ec58b7c0ed",
+          "fileName": "05-log-empty.png",
+          "bytes": 1415651,
+          "state": "COMPLETE",
+          "errors": []
+        },
+        {
+          "id": "84800019-3065-8a53-8002-543cdd266097",
+          "fileName": "06-equip.png",
+          "bytes": 3442233,
+          "state": "COMPLETE",
+          "errors": []
+        },
+        {
+          "id": "45800019-3065-8a53-8026-1b7a8c93bf10",
+          "fileName": "07-trophy.png",
+          "bytes": 1407571,
+          "state": "COMPLETE",
+          "errors": []
+        },
+        {
+          "id": "9fc00019-3065-8a53-800d-426bb956ca7b",
+          "fileName": "08-heatmap.png",
+          "bytes": 1347934,
+          "state": "COMPLETE",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "step": "screenshots APP_IPAD_PRO_3GEN_129",
+      "status": "removed",
+      "at": "2026-11-22T15:51:17.101Z",
+      "setId": "b3976379-6aaa-4b55-bb4b-98580fc45762",
+      "removed": 5
     },
     {
       "step": "releaseType",
       "status": "ok",
-      "at": "2026-11-22T15:33:41.253Z",
+      "at": "2026-11-22T15:51:18.308Z",
       "before": "AFTER_APPROVAL",
       "after": "AFTER_APPROVAL"
     },
     {
+      "step": "reviewSubmission",
+      "status": "created",
+      "at": "2026-11-22T15:51:18.685Z",
+      "id": "7346eb07-528c-4ada-a27f-10a846c12219",
+      "state": "READY_FOR_REVIEW"
+    },
+    {
+      "step": "reviewSubmissionItem",
+      "status": "created",
+      "at": "2026-11-22T15:51:23.393Z",
+      "id": "NzM0NmViMDctNTI4Yy00YWRhLWEyN2YtMTBhODQ2YzEyMjE5fDZ8ODk1ODM4ODI1",
+      "state": "READY_FOR_REVIEW"
+    },
+    {
       "step": "submit",
-      "status": "skipped",
-      "at": "2026-11-22T15:33:41.254Z",
-      "reason": "submitForReview is not true"
+      "status": "ok",
+      "at": "2026-11-22T15:51:28.361Z",
+      "reviewSubmissionId": "7346eb07-528c-4ada-a27f-10a846c12219",
+      "state": "WAITING_FOR_REVIEW",
+      "submittedDate": "2026-11-22T15:51:26.882Z"
     }
   ],
-  "ok": false,
-  "finalVersionState": "PREPARE_FOR_SUBMISSION",
-  "finishedAt": "2026-11-22T15:33:41.475Z"
+  "ok": true,
+  "reviewSubmissionState": "WAITING_FOR_REVIEW",
+  "finalVersionState": "WAITING_FOR_REVIEW",
+  "finishedAt": "2026-11-22T15:51:29.076Z"
 }
