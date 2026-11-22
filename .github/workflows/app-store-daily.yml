@@ -1,0 +1,58 @@
+name: App Store snapshot
+
+# Daily snapshot of the App Store listing, versions and reviews, committed to
+# ops/reports/app-store/. Pushing ops/requests/app-store/listing.json applies
+# listing text changes (see ops/README.md). Never touches pricing or in-app purchases.
+
+on:
+  schedule:
+    - cron: '17 11 * * *'
+  push:
+    paths:
+      - 'ops/requests/app-store/**'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: app-store-ops-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  # App Store Connect Issuer ID (not secret).
+  ASC_ISSUER_ID: "5b6ca736-31c8-499c-83ff-200056b9b07b"
+  ASC_APP_ID: "6761634387"
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Snapshot and apply requests
+        env:
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+        run: node scripts/app-store.cjs
+
+      - name: Commit report
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A ops
+          if git diff --cached --quiet; then
+            echo "Nothing to commit"
+            exit 0
+          fi
+          git commit -m "App Store snapshot $(date -u +%Y-%m-%dT%H:%MZ) (${GITHUB_EVENT_NAME})"
+          for i in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep 5
+          done
+          exit 1
