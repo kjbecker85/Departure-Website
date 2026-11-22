@@ -1,0 +1,71 @@
+{
+  "startedAt": "2026-11-22T02:58:47.236Z",
+  "request": {
+    "version": "1.0.4",
+    "note": "Apple's updated age rating questions. Reasons in ops/app-store-answers.md.",
+    "ageRatingDeclaration": {
+      "socialMedia": true,
+      "socialMediaAgeRestricted": false,
+      "sharedLocation": false,
+      "messagingAndChat": true,
+      "userGeneratedContent": true
+    }
+  },
+  "steps": [
+    {
+      "step": "ageRatingDeclaration",
+      "status": "ok",
+      "at": "2026-11-22T02:58:48.124Z",
+      "id": "e44ec198-517d-486c-a642-ba17ae37ac17",
+      "before": {
+        "socialMedia": null,
+        "socialMediaAgeRestricted": null,
+        "sharedLocation": null,
+        "messagingAndChat": false,
+        "userGeneratedContent": false
+      },
+      "after": {
+        "advertising": false,
+        "alcoholTobaccoOrDrugUseOrReferences": "NONE",
+        "contests": "FREQUENT_OR_INTENSE",
+        "datingAndRelationships": null,
+        "gambling": false,
+        "gamblingSimulated": "NONE",
+        "gunsOrOtherWeapons": "INFREQUENT_OR_MILD",
+        "healthOrWellnessTopics": true,
+        "kidsAgeBand": null,
+        "lootBox": true,
+        "medicalOrTreatmentInformation": "NONE",
+        "messagingAndChat": true,
+        "parentalControls": false,
+        "profanityOrCrudeHumor": "NONE",
+        "ageAssurance": false,
+        "sexualContentGraphicAndNudity": "NONE",
+        "sexualContentOrNudity": "NONE",
+        "sharedLocation": false,
+        "socialMedia": true,
+        "socialMediaAgeRestricted": false,
+        "horrorOrFearThemes": "NONE",
+        "matureOrSuggestiveThemes": "NONE",
+        "unrestrictedWebAccess": false,
+        "userGeneratedContent": true,
+        "violenceCartoonOrFantasy": "FREQUENT_OR_INTENSE",
+        "violenceRealisticProlongedGraphicOrSadistic": "NONE",
+        "violenceRealistic": "INFREQUENT_OR_MILD",
+        "ageRatingOverride": "NONE",
+        "ageRatingOverrideV2": "NONE",
+        "koreaAgeRatingOverride": "NONE",
+        "gracRatingClassificationNumber": null,
+        "developerAgeRatingInfoUrl": null
+      },
+      "stillNull": [
+        "datingAndRelationships",
+        "kidsAgeBand",
+        "gracRatingClassificationNumber",
+        "developerAgeRatingInfoUrl"
+      ]
+    }
+  ],
+  "ok": true,
+  "finishedAt": "2026-11-22T02:58:48.124Z"
+}

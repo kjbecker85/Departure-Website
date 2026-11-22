@@ -1,12 +1,8 @@
 {
-  "startedAt": "2026-11-22T02:51:06.832Z",
+  "startedAt": "2026-11-22T02:58:48.125Z",
   "request": {
     "version": "1.0.4",
     "build": "28",
-    "whatsNew": "Onboarding is shorter to get through, with a Skip button and a clearer order. A workout in progress is no longer lost while the app refreshes your sign in. XP and ranks are rebalanced, and Home shows your weekly streak. New players start with a set of common gear, and duplicate gear drops now pay coins. Fixes for double purchase grants and a projection graph crash.",
-    "subtitle": "Gym Log, Ranks & Boss Fights",
-    "keywords": "workout,tracker,game,weightlifting,exercise,strength,gamified,level,habit,raid,team,monster,1rm,xp",
-    "privacyPolicyUrl": "https://departure.engagequalia.com/privacy/",
     "releaseType": "AFTER_APPROVAL",
     "submitForReview": true
   },
@@ -15,19 +11,20 @@
     {
       "step": "validate",
       "status": "ok",
-      "at": "2026-11-22T02:51:06.832Z"
+      "at": "2026-11-22T02:58:48.125Z"
     },
     {
       "step": "version",
-      "status": "created",
-      "at": "2026-11-22T02:51:10.343Z",
+      "status": "found",
+      "at": "2026-11-22T02:58:48.308Z",
       "id": "4d905e7e-0744-4907-bc77-59f8333298e7",
-      "state": "PREPARE_FOR_SUBMISSION"
+      "state": "PREPARE_FOR_SUBMISSION",
+      "releaseType": "AFTER_APPROVAL"
     },
     {
       "step": "build",
       "status": "valid",
-      "at": "2026-11-22T02:51:10.545Z",
+      "at": "2026-11-22T02:58:48.409Z",
       "id": "fef4ef6f-133e-4148-ab01-5a9a133d3406",
       "uploadedDate": "2026-11-21T18:46:53-08:00",
       "usesNonExemptEncryption": false,
@@ -36,68 +33,59 @@
     {
       "step": "exportCompliance",
       "status": "already set",
-      "at": "2026-11-22T02:51:10.545Z",
+      "at": "2026-11-22T02:58:48.409Z",
       "usesNonExemptEncryption": false
     },
     {
       "step": "attachBuild",
-      "status": "ok",
-      "at": "2026-11-22T02:51:12.653Z",
-      "buildId": "fef4ef6f-133e-4148-ab01-5a9a133d3406",
-      "replaced": null
+      "status": "already attached",
+      "at": "2026-11-22T02:58:48.409Z",
+      "buildId": "fef4ef6f-133e-4148-ab01-5a9a133d3406"
     },
     {
       "step": "versionLocalization",
-      "status": "ok",
-      "at": "2026-11-22T02:51:13.240Z",
-      "id": "5e77fb9c-0f57-4594-b138-e93566b5b587",
-      "before": {
-        "whatsNew": " • Sign in with Apple                                                                                                                 \n  • Sign in with Google                                                                                                                \n  • Quality and stability improvements",
-        "keywords": "fitness, workout, gym, tracker, strength training, rpg, challenge, muscle, weightlifting, cardio"
-      },
-      "after": {
-        "whatsNew": "Onboarding is shorter to get through, with a Skip button and a clearer order. A workout in progress is no longer lost while the app refreshes your sign in. XP and ranks are rebalanced, and Home shows your weekly streak. New players start with a set of common gear, and duplicate gear drops now pay coins. Fixes for double purchase grants and a projection graph crash.",
-        "keywords": "workout,tracker,game,weightlifting,exercise,strength,gamified,level,habit,raid,team,monster,1rm,xp"
-      }
+      "status": "skipped",
+      "at": "2026-11-22T02:58:48.409Z",
+      "reason": "no version fields in the request"
     },
     {
       "step": "appInfoLocalization",
-      "status": "ok",
-      "at": "2026-11-22T02:51:14.951Z",
-      "appInfoId": "e44ec198-517d-486c-a642-ba17ae37ac17",
-      "appInfoState": "PREPARE_FOR_SUBMISSION",
-      "id": "97ae2e01-988d-4f24-9ba2-12569613efa8",
-      "before": {
-        "subtitle": null,
-        "privacyPolicyUrl": "https://docs.google.com/document/d/1MFbwdZ6QtHDXghhFWAMlgsE8Qd9GqpRWVaq6n2xCfEs/edit?usp=sharing"
-      },
-      "after": {
-        "subtitle": "Gym Log, Ranks & Boss Fights",
-        "privacyPolicyUrl": "https://departure.engagequalia.com/privacy/"
-      }
+      "status": "skipped",
+      "at": "2026-11-22T02:58:48.409Z",
+      "reason": "no subtitle or privacyPolicyUrl in the request"
     },
     {
       "step": "releaseType",
       "status": "ok",
-      "at": "2026-11-22T02:51:16.439Z",
+      "at": "2026-11-22T02:58:49.665Z",
       "before": "AFTER_APPROVAL",
       "after": "AFTER_APPROVAL"
     },
     {
       "step": "reviewSubmission",
-      "status": "created",
-      "at": "2026-11-22T02:51:19.545Z",
+      "status": "reused",
+      "at": "2026-11-22T02:58:49.756Z",
       "id": "d442d11b-c41f-4b49-a6bb-6a82988c1760",
       "state": "READY_FOR_REVIEW"
     },
     {
       "step": "reviewSubmissionItem",
-      "status": "error",
-      "at": "2026-11-22T02:51:22.201Z",
-      "error": "POST /v1/reviewSubmissionItems -> 409 STATE_ERROR.ENTITY_STATE_INVALID appStoreVersions with id '4d905e7e-0744-4907-bc77-59f8333298e7' is not in valid state.: This resource cannot be reviewed, please check associated errors to see why."
+      "status": "created",
+      "at": "2026-11-22T02:58:54.466Z",
+      "id": "ZDQ0MmQxMWItYzQxZi00YjQ5LWE2YmItNmE4Mjk4OGMxNzYwfDZ8ODk1ODM4ODI1",
+      "state": "READY_FOR_REVIEW"
+    },
+    {
+      "step": "submit",
+      "status": "ok",
+      "at": "2026-11-22T02:58:59.584Z",
+      "reviewSubmissionId": "d442d11b-c41f-4b49-a6bb-6a82988c1760",
+      "state": "WAITING_FOR_REVIEW",
+      "submittedDate": "2026-11-22T02:58:57.907Z"
     }
   ],
-  "ok": false,
-  "finalVersionState": "PREPARE_FOR_SUBMISSION",
-  "finishedAt": "2026-11-22T02:51:22.405Z"
+  "ok": true,
+  "reviewSubmissionState": "WAITING_FOR_REVIEW",
+  "finalVersionState": "WAITING_FOR_REVIEW",
+  "finishedAt": "2026-11-22T02:59:00.308Z"
 }
