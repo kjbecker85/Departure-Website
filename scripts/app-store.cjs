@@ -357,6 +357,7 @@ const RELEASE_VERSION_FIELDS = ['whatsNew', 'keywords', 'promotionalText', 'desc
 const RELEASE_APP_INFO_FIELDS = ['subtitle', 'privacyPolicyUrl'];
 const RELEASE_KNOWN_FIELDS = [
   'version', 'build', 'locale', 'releaseType', 'submitForReview', 'requestedAt', 'note',
+  'fromVersion', 'withdraw', 'screenshots',
   ...RELEASE_VERSION_FIELDS, ...RELEASE_APP_INFO_FIELDS,
 ];
 // Review submission states that still accept items and can be submitted.
@@ -386,6 +387,200 @@ async function findBuild(versionString, buildNumber) {
       '&filter[preReleaseVersion.platform]=IOS&limit=5',
   );
   return json.data[0] || null;
+}
+
+// Review submission states that are with Apple and can be cancelled.
+const CANCELABLE_SUBMISSION_STATES = new Set(['WAITING_FOR_REVIEW', 'IN_REVIEW', 'UNRESOLVED_ISSUES']);
+const WITHDRAW_WAIT_MS = 6 * 60 * 1000;
+
+/**
+ * Take a version back from App Review: cancel the review submission that
+ * holds it, then wait until Apple marks the version DEVELOPER_REJECTED, which
+ * makes it editable again. The version keeps its build and text.
+ */
+async function withdrawVersion(ver, step, fail) {
+  let submissionId = null;
+  try {
+    const subs = await asc('GET', `/v1/reviewSubmissions?filter[app]=${APP_ID}&filter[platform]=IOS&limit=20`);
+    for (const sub of subs.data || []) {
+      if (!CANCELABLE_SUBMISSION_STATES.has(sub.attributes.state)) continue;
+      const items = await asc('GET', `/v1/reviewSubmissions/${sub.id}/items?include=appStoreVersion&limit=50`);
+      const holds = (items.data || []).some((it) => it.relationships && it.relationships.appStoreVersion &&
+        it.relationships.appStoreVersion.data && it.relationships.appStoreVersion.data.id === ver.id);
+      if (holds) { submissionId = sub.id; break; }
+    }
+    if (!submissionId) {
+      step('withdraw', 'error', { error: 'no review submission with Apple holds this version' });
+      return false;
+    }
+    const res = await asc('PATCH', `/v1/reviewSubmissions/${submissionId}`, {
+      data: { type: 'reviewSubmissions', id: submissionId, attributes: { canceled: true } },
+    });
+    step('withdraw', 'requested', { reviewSubmissionId: submissionId, state: res.data.attributes.state });
+  } catch (e) {
+    fail('withdraw', e, { reviewSubmissionId: submissionId });
+    return false;
+  }
+  const deadline = Date.now() + WITHDRAW_WAIT_MS;
+  let state = versionState(ver);
+  let polls = 0;
+  while (Date.now() < deadline) {
+    polls += 1;
+    await sleep(20 * 1000);
+    try {
+      const fresh = await asc('GET', `/v1/appStoreVersions/${ver.id}`);
+      state = versionState(fresh.data);
+    } catch (e) {
+      fail('withdrawWait', e, { polls });
+      return false;
+    }
+    if (EDITABLE_VERSION_STATES.has(state)) {
+      step('withdrawWait', 'ok', { state, polls });
+      return true;
+    }
+  }
+  step('withdrawWait', 'error', { error: `version still ${state} after ${polls} check(s); try again on the next run`, polls });
+  return false;
+}
+
+// ---- Screenshots ----------------------------------------------------------
+// release.json "screenshots": { "<screenshotDisplayType>": "<folder of PNG or JPEG files>" | null }
+// A folder replaces every screenshot in that set with the folder's files, in
+// file name order. null removes the set. Paths are relative to the repo root.
+
+const SCREENSHOT_EXTS = new Set(['.png', '.jpg', '.jpeg']);
+const SCREENSHOT_WAIT_MS = 5 * 60 * 1000;
+
+async function listScreenshotSets(locId) {
+  const json = await asc('GET', `/v1/appStoreVersionLocalizations/${locId}/appScreenshotSets?limit=50&include=appScreenshots`);
+  return json.data || [];
+}
+
+async function listScreenshots(setId) {
+  const json = await asc('GET', `/v1/appScreenshotSets/${setId}/appScreenshots?limit=50`);
+  return json.data || [];
+}
+
+async function uploadScreenshot(setId, file) {
+  const bytes = fs.readFileSync(file);
+  const fileName = path.basename(file);
+  const reserved = await asc('POST', '/v1/appScreenshots', {
+    data: {
+      type: 'appScreenshots',
+      attributes: { fileName, fileSize: bytes.length },
+      relationships: { appScreenshotSet: { data: { type: 'appScreenshotSets', id: setId } } },
+    },
+  });
+  const id = reserved.data.id;
+  for (const op of reserved.data.attributes.uploadOperations || []) {
+    const headers = Object.fromEntries((op.requestHeaders || []).map((h) => [h.name, h.value]));
+    const part = bytes.subarray(op.offset, op.offset + op.length);
+    const res = await fetch(op.url, { method: op.method, headers, body: part });
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      throw new Error(`upload of ${fileName} part at ${op.offset} -> ${res.status} ${text.slice(0, 300)}`);
+    }
+  }
+  const checksum = crypto.createHash('md5').update(bytes).digest('hex');
+  await asc('PATCH', `/v1/appScreenshots/${id}`, {
+    data: { type: 'appScreenshots', id, attributes: { uploaded: true, sourceFileChecksum: checksum } },
+  });
+  return { id, fileName, bytes: bytes.length, state: 'UPLOADED', errors: null };
+}
+
+// Apple checks each image after its upload. Wait for all of them together,
+// under one time limit, so a slow set cannot run past the job's own timeout.
+async function waitForScreenshots(uploaded) {
+  const deadline = Date.now() + SCREENSHOT_WAIT_MS;
+  let pending = uploaded.filter((u) => u.state !== 'COMPLETE' && u.state !== 'FAILED');
+  while (pending.length && Date.now() < deadline) {
+    await sleep(5000);
+    for (const u of pending) {
+      const got = await asc('GET', `/v1/appScreenshots/${u.id}`);
+      const d = got.data.attributes.assetDeliveryState || null;
+      if (d) { u.state = d.state; u.errors = d.errors || null; }
+    }
+    pending = pending.filter((u) => u.state !== 'COMPLETE' && u.state !== 'FAILED');
+  }
+  return uploaded;
+}
+
+async function replaceScreenshots(ver, locale, spec, step, fail) {
+  let loc;
+  try {
+    const locs = await getVersionLocalizations(ver.id);
+    loc = locs.find((l) => l.locale === locale);
+    if (!loc) {
+      step('screenshots', 'error', { error: `version has no ${locale} localization` });
+      return;
+    }
+  } catch (e) {
+    fail('screenshots', e);
+    return;
+  }
+  let sets;
+  try {
+    sets = await listScreenshotSets(loc.id);
+  } catch (e) {
+    fail('screenshots', e);
+    return;
+  }
+  for (const [displayType, folder] of Object.entries(spec)) {
+    const name = `screenshots ${displayType}`;
+    let set = sets.find((x) => x.attributes.screenshotDisplayType === displayType) || null;
+    try {
+      if (folder === null) {
+        if (!set) { step(name, 'skipped', { reason: 'no such set' }); continue; }
+        const old = await listScreenshots(set.id);
+        for (const shot of old) await asc('DELETE', `/v1/appScreenshots/${shot.id}`);
+        await asc('DELETE', `/v1/appScreenshotSets/${set.id}`);
+        step(name, 'removed', { setId: set.id, removed: old.length });
+        continue;
+      }
+      const dir = path.resolve(ROOT, String(folder));
+      if (!dir.startsWith(ROOT + path.sep) || !fs.existsSync(dir)) {
+        step(name, 'error', { error: `folder ${folder} not found in the repository` });
+        continue;
+      }
+      const files = fs.readdirSync(dir)
+        .filter((f) => SCREENSHOT_EXTS.has(path.extname(f).toLowerCase()))
+        .sort()
+        .map((f) => path.join(dir, f));
+      if (files.length === 0 || files.length > 10) {
+        step(name, 'error', { error: `folder ${folder} holds ${files.length} images; Apple takes 1 to 10` });
+        continue;
+      }
+      if (!set) {
+        const created = await asc('POST', '/v1/appScreenshotSets', {
+          data: {
+            type: 'appScreenshotSets',
+            attributes: { screenshotDisplayType: displayType },
+            relationships: { appStoreVersionLocalization: { data: { type: 'appStoreVersionLocalizations', id: loc.id } } },
+          },
+        });
+        set = created.data;
+      }
+      const old = await listScreenshots(set.id);
+      for (const shot of old) await asc('DELETE', `/v1/appScreenshots/${shot.id}`);
+      const uploaded = [];
+      for (const f of files) uploaded.push(await uploadScreenshot(set.id, f));
+      await waitForScreenshots(uploaded);
+      const good = uploaded.filter((u) => u.state === 'COMPLETE');
+      if (good.length === uploaded.length) {
+        await asc('PATCH', `/v1/appScreenshotSets/${set.id}/relationships/appScreenshots`, {
+          data: good.map((u) => ({ type: 'appScreenshots', id: u.id })),
+        });
+      }
+      step(name, good.length === uploaded.length ? 'ok' : 'error', {
+        setId: set.id,
+        removed: old.length,
+        uploaded,
+        ...(good.length === uploaded.length ? {} : { error: `${uploaded.length - good.length} image(s) were not accepted` }),
+      });
+    } catch (e) {
+      fail(name, e, { setId: set ? set.id : null });
+    }
+  }
 }
 
 async function processRelease(req) {
@@ -429,6 +624,38 @@ async function processRelease(req) {
   let ver;
   try {
     ver = await findVersion(version);
+    // "fromVersion": reuse a version that was never released (for example one
+    // waiting for review) under the new version string, instead of a new one.
+    // Apple allows only one version in progress at a time.
+    if (!ver && typeof req.fromVersion === 'string' && req.fromVersion.trim()) {
+      let from = await findVersion(req.fromVersion.trim());
+      if (!from) {
+        step('fromVersion', 'error', { error: `version ${req.fromVersion} not found` });
+        return out;
+      }
+      step('fromVersion', 'found', { id: from.id, versionString: req.fromVersion, state: versionState(from) });
+      if (SUBMITTED_VERSION_STATES.has(versionState(from))) {
+        if (req.withdraw !== true) {
+          step('fromVersion', 'error', { error: `version ${req.fromVersion} is ${versionState(from)}; set "withdraw": true to take it back from review` });
+          return out;
+        }
+        if (LIVE_VERSION_STATES.has(versionState(from)) || versionState(from) === 'PENDING_DEVELOPER_RELEASE') {
+          step('fromVersion', 'error', { error: `version ${req.fromVersion} is already approved (${versionState(from)}); not withdrawn` });
+          return out;
+        }
+        if (!(await withdrawVersion(from, step, fail))) return out;
+        from = await findVersion(req.fromVersion.trim());
+      }
+      if (!EDITABLE_VERSION_STATES.has(versionState(from))) {
+        step('rename', 'error', { error: `version ${req.fromVersion} is ${versionState(from)} and cannot be renamed` });
+        return out;
+      }
+      await asc('PATCH', `/v1/appStoreVersions/${from.id}`, {
+        data: { type: 'appStoreVersions', id: from.id, attributes: { versionString: version } },
+      });
+      step('rename', 'ok', { id: from.id, before: req.fromVersion, after: version });
+      ver = await findVersion(version);
+    }
     if (ver) {
       step('version', 'found', { id: ver.id, state: versionState(ver), releaseType: ver.attributes.releaseType });
     } else {
@@ -587,6 +814,13 @@ async function processRelease(req) {
     }
   } else {
     step('appInfoLocalization', 'skipped', { reason: 'no subtitle or privacyPolicyUrl in the request' });
+  }
+
+  // 3c. Screenshots.
+  if (req.screenshots && typeof req.screenshots === 'object' && !Array.isArray(req.screenshots)) {
+    await replaceScreenshots(ver, locale, req.screenshots, step, fail);
+  } else {
+    step('screenshots', 'skipped', { reason: 'not in the request' });
   }
 
   // 4. Release type.
@@ -954,6 +1188,37 @@ async function snapshot(errors) {
     snap.versionLocalizations[v.versionString] = await section(errors, `versionLocalizations ${v.versionString}`, () =>
       getVersionLocalizations(v.id),
     );
+  }
+
+  // Screenshots of the live, pending and editable versions: which images are
+  // up, their size and a link to each, so a session can see the store page.
+  snap.screenshots = {};
+  for (const v of [snap.liveVersion, ...snap.pendingVersions, snap.editableVersion].filter(Boolean)) {
+    if (snap.screenshots[v.versionString]) continue;
+    snap.screenshots[v.versionString] = await section(errors, `screenshots ${v.versionString}`, async () => {
+      const out = [];
+      for (const loc of await getVersionLocalizations(v.id)) {
+        for (const set of await listScreenshotSets(loc.id)) {
+          const shots = await listScreenshots(set.id);
+          out.push({
+            locale: loc.locale,
+            displayType: set.attributes.screenshotDisplayType,
+            images: shots.map((x) => {
+              const a = x.attributes || {};
+              const img = a.imageAsset || {};
+              return {
+                fileName: a.fileName || null,
+                width: img.width || null,
+                height: img.height || null,
+                url: img.templateUrl ? img.templateUrl.replace('{w}', String(img.width || 600)).replace('{h}', String(img.height || 1300)).replace('{f}', 'png') : null,
+                state: a.assetDeliveryState ? a.assetDeliveryState.state : null,
+              };
+            }),
+          });
+        }
+      }
+      return out;
+    });
   }
 
   const appInfos = (await section(errors, 'appInfos', getAppInfos)) || [];

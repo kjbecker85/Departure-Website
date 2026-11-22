@@ -1,12 +1,15 @@
 {
-  "generatedAt": "2026-11-22T11:22:57.558Z",
-  "startedAt": "2026-11-22T11:22:55.908Z",
+  "generatedAt": "2026-11-22T15:51:31.390Z",
+  "startedAt": "2026-11-22T15:50:15.191Z",
   "trigger": "push",
-  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/45017027799",
+  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/45040458572",
   "ok": true,
   "errors": [],
   "applied": null,
-  "release": null,
+  "release": {
+    "ok": true,
+    "file": "ops/reports/app-store/last-release.json"
+  },
   "otherRequests": null,
   "appId": "6761634387",
   "app": {
@@ -19,7 +22,7 @@
   "versions": [
     {
       "id": "4d905e7e-0744-4907-bc77-59f8333298e7",
-      "versionString": "1.0.4",
+      "versionString": "1.1.0",
       "state": "WAITING_FOR_REVIEW",
       "appStoreState": "WAITING_FOR_REVIEW",
       "appVersionState": "WAITING_FOR_REVIEW",
@@ -87,7 +90,7 @@
   "pendingVersions": [
     {
       "id": "4d905e7e-0744-4907-bc77-59f8333298e7",
-      "versionString": "1.0.4",
+      "versionString": "1.1.0",
       "state": "WAITING_FOR_REVIEW",
       "appStoreState": "WAITING_FOR_REVIEW",
       "appVersionState": "WAITING_FOR_REVIEW",
@@ -112,6 +115,191 @@
         "promotionalText": "Turn every workout into a quest. Log real lifts, earn XP, rank up from Recruit to Legend, and fight monsters with your team. Free to play.",
         "supportUrl": "https://departure.engagequalia.com/support",
         "whatsNew": " • Sign in with Apple                                                                                                                 \n  • Sign in with Google                                                                                                                \n  • Quality and stability improvements"
+      }
+    ]
+  },
+  "screenshots": {
+    "1.0.3": [
+      {
+        "locale": "en-US",
+        "displayType": "APP_IPHONE_65",
+        "images": [
+          {
+            "fileName": "onboarding-motivation-2.png",
+            "width": 1242,
+            "height": 2688,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/qYxBPoXPvR5ZVWCxqdpI8g/1242x2688bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "01_quest.jpg",
+            "width": 1242,
+            "height": 2688,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/gyr4_p7PPnnZkaa_ZeRbMA/1242x2688bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "02_current_self.jpg",
+            "width": 1242,
+            "height": 2688,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/QpVYGRkoAL2rOryH-nasiw/1242x2688bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "03a_goal.jpg",
+            "width": 1242,
+            "height": 2688,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/k70RLKpqaaHEC5U0OV_jdg/1242x2688bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "03b_disciplines.jpg",
+            "width": 1242,
+            "height": 2688,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/aYCvi7bn1SB9iC_0rfBYzQ/1242x2688bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "04_future_self.jpg",
+            "width": 1242,
+            "height": 2688,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/jnSkqz1XdfTXLAVjkUWEHg/1242x2688bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "05_team.jpg",
+            "width": 1242,
+            "height": 2688,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/QMbHHIFK59ygzwshzgp63Q/1242x2688bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "06a_workout_xp.jpg",
+            "width": 1242,
+            "height": 2688,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/kZowfhUti3C_CM6ZKOLnrw/1242x2688bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "06b_workout_loot.jpg",
+            "width": 1242,
+            "height": 2688,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/iO1HE26tasYXlszbdp_afA/1242x2688bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "07_slay.jpg",
+            "width": 1242,
+            "height": 2688,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/BYtrrt_E2SFcv2a_oFTUwQ/1242x2688bb.png",
+            "state": "COMPLETE"
+          }
+        ]
+      },
+      {
+        "locale": "en-US",
+        "displayType": "APP_IPAD_PRO_3GEN_129",
+        "images": [
+          {
+            "fileName": "iPad_13inch_4.png",
+            "width": 2048,
+            "height": 2732,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/pwkN1BfktyNPQrVjKVmjww/2048x2732bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "iPad_13inch_5.png",
+            "width": 2048,
+            "height": 2732,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/KmvTqG-BXR3UT5htkP7k8A/2048x2732bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "iPad_13inch_7.png",
+            "width": 2048,
+            "height": 2732,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/eH_dY8g4Q9A-54EbTdnTrA/2048x2732bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "iPad_13inch_6.png",
+            "width": 2048,
+            "height": 2732,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/p4J6mzYIVhWkk6KCOk9XNw/2048x2732bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "iPad_13inch_8.png",
+            "width": 2048,
+            "height": 2732,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/wuy17g-Uhe8yq3AzrGMxwQ/2048x2732bb.png",
+            "state": "COMPLETE"
+          }
+        ]
+      }
+    ],
+    "1.1.0": [
+      {
+        "locale": "en-US",
+        "displayType": "APP_IPHONE_65",
+        "images": [
+          {
+            "fileName": "01-log-list.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/9SEOk4uay1LD-LZBVQeKKA/1284x2778bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "02-team.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/FavXhZGAEnT5d_KfwAbotA/1284x2778bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "03-summary.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/F-7EUP8Ybe_KEFfEuTDjdQ/1284x2778bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "04-home.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/0Py4kTJT4A24knnZM3pHDw/1284x2778bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "05-log-empty.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/cVbXi702nsJ6A4ScYMuVNw/1284x2778bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "06-equip.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/0tf2s1EWSTRmAGArALrAYw/1284x2778bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "07-trophy.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/G5LWvbQWBZaKSS_ncP6WlQ/1284x2778bb.png",
+            "state": "COMPLETE"
+          },
+          {
+            "fileName": "08-heatmap.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/sPruHQvIzm8bgo58-kHrdA/1284x2778bb.png",
+            "state": "COMPLETE"
+          }
+        ]
       }
     ]
   },

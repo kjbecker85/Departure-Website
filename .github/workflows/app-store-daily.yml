@@ -27,8 +27,10 @@ env:
 jobs:
   snapshot:
     runs-on: ubuntu-latest
-    # A release request can wait up to 30 minutes for the build to finish processing.
-    timeout-minutes: 50
+    # A release request can wait up to 30 minutes for the build to finish
+    # processing, 6 to take a version back from review and 5 per screenshot
+    # set for Apple to check the images.
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v4
 
