@@ -36,6 +36,36 @@ The job deletes `listing.json` in the same commit once it has tried it. If it co
 
 The job never touches pricing, availability or in-app purchases.
 
+## Submit a version for review
+
+Commit `ops/requests/app-store/release.json` and push:
+
+```json
+{
+  "version": "1.0.4",
+  "build": "28",
+  "whatsNew": "...",
+  "keywords": "...",
+  "promotionalText": "...",
+  "description": "...",
+  "subtitle": "...",
+  "privacyPolicyUrl": "https://...",
+  "releaseType": "AFTER_APPROVAL",
+  "submitForReview": true
+}
+```
+
+Only `version` is required. In order, the job:
+
+1. Finds the iOS App Store version with that version string, or creates it.
+2. Waits up to 30 minutes for the build with that build number (pre-release version = `version`) to reach processing state `VALID`, then attaches it.
+3. Answers export compliance on the build with `usesNonExemptEncryption=false` if it is not answered yet. This is allowed only because `qualia-fitness/app.json` declares `ITSAppUsesNonExemptEncryption: false`. If that changes, change `APP_DECLARES_NO_NON_EXEMPT_ENCRYPTION` in the script.
+4. Sets the en-US version text (what's new, keywords, promotional text, description) and, on the editable app info, the subtitle and privacy policy URL.
+5. Sets `releaseType` (`MANUAL`, `AFTER_APPROVAL` or `SCHEDULED`) if given.
+6. If `submitForReview` is true and no step failed: creates a review submission (or reuses an unsent one), adds the version as an item, and sends it (`submitted: true`).
+
+Read `ops/reports/app-store/last-release.json`: `steps` lists each step with its status and any Apple error text, `finalVersionState` and `reviewSubmissionState` show where it ended. The request file is deleted once tried; it is kept only when the job could not sign in. A version already waiting for or in review is left alone.
+
 ## iOS release (qualia-fitness repo)
 
 Workflow: `qualia-fitness/.github/workflows/release-ios.yml`.
@@ -45,7 +75,7 @@ Workflow: `qualia-fitness/.github/workflows/release-ios.yml`.
 3. The job checks that the tag matches `app.json`, builds on EAS with the `production` profile (EAS raises the build number), then submits the build to App Store Connect.
 4. Fetch the branch `ops/ios-reports` and read `reports/<tag>.json` (`steps` says which step passed) and `logs/<tag>-build.log`, `logs/<tag>-submit.log`. A build takes about 15 to 40 minutes.
 
-Submitting uploads the build to App Store Connect. Sending it for review is still a step in App Store Connect, or a later job.
+Submitting uploads the build to App Store Connect. Send it for review with `release.json` in this repo (above).
 
 ## Secrets
 

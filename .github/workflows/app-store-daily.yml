@@ -2,7 +2,8 @@ name: App Store snapshot
 
 # Daily snapshot of the App Store listing, versions and reviews, committed to
 # ops/reports/app-store/. Pushing ops/requests/app-store/listing.json applies
-# listing text changes (see ops/README.md). Never touches pricing or in-app purchases.
+# listing text changes; pushing ops/requests/app-store/release.json prepares a version
+# and can submit it for review (see ops/README.md). Never touches pricing or in-app purchases.
 
 on:
   schedule:
@@ -26,7 +27,8 @@ env:
 jobs:
   snapshot:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # A release request can wait up to 30 minutes for the build to finish processing.
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v4
 
