@@ -1,23 +1,10 @@
 {
-  "generatedAt": "2026-11-22T01:31:42.964Z",
-  "startedAt": "2026-11-22T01:31:42.406Z",
+  "generatedAt": "2026-11-22T01:33:46.321Z",
+  "startedAt": "2026-11-22T01:33:44.443Z",
   "trigger": "push",
-  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/44971862451",
-  "ok": false,
-  "errors": [
-    {
-      "section": "versionLocalizations 1.0.3",
-      "error": "GET /v1/appStoreVersions/1e1e61e4-0bba-4959-95b9-5e04be823000/appStoreVersionLocalizations?limit=50 -> 403 FORBIDDEN.REQUIRED_AGREEMENTS_MISSING_OR_EXPIRED A required agreement is missing or has expired.: This request requires an in-effect agreement that has not been signed or has expired."
-    },
-    {
-      "section": "appInfos",
-      "error": "GET /v1/apps/6761634387/appInfos?limit=10 -> 403 FORBIDDEN.REQUIRED_AGREEMENTS_MISSING_OR_EXPIRED A required agreement is missing or has expired.: This request requires an in-effect agreement that has not been signed or has expired."
-    },
-    {
-      "section": "customerReviews",
-      "error": "GET /v1/apps/6761634387/customerReviews?sort=-createdDate&limit=50&include=response -> 403 FORBIDDEN.REQUIRED_AGREEMENTS_MISSING_OR_EXPIRED A required agreement is missing or has expired.: This request requires an in-effect agreement that has not been signed or has expired."
-    }
-  ],
+  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/44972022337",
+  "ok": true,
+  "errors": [],
   "applied": null,
   "appId": "6761634387",
   "app": {
@@ -90,9 +77,38 @@
     "No editable App Store version. Listing changes other than promotional text need a new version."
   ],
   "versionLocalizations": {
-    "1.0.3": null
+    "1.0.3": [
+      {
+        "id": "5cd1a155-bec5-469e-b06f-1b229ee8ff4a",
+        "description": "Departure: Fitness Quest makes working out feel like a game. Log your workouts across arms, legs, core, and cardio — and earn XP for every session. The more consistent and varied your training, the higher you rank through 12 tiers from Thrall to Allfather.                                                    \n                                                  \nSee your transformation before it happens. Upload a selfie and our AI generates an image of your future physique based on your workout plan, giving you a powerful visual of where you're headed.    \n                                                                                                  \nTeam up with friends and compete together. Create or join a team, pick a genre theme (Barbarian, Cyberpunk, Samurai, and more), set group goals, and climb the team leaderboard. Your individual effort contributes to your team's score.                                                       \n                                                                                                      \n  Features:                                                                                           \n  - Log workouts with detailed exercise tracking\n  - XP scoring system with streak and variety bonuses                                                 \n  - 24 rank tiers to progress through                                                              \n  - AI-powered future body transformation images\n  - Team creation with 18 unique genre themes   \n  - Team goals and group scoring              \n  - Social features to find and compete with friends  ",
+        "locale": "en-US",
+        "keywords": "fitness, workout, gym, tracker, strength training, rpg, challenge, muscle, weightlifting, cardio",
+        "marketingUrl": "https://departure.engagequalia.com",
+        "promotionalText": null,
+        "supportUrl": "https://departure.engagequalia.com/support",
+        "whatsNew": " • Sign in with Apple                                                                                                                 \n  • Sign in with Google                                                                                                                \n  • Quality and stability improvements"
+      }
+    ]
   },
-  "appInfos": [],
+  "appInfos": [
+    {
+      "id": "21f0fda3-83c8-4f1f-8aa7-8d5eae215b8c",
+      "state": "READY_FOR_DISTRIBUTION",
+      "appStoreState": "READY_FOR_SALE",
+      "editable": false,
+      "localizations": [
+        {
+          "id": "2d5bffbc-8f14-4a30-86ec-efe221fa01c8",
+          "locale": "en-US",
+          "name": "Departure: Fitness Quest",
+          "subtitle": null,
+          "privacyPolicyUrl": "https://docs.google.com/document/d/1MFbwdZ6QtHDXghhFWAMlgsE8Qd9GqpRWVaq6n2xCfEs/edit?usp=sharing",
+          "privacyChoicesUrl": null,
+          "privacyPolicyText": null
+        }
+      ]
+    }
+  ],
   "ratingsSummary": {
     "available": true,
     "source": "itunes.apple.com/lookup (country us)",
@@ -103,5 +119,5 @@
     "storeVersion": "1.0.3",
     "currentVersionReleaseDate": "2026-04-27T17:32:59Z"
   },
-  "customerReviews": null
+  "customerReviews": []
 }
