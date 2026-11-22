@@ -13,6 +13,11 @@
  * Reads (optional): ops/requests/app-store/listing.json
  *   { "locale": "en-US", "subtitle", "keywords", "promotionalText", "description", "whatsNew" }
  *   Only fields present are changed. The file is deleted after it is processed.
+ * Reads (optional): ops/requests/app-store/release.json
+ *   { "version", "build", "whatsNew", "keywords", "promotionalText", "description", "subtitle",
+ *     "privacyPolicyUrl", "releaseType", "submitForReview", "locale" }
+ *   Finds or creates the version, waits for the build, attaches it, sets the listing text,
+ *   answers export compliance and, when asked, submits for review. Result in last-release.json.
  * Writes: ops/reports/app-store/latest.json, ops/reports/app-store/YYYY-MM-DD.json,
  *         ops/reports/app-store/last-apply.json (only when a request was processed).
  *
@@ -26,6 +31,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const REQUEST_FILE = path.join(ROOT, 'ops/requests/app-store/listing.json');
+const RELEASE_FILE = path.join(ROOT, 'ops/requests/app-store/release.json');
 const REPORT_DIR = path.join(ROOT, 'ops/reports/app-store');
 const API = 'https://api.appstoreconnect.apple.com';
 const APP_ID = process.env.ASC_APP_ID || '6761634387';
@@ -72,8 +78,14 @@ function makeToken() {
 }
 
 let TOKEN = null;
+let TOKEN_AT = 0;
 
 async function asc(method, urlPath, body) {
+  // Tokens live 20 minutes; the release request can poll for 30, so renew after 15.
+  if (TOKEN && Date.now() - TOKEN_AT > 15 * 60 * 1000) {
+    TOKEN = makeToken();
+    TOKEN_AT = Date.now();
+  }
   const res = await fetch(urlPath.startsWith('http') ? urlPath : API + urlPath, {
     method,
     headers: {
@@ -317,6 +329,344 @@ async function applyRequest(request, versions, appInfos) {
   return result;
 }
 
+// ---------------------------------------------------------------------------
+// Release request: ops/requests/app-store/release.json
+// ---------------------------------------------------------------------------
+
+// qualia-fitness/app.json sets expo.ios.infoPlist.ITSAppUsesNonExemptEncryption = false
+// (checked 2026-11-22). Only because of that may the job answer the export compliance
+// question with usesNonExemptEncryption=false. If app.json changes, change this too.
+const APP_DECLARES_NO_NON_EXEMPT_ENCRYPTION = true;
+
+const RELEASE_TYPES = new Set(['MANUAL', 'AFTER_APPROVAL', 'SCHEDULED']);
+const RELEASE_VERSION_FIELDS = ['whatsNew', 'keywords', 'promotionalText', 'description'];
+const RELEASE_APP_INFO_FIELDS = ['subtitle', 'privacyPolicyUrl'];
+const RELEASE_KNOWN_FIELDS = [
+  'version', 'build', 'locale', 'releaseType', 'submitForReview', 'requestedAt', 'note',
+  ...RELEASE_VERSION_FIELDS, ...RELEASE_APP_INFO_FIELDS,
+];
+// Review submission states that still accept items and can be submitted.
+const OPEN_SUBMISSION_STATES = new Set(['READY_FOR_REVIEW']);
+// Version states that mean it is already with Apple: no edits, no new submission.
+const SUBMITTED_VERSION_STATES = new Set(['WAITING_FOR_REVIEW', 'IN_REVIEW', 'PENDING_DEVELOPER_RELEASE',
+  'PENDING_APPLE_RELEASE', 'PROCESSING_FOR_DISTRIBUTION', 'ACCEPTED', 'READY_FOR_SALE', 'READY_FOR_DISTRIBUTION']);
+const BUILD_WAIT_MS = 30 * 60 * 1000;
+const BUILD_POLL_MS = 60 * 1000;
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function findVersion(versionString) {
+  const json = await asc(
+    'GET',
+    `/v1/apps/${APP_ID}/appStoreVersions?filter[platform]=IOS&filter[versionString]=${encodeURIComponent(versionString)}` +
+      '&limit=5&include=build',
+  );
+  return json.data[0] || null;
+}
+
+async function findBuild(versionString, buildNumber) {
+  const json = await asc(
+    'GET',
+    `/v1/builds?filter[app]=${APP_ID}&filter[version]=${encodeURIComponent(buildNumber)}` +
+      `&filter[preReleaseVersion.version]=${encodeURIComponent(versionString)}` +
+      '&filter[preReleaseVersion.platform]=IOS&limit=5',
+  );
+  return json.data[0] || null;
+}
+
+async function processRelease(req) {
+  const locale = req.locale || 'en-US';
+  const out = { startedAt: new Date().toISOString(), request: req, locale, steps: [], ok: false };
+  const step = (name, status, details) => {
+    const s = { step: name, status, at: new Date().toISOString(), ...details };
+    out.steps.push(s);
+    console.log(`release ${name}: ${status}${details && details.error ? ' ' + details.error : ''}`);
+    return s;
+  };
+  const fail = (name, e, extra) => step(name, 'error', { error: e.message || String(e), ...extra });
+
+  const version = typeof req.version === 'string' ? req.version.trim() : '';
+  const buildNumber = req.build === undefined || req.build === null ? '' : String(req.build).trim();
+  if (!/^\d+(\.\d+){0,2}$/.test(version)) {
+    step('validate', 'error', { error: 'version must be a string like "1.0.4"' });
+    return out;
+  }
+  if (req.releaseType !== undefined && !RELEASE_TYPES.has(req.releaseType)) {
+    step('validate', 'error', { error: `releaseType must be one of ${[...RELEASE_TYPES].join(', ')}` });
+    return out;
+  }
+  let versionFields;
+  let appInfoFields;
+  try {
+    versionFields = pickFields(req, RELEASE_VERSION_FIELDS);
+    appInfoFields = pickFields(req, RELEASE_APP_INFO_FIELDS);
+  } catch (e) {
+    fail('validate', e);
+    return out;
+  }
+  const unknown = Object.keys(req).filter((k) => !RELEASE_KNOWN_FIELDS.includes(k));
+  step('validate', 'ok', unknown.length ? { ignoredFields: unknown } : {});
+
+  // 1. Find or create the App Store version.
+  let ver;
+  try {
+    ver = await findVersion(version);
+    if (ver) {
+      step('version', 'found', { id: ver.id, state: versionState(ver), releaseType: ver.attributes.releaseType });
+    } else {
+      const created = await asc('POST', '/v1/appStoreVersions', {
+        data: {
+          type: 'appStoreVersions',
+          attributes: { platform: 'IOS', versionString: version },
+          relationships: { app: { data: { type: 'apps', id: APP_ID } } },
+        },
+      });
+      ver = created.data;
+      step('version', 'created', { id: ver.id, state: versionState(ver) });
+    }
+  } catch (e) {
+    fail('version', e);
+    return out;
+  }
+  const verState = versionState(ver);
+  if (SUBMITTED_VERSION_STATES.has(verState)) {
+    step('stop', 'skipped', { reason: `version ${version} is already ${verState}; nothing changed` });
+    out.ok = true;
+    out.finalVersionState = verState;
+    return out;
+  }
+  // READY_FOR_REVIEW: added to a review submission that was not sent yet; still editable.
+  if (!EDITABLE_VERSION_STATES.has(verState) && verState !== 'READY_FOR_REVIEW') {
+    step('stop', 'error', { error: `version ${version} is in state ${verState}, which cannot be edited` });
+    return out;
+  }
+
+  // 2. Wait for the build to be processed, then attach it.
+  let build = null;
+  if (!buildNumber) {
+    step('build', 'skipped', { reason: 'no build number in the request' });
+  } else {
+    const deadline = Date.now() + BUILD_WAIT_MS;
+    let lastState = null;
+    let polls = 0;
+    try {
+      for (;;) {
+        polls += 1;
+        build = await findBuild(version, buildNumber);
+        lastState = build ? build.attributes.processingState : 'NOT_FOUND';
+        if (lastState === 'VALID') break;
+        if (lastState === 'FAILED' || lastState === 'INVALID') break;
+        if (Date.now() + BUILD_POLL_MS > deadline) break;
+        await sleep(BUILD_POLL_MS);
+      }
+    } catch (e) {
+      fail('build', e, { polls });
+      return out;
+    }
+    if (lastState !== 'VALID') {
+      step('build', 'error', {
+        error: `build ${buildNumber} of ${version} is ${lastState} after ${polls} check(s) over up to 30 minutes`,
+        buildId: build ? build.id : null,
+      });
+      return out;
+    }
+    step('build', 'valid', {
+      id: build.id,
+      uploadedDate: build.attributes.uploadedDate,
+      usesNonExemptEncryption: build.attributes.usesNonExemptEncryption ?? null,
+      polls,
+    });
+
+    // 6 (done before submitting, Apple requires it). Export compliance on the build.
+    if (build.attributes.usesNonExemptEncryption === false || build.attributes.usesNonExemptEncryption === true) {
+      step('exportCompliance', 'already set', { usesNonExemptEncryption: build.attributes.usesNonExemptEncryption });
+    } else if (!APP_DECLARES_NO_NON_EXEMPT_ENCRYPTION) {
+      step('exportCompliance', 'not answered', {
+        reason: 'app.json does not declare ITSAppUsesNonExemptEncryption=false; answer it in App Store Connect',
+      });
+    } else {
+      try {
+        await asc('PATCH', `/v1/builds/${build.id}`, {
+          data: { type: 'builds', id: build.id, attributes: { usesNonExemptEncryption: false } },
+        });
+        step('exportCompliance', 'set', { usesNonExemptEncryption: false, basis: 'qualia-fitness app.json ITSAppUsesNonExemptEncryption=false' });
+      } catch (e) {
+        fail('exportCompliance', e);
+      }
+    }
+
+    const attached = ver.relationships && ver.relationships.build && ver.relationships.build.data
+      ? ver.relationships.build.data.id
+      : null;
+    if (attached === build.id) {
+      step('attachBuild', 'already attached', { buildId: build.id });
+    } else {
+      try {
+        await asc('PATCH', `/v1/appStoreVersions/${ver.id}/relationships/build`, {
+          data: { type: 'builds', id: build.id },
+        });
+        step('attachBuild', 'ok', { buildId: build.id, replaced: attached });
+      } catch (e) {
+        fail('attachBuild', e);
+        return out;
+      }
+    }
+  }
+
+  // 3a. Version localization.
+  if (Object.keys(versionFields).length) {
+    try {
+      const locs = await getVersionLocalizations(ver.id);
+      const loc = locs.find((l) => l.locale === locale);
+      if (loc) {
+        const before = Object.fromEntries(Object.keys(versionFields).map((k) => [k, loc[k] ?? null]));
+        await asc('PATCH', `/v1/appStoreVersionLocalizations/${loc.id}`, {
+          data: { type: 'appStoreVersionLocalizations', id: loc.id, attributes: versionFields },
+        });
+        step('versionLocalization', 'ok', { id: loc.id, before, after: versionFields });
+      } else {
+        const created = await asc('POST', '/v1/appStoreVersionLocalizations', {
+          data: {
+            type: 'appStoreVersionLocalizations',
+            attributes: { locale, ...versionFields },
+            relationships: { appStoreVersion: { data: { type: 'appStoreVersions', id: ver.id } } },
+          },
+        });
+        step('versionLocalization', 'created', { id: created.data.id, after: versionFields });
+      }
+    } catch (e) {
+      fail('versionLocalization', e);
+    }
+  } else {
+    step('versionLocalization', 'skipped', { reason: 'no version fields in the request' });
+  }
+
+  // 3b. App info localization (subtitle, privacy policy URL) on the editable app info.
+  if (Object.keys(appInfoFields).length) {
+    try {
+      const infos = await getAppInfos();
+      const info = infos.find((i) => i.editable);
+      if (!info) {
+        step('appInfoLocalization', 'error', {
+          error: 'no editable app info',
+          appInfos: infos.map((i) => ({ id: i.id, state: i.state })),
+        });
+      } else {
+        const locs = await getAppInfoLocalizations(info.id);
+        const loc = locs.find((l) => l.locale === locale);
+        if (!loc) {
+          step('appInfoLocalization', 'error', { error: `app info ${info.id} has no ${locale} localization` });
+        } else {
+          const before = Object.fromEntries(Object.keys(appInfoFields).map((k) => [k, loc[k] ?? null]));
+          await asc('PATCH', `/v1/appInfoLocalizations/${loc.id}`, {
+            data: { type: 'appInfoLocalizations', id: loc.id, attributes: appInfoFields },
+          });
+          step('appInfoLocalization', 'ok', { appInfoId: info.id, appInfoState: info.state, id: loc.id, before, after: appInfoFields });
+        }
+      }
+    } catch (e) {
+      fail('appInfoLocalization', e);
+    }
+  } else {
+    step('appInfoLocalization', 'skipped', { reason: 'no subtitle or privacyPolicyUrl in the request' });
+  }
+
+  // 4. Release type.
+  if (req.releaseType) {
+    try {
+      await asc('PATCH', `/v1/appStoreVersions/${ver.id}`, {
+        data: { type: 'appStoreVersions', id: ver.id, attributes: { releaseType: req.releaseType } },
+      });
+      step('releaseType', 'ok', { before: ver.attributes.releaseType ?? null, after: req.releaseType });
+    } catch (e) {
+      fail('releaseType', e);
+    }
+  } else {
+    step('releaseType', 'skipped', { reason: 'not in the request' });
+  }
+
+  // 5. Submit for review.
+  const earlierErrors = out.steps.filter((s) => s.status === 'error').map((s) => s.step);
+  if (req.submitForReview !== true) {
+    step('submit', 'skipped', { reason: 'submitForReview is not true' });
+  } else if (!build) {
+    step('submit', 'error', { error: 'not submitted: no valid build was attached in this run' });
+  } else if (earlierErrors.length) {
+    step('submit', 'error', { error: `not submitted because these steps failed: ${earlierErrors.join(', ')}` });
+  } else {
+    let submissionId = null;
+    try {
+      const open = await asc(
+        'GET',
+        `/v1/reviewSubmissions?filter[app]=${APP_ID}&filter[platform]=IOS&limit=10`,
+      );
+      const reuse = (open.data || []).find((s) => OPEN_SUBMISSION_STATES.has(s.attributes.state));
+      if (reuse) {
+        submissionId = reuse.id;
+        step('reviewSubmission', 'reused', { id: reuse.id, state: reuse.attributes.state });
+      } else {
+        const created = await asc('POST', '/v1/reviewSubmissions', {
+          data: {
+            type: 'reviewSubmissions',
+            attributes: { platform: 'IOS' },
+            relationships: { app: { data: { type: 'apps', id: APP_ID } } },
+          },
+        });
+        submissionId = created.data.id;
+        step('reviewSubmission', 'created', { id: submissionId, state: created.data.attributes.state });
+      }
+    } catch (e) {
+      fail('reviewSubmission', e);
+    }
+    if (submissionId) {
+      let itemOk = false;
+      try {
+        const items = await asc('GET', `/v1/reviewSubmissions/${submissionId}/items?include=appStoreVersion&limit=50`);
+        const has = (items.data || []).some((it) => it.relationships && it.relationships.appStoreVersion &&
+          it.relationships.appStoreVersion.data && it.relationships.appStoreVersion.data.id === ver.id);
+        if (has) {
+          itemOk = true;
+          step('reviewSubmissionItem', 'already added', { versionId: ver.id });
+        } else {
+          const item = await asc('POST', '/v1/reviewSubmissionItems', {
+            data: {
+              type: 'reviewSubmissionItems',
+              relationships: {
+                reviewSubmission: { data: { type: 'reviewSubmissions', id: submissionId } },
+                appStoreVersion: { data: { type: 'appStoreVersions', id: ver.id } },
+              },
+            },
+          });
+          itemOk = true;
+          step('reviewSubmissionItem', 'created', { id: item.data.id, state: item.data.attributes && item.data.attributes.state });
+        }
+      } catch (e) {
+        fail('reviewSubmissionItem', e);
+      }
+      if (itemOk) {
+        try {
+          const sub = await asc('PATCH', `/v1/reviewSubmissions/${submissionId}`, {
+            data: { type: 'reviewSubmissions', id: submissionId, attributes: { submitted: true } },
+          });
+          step('submit', 'ok', { reviewSubmissionId: submissionId, state: sub.data.attributes.state, submittedDate: sub.data.attributes.submittedDate ?? null });
+          out.reviewSubmissionState = sub.data.attributes.state;
+        } catch (e) {
+          fail('submit', e, { reviewSubmissionId: submissionId });
+        }
+      }
+    }
+  }
+
+  try {
+    const after = await findVersion(version);
+    out.finalVersionState = after ? versionState(after) : null;
+  } catch (e) {
+    fail('finalState', e);
+  }
+  out.ok = out.steps.every((s) => s.status !== 'error');
+  return out;
+}
+
 async function snapshot(errors) {
   const snap = { appId: APP_ID };
 
@@ -378,6 +728,7 @@ async function main() {
 
   try {
     TOKEN = makeToken();
+    TOKEN_AT = Date.now();
   } catch (e) {
     errors.push({ section: 'auth', error: e.message });
   }
@@ -413,6 +764,37 @@ async function main() {
     applyResult = { appliedAt: new Date().toISOString(), ok: false, errors: [{ error: requestError }], note: 'Invalid request file was removed.' };
   }
 
+  // Release request (version, build, listing text, review submission).
+  let releaseResult = null;
+  let consumeRelease = false;
+  if (fs.existsSync(RELEASE_FILE)) {
+    let releaseReq = null;
+    try {
+      releaseReq = JSON.parse(fs.readFileSync(RELEASE_FILE, 'utf8'));
+      if (!releaseReq || typeof releaseReq !== 'object' || Array.isArray(releaseReq)) throw new Error('request must be a JSON object');
+    } catch (e) {
+      releaseResult = { startedAt: new Date().toISOString(), ok: false, steps: [{ step: 'read', status: 'error', error: `Could not read release.json: ${e.message}` }], note: 'Invalid request file was removed.' };
+      consumeRelease = true;
+    }
+    if (releaseReq) {
+      if (TOKEN) {
+        try {
+          releaseResult = await processRelease(releaseReq);
+        } catch (e) {
+          releaseResult = { startedAt: new Date().toISOString(), request: releaseReq, ok: false, steps: [{ step: 'fatal', status: 'error', error: e.message }] };
+        }
+        consumeRelease = true;
+      } else {
+        releaseResult = {
+          startedAt: new Date().toISOString(), request: releaseReq, ok: false, requestKept: true,
+          steps: [{ step: 'auth', status: 'error', error: 'not authenticated, nothing done' }],
+          note: 'release.json was kept; the next run retries it.',
+        };
+      }
+    }
+    releaseResult.finishedAt = new Date().toISOString();
+  }
+
   let snap = { appId: APP_ID };
   if (TOKEN) ({ snap } = await snapshot(errors));
 
@@ -426,6 +808,7 @@ async function main() {
     ok: errors.length === 0,
     errors,
     applied: applyResult ? { ok: applyResult.ok, file: 'ops/reports/app-store/last-apply.json' } : null,
+    release: releaseResult ? { ok: releaseResult.ok, file: 'ops/reports/app-store/last-release.json' } : null,
     ...snap,
   };
 
@@ -436,6 +819,11 @@ async function main() {
     writeJson(path.join(REPORT_DIR, 'last-apply.json'), applyResult);
     // The request is consumed once it was attempted (or is invalid); last-apply.json says what happened.
     if (consumeRequest && fs.existsSync(REQUEST_FILE)) fs.unlinkSync(REQUEST_FILE);
+  }
+
+  if (releaseResult) {
+    writeJson(path.join(REPORT_DIR, 'last-release.json'), releaseResult);
+    if (consumeRelease && fs.existsSync(RELEASE_FILE)) fs.unlinkSync(RELEASE_FILE);
   }
 
   console.log(`Snapshot written (${errors.length} error(s)).`);
