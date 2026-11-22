@@ -485,16 +485,24 @@ async function uploadScreenshot(setId, file) {
   await asc('PATCH', `/v1/appScreenshots/${id}`, {
     data: { type: 'appScreenshots', id, attributes: { uploaded: true, sourceFileChecksum: checksum } },
   });
-  // Apple checks the image after the upload. Wait for its verdict.
+  return { id, fileName, bytes: bytes.length, state: 'UPLOADED', errors: null };
+}
+
+// Apple checks each image after its upload. Wait for all of them together,
+// under one time limit, so a slow set cannot run past the job's own timeout.
+async function waitForScreenshots(uploaded) {
   const deadline = Date.now() + SCREENSHOT_WAIT_MS;
-  let delivery = null;
-  while (Date.now() < deadline) {
-    const got = await asc('GET', `/v1/appScreenshots/${id}`);
-    delivery = got.data.attributes.assetDeliveryState || null;
-    if (delivery && (delivery.state === 'COMPLETE' || delivery.state === 'FAILED')) break;
+  let pending = uploaded.filter((u) => u.state !== 'COMPLETE' && u.state !== 'FAILED');
+  while (pending.length && Date.now() < deadline) {
     await sleep(5000);
+    for (const u of pending) {
+      const got = await asc('GET', `/v1/appScreenshots/${u.id}`);
+      const d = got.data.attributes.assetDeliveryState || null;
+      if (d) { u.state = d.state; u.errors = d.errors || null; }
+    }
+    pending = pending.filter((u) => u.state !== 'COMPLETE' && u.state !== 'FAILED');
   }
-  return { id, fileName, bytes: bytes.length, state: delivery ? delivery.state : 'UNKNOWN', errors: delivery ? delivery.errors || null : null };
+  return uploaded;
 }
 
 async function replaceScreenshots(ver, locale, spec, step, fail) {
@@ -556,6 +564,7 @@ async function replaceScreenshots(ver, locale, spec, step, fail) {
       for (const shot of old) await asc('DELETE', `/v1/appScreenshots/${shot.id}`);
       const uploaded = [];
       for (const f of files) uploaded.push(await uploadScreenshot(set.id, f));
+      await waitForScreenshots(uploaded);
       const good = uploaded.filter((u) => u.state === 'COMPLETE');
       if (good.length === uploaded.length) {
         await asc('PATCH', `/v1/appScreenshotSets/${set.id}/relationships/appScreenshots`, {
