@@ -1,0 +1,11 @@
+{
+  "version": "1.0.4",
+  "note": "Apple's updated age rating questions. Reasons in ops/app-store-answers.md.",
+  "ageRatingDeclaration": {
+    "socialMedia": true,
+    "socialMediaAgeRestricted": false,
+    "sharedLocation": false,
+    "messagingAndChat": true,
+    "userGeneratedContent": true
+  }
+}
