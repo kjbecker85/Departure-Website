@@ -1,0 +1,245 @@
+{
+  "startedAt": "2026-11-22T02:57:04.307Z",
+  "request": {
+    "version": "1.0.4",
+    "reviewSubmissionId": "d442d11b-c41f-4b49-a6bb-6a82988c1760"
+  },
+  "checks": {
+    "version": {
+      "id": "4d905e7e-0744-4907-bc77-59f8333298e7",
+      "attributes": {
+        "platform": "IOS",
+        "versionString": "1.0.4",
+        "appStoreState": "PREPARE_FOR_SUBMISSION",
+        "appVersionState": "PREPARE_FOR_SUBMISSION",
+        "copyright": "Kyle Becker",
+        "reviewType": "APP_STORE",
+        "releaseType": "AFTER_APPROVAL",
+        "earliestReleaseDate": null,
+        "usesIdfa": null,
+        "downloadable": true,
+        "createdDate": "2026-11-21T18:51:07-08:00"
+      },
+      "buildId": "fef4ef6f-133e-4148-ab01-5a9a133d3406"
+    },
+    "reviewSubmission": {
+      "submissions": [
+        {
+          "id": "d442d11b-c41f-4b49-a6bb-6a82988c1760",
+          "platform": "IOS",
+          "submittedDate": null,
+          "state": "READY_FOR_REVIEW"
+        }
+      ],
+      "usedSubmissionId": "d442d11b-c41f-4b49-a6bb-6a82988c1760",
+      "items": []
+    },
+    "reviewSubmissionItemRetry": {
+      "status": "error",
+      "error": "POST /v1/reviewSubmissionItems -> 409 STATE_ERROR.ENTITY_STATE_INVALID appStoreVersions with id '4d905e7e-0744-4907-bc77-59f8333298e7' is not in valid state.: This resource cannot be reviewed, please check associated errors to see why.",
+      "apiErrors": [
+        {
+          "id": "1734b36a-d492-43ee-b5d9-87ea4c376391",
+          "status": "409",
+          "code": "STATE_ERROR.ENTITY_STATE_INVALID",
+          "title": "appStoreVersions with id '4d905e7e-0744-4907-bc77-59f8333298e7' is not in valid state.",
+          "detail": "This resource cannot be reviewed, please check associated errors to see why.",
+          "meta": {
+            "associatedErrors": {
+              "/v1/ageRatingDeclarations/4d905e7e-0744-4907-bc77-59f8333298e7": [
+                {
+                  "id": "781e22ae-fff1-4e16-be81-9138a536272d",
+                  "status": "409",
+                  "code": "ENTITY_ERROR.ATTRIBUTE.REQUIRED",
+                  "title": "The provided entity is missing a required attribute",
+                  "detail": "You must provide a value for the attribute 'socialMedia' with this request",
+                  "source": {
+                    "pointer": "/data/attributes/socialMedia"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "httpStatus": 409
+    },
+    "appInfo": {
+      "appInfos": [
+        {
+          "id": "21f0fda3-83c8-4f1f-8aa7-8d5eae215b8c",
+          "state": "READY_FOR_DISTRIBUTION",
+          "appStoreState": "READY_FOR_SALE",
+          "editable": false
+        },
+        {
+          "id": "e44ec198-517d-486c-a642-ba17ae37ac17",
+          "state": "PREPARE_FOR_SUBMISSION",
+          "appStoreState": "PREPARE_FOR_SUBMISSION",
+          "editable": true
+        }
+      ],
+      "usedAppInfoId": "e44ec198-517d-486c-a642-ba17ae37ac17",
+      "attributes": {
+        "brazilAgeRating": "TWELVE",
+        "brazilAgeRatingV2": "SELF_RATED_TWELVE",
+        "koreaAgeRating": null,
+        "appStoreState": "PREPARE_FOR_SUBMISSION",
+        "appStoreAgeRating": "TWELVE_PLUS",
+        "state": "PREPARE_FOR_SUBMISSION",
+        "australiaAgeRating": null,
+        "franceAgeRating": null
+      },
+      "primaryCategory": "HEALTH_AND_FITNESS",
+      "secondaryCategory": null
+    },
+    "ageRatingDeclaration": {
+      "id": "e44ec198-517d-486c-a642-ba17ae37ac17",
+      "attributes": {
+        "advertising": false,
+        "alcoholTobaccoOrDrugUseOrReferences": "NONE",
+        "contests": "FREQUENT_OR_INTENSE",
+        "datingAndRelationships": null,
+        "gambling": false,
+        "gamblingSimulated": "NONE",
+        "gunsOrOtherWeapons": "INFREQUENT_OR_MILD",
+        "healthOrWellnessTopics": true,
+        "kidsAgeBand": null,
+        "lootBox": true,
+        "medicalOrTreatmentInformation": "NONE",
+        "messagingAndChat": false,
+        "parentalControls": false,
+        "profanityOrCrudeHumor": "NONE",
+        "ageAssurance": false,
+        "sexualContentGraphicAndNudity": "NONE",
+        "sexualContentOrNudity": "NONE",
+        "sharedLocation": null,
+        "socialMedia": null,
+        "socialMediaAgeRestricted": null,
+        "horrorOrFearThemes": "NONE",
+        "matureOrSuggestiveThemes": "NONE",
+        "unrestrictedWebAccess": false,
+        "userGeneratedContent": false,
+        "violenceCartoonOrFantasy": "FREQUENT_OR_INTENSE",
+        "violenceRealisticProlongedGraphicOrSadistic": "NONE",
+        "violenceRealistic": "INFREQUENT_OR_MILD",
+        "ageRatingOverride": "NONE",
+        "ageRatingOverrideV2": "NONE",
+        "koreaAgeRatingOverride": "NONE",
+        "gracRatingClassificationNumber": null,
+        "developerAgeRatingInfoUrl": null
+      },
+      "nullFields": [
+        "datingAndRelationships",
+        "kidsAgeBand",
+        "sharedLocation",
+        "socialMedia",
+        "socialMediaAgeRestricted",
+        "gracRatingClassificationNumber",
+        "developerAgeRatingInfoUrl"
+      ]
+    },
+    "app": {
+      "attributes": {
+        "accessibilityUrl": null,
+        "name": "Departure: Fitness Quest",
+        "bundleId": "com.qualia.fitness",
+        "sku": "qualia-fitness",
+        "primaryLocale": "en-US",
+        "isOrEverWasMadeForKids": false,
+        "subscriptionStatusUrl": "https://api.revenuecat.com/v1/incoming-webhooks/apple-server-to-server-notification/UnVvClvNFypVSZdPkWSWFUfHYvODkjZi",
+        "subscriptionStatusUrlVersion": "V2",
+        "subscriptionStatusUrlForSandbox": "https://api.revenuecat.com/v1/incoming-webhooks/apple-server-to-server-notification/UnVvClvNFypVSZdPkWSWFUfHYvODkjZi",
+        "subscriptionStatusUrlVersionForSandbox": "V2",
+        "contentRightsDeclaration": "DOES_NOT_USE_THIRD_PARTY_CONTENT",
+        "streamlinedPurchasingEnabled": true,
+        "groupPurchaseInvitationMode": "APPLE_HOSTED"
+      },
+      "nullFields": [
+        "accessibilityUrl"
+      ]
+    },
+    "availability": {
+      "id": "6761634387",
+      "attributes": {
+        "availableInNewTerritories": true
+      },
+      "territoriesListed": 175,
+      "territoriesAvailable": 175,
+      "usAvailable": true
+    },
+    "priceSchedule": {
+      "id": "6761634387",
+      "baseTerritory": "USA",
+      "manualPrices": 1,
+      "note": "read only"
+    },
+    "reviewDetail": {
+      "exists": true,
+      "id": "daaeb79d-8cdd-440b-9ae9-55706c400204",
+      "attributes": {
+        "contactFirstName": "Kyle",
+        "contactLastName": "Becker",
+        "contactPhone": "4692782456",
+        "contactEmail": "departure@engagequalia.com",
+        "demoAccountName": "appreview@qualia.app",
+        "demoAccountPassword": "(set, hidden)",
+        "demoAccountRequired": true,
+        "notes": "              "
+      },
+      "nullFields": []
+    },
+    "localizationsAndScreenshots": [
+      {
+        "locale": "en-US",
+        "nullFields": [],
+        "supportUrl": "https://departure.engagequalia.com/support",
+        "screenshotSets": [
+          {
+            "displayType": "APP_IPAD_PRO_3GEN_129",
+            "count": 5
+          },
+          {
+            "displayType": "APP_IPHONE_65",
+            "count": 10
+          }
+        ]
+      }
+    ],
+    "build": {
+      "id": "fef4ef6f-133e-4148-ab01-5a9a133d3406",
+      "attributes": {
+        "version": "28",
+        "uploadedDate": "2026-11-21T18:46:53-08:00",
+        "expirationDate": "2027-02-19T18:46:53-08:00",
+        "expired": false,
+        "minOsVersion": "15.1",
+        "lsMinimumSystemVersion": "12.0",
+        "computedMinMacOsVersion": "12.0",
+        "computedMinVisionOsVersion": "1.0",
+        "iconAssetToken": {
+          "templateUrl": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/1b/39/1b/1b391b72-19dc-9331-28ce-01cedf731997/AppIcon60x60@2x.png/{w}x{h}bb.{f}",
+          "width": 120,
+          "height": 120
+        },
+        "processingState": "VALID",
+        "buildAudienceType": "APP_STORE_ELIGIBLE",
+        "usesNonExemptEncryption": false
+      }
+    },
+    "appInfoLocalizations": [
+      {
+        "id": "97ae2e01-988d-4f24-9ba2-12569613efa8",
+        "locale": "en-US",
+        "name": "Departure: Fitness Quest",
+        "subtitle": "Gym Log, Ranks & Boss Fights",
+        "privacyPolicyUrl": "https://departure.engagequalia.com/privacy/",
+        "privacyChoicesUrl": null,
+        "privacyPolicyText": null
+      }
+    ]
+  },
+  "errors": [],
+  "ok": true,
+  "finishedAt": "2026-11-22T02:57:12.352Z"
+}
