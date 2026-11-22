@@ -19,6 +19,32 @@ const { createClient } = require("@supabase/supabase-js");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 const SITE_BASE = "https://departure.engagequalia.com";
+// Same files, served straight from the repository. Used when the site does not
+// answer over HTTPS (for example while its certificate is being issued), since
+// Instagram and Facebook refuse an image they cannot fetch.
+const FALLBACK_BASE = "https://raw.githubusercontent.com/kjbecker85/Departure-Website/main/public";
+
+async function isImageReachable(url) {
+  try {
+    const res = await fetch(url, { method: "HEAD", signal: AbortSignal.timeout(15000) });
+    const type = res.headers.get("content-type") || "";
+    return res.ok && type.startsWith("image/");
+  } catch {
+    return false;
+  }
+}
+
+async function resolveImageUrl(imagePath) {
+  const siteUrl = `${SITE_BASE}/${imagePath}`;
+  if (await isImageReachable(siteUrl)) return siteUrl;
+  const fallbackUrl = `${FALLBACK_BASE}/${imagePath}`;
+  if (await isImageReachable(fallbackUrl)) {
+    console.warn(`Site image not reachable over HTTPS, using fallback: ${fallbackUrl}`);
+    return fallbackUrl;
+  }
+  console.warn(`Neither the site nor the fallback serves ${imagePath}; keeping the site URL.`);
+  return siteUrl;
+}
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -189,7 +215,7 @@ async function main() {
     return;
   }
 
-  const imageUrl = post.image_path ? `${SITE_BASE}/${post.image_path}` : null;
+  const imageUrl = post.image_path ? await resolveImageUrl(post.image_path) : null;
   const localImagePath = post.image_path
     ? path.resolve(__dirname, "..", "public", post.image_path)
     : null;
