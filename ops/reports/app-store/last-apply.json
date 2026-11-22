@@ -1,0 +1,25 @@
+{
+  "requestedAt": null,
+  "appliedAt": "2026-11-22T01:34:23.982Z",
+  "locale": "en-US",
+  "request": {
+    "promotionalText": "Turn every workout into a quest. Log real lifts, earn XP, rank up from Recruit to Legend, and fight monsters with your team. Free to play."
+  },
+  "changes": [
+    {
+      "target": "appStoreVersionLocalization",
+      "version": "1.0.3",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "localizationId": "5cd1a155-bec5-469e-b06f-1b229ee8ff4a",
+      "before": {
+        "promotionalText": null
+      },
+      "after": {
+        "promotionalText": "Turn every workout into a quest. Log real lifts, earn XP, rank up from Recruit to Legend, and fight monsters with your team. Free to play."
+      }
+    }
+  ],
+  "skipped": [],
+  "errors": [],
+  "ok": true
+}

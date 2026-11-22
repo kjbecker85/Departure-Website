@@ -1,11 +1,14 @@
 {
-  "generatedAt": "2026-11-22T01:33:46.321Z",
-  "startedAt": "2026-11-22T01:33:44.443Z",
+  "generatedAt": "2026-11-22T01:34:26.988Z",
+  "startedAt": "2026-11-22T01:34:22.732Z",
   "trigger": "push",
-  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/44972022337",
+  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/44972071009",
   "ok": true,
   "errors": [],
-  "applied": null,
+  "applied": {
+    "ok": true,
+    "file": "ops/reports/app-store/last-apply.json"
+  },
   "appId": "6761634387",
   "app": {
     "id": "6761634387",
@@ -84,7 +87,7 @@
         "locale": "en-US",
         "keywords": "fitness, workout, gym, tracker, strength training, rpg, challenge, muscle, weightlifting, cardio",
         "marketingUrl": "https://departure.engagequalia.com",
-        "promotionalText": null,
+        "promotionalText": "Turn every workout into a quest. Log real lifts, earn XP, rank up from Recruit to Legend, and fight monsters with your team. Free to play.",
         "supportUrl": "https://departure.engagequalia.com/support",
         "whatsNew": " • Sign in with Apple                                                                                                                 \n  • Sign in with Google                                                                                                                \n  • Quality and stability improvements"
       }
