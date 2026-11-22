@@ -2,12 +2,16 @@
 
 Marketing/landing site for **Departure: Fitness Quest** — a fitness RPG app by Qualia Consulting.
 The app combines real workout tracking with RPG progression, team monster battles, and AI body transformation.
-Currently in pre-launch: Google Play beta live, iOS coming soon.
+Live on the iOS App Store (id6761634387). Google Play is a closed beta.
 
 ## Stack
 - Astro 6 + Tailwind CSS 4 (via `@tailwindcss/vite`, not `@astrojs/tailwind`)
 - Node >= 22.12 required
 - `"type": "module"` (ESM) in package.json
+
+## Hosting
+- GitHub Pages, deployed by `.github/workflows/deploy-site.yml` on every push to main. DNS: CNAME `departure` at GoDaddy points to `kjbecker85.github.io`. The old Render service is no longer used.
+- Instagram and Facebook posts load images from this site, so the site must be up for the social job.
 
 ## Commands
 - `npm run dev` — dev server
@@ -25,7 +29,7 @@ Currently in pre-launch: Google Play beta live, iOS coming soon.
 ## Notes
 - Scripts in `scripts/` are `.cjs` despite ESM project — they run standalone outside Astro
 - Working directory path contains spaces — quote paths in shell commands
-- Email capture currently uses localStorage (TODO: connect to Tally/Supabase)
+- Email capture writes to the Supabase table `waitlist_signups`. Signups get 500 coins when they create an account with the same email (migration 118 in qualia-fitness).
 - `.env` is gitignored — needed for social posting scripts (X/Instagram API keys)
 - No test framework configured
 
