@@ -264,6 +264,7 @@ import PhoneMockup from '../components/PhoneMockup.astro';
         return;
       }
 
+      (window as any).posthog?.capture('waitlist_signup', { source: 'website' });
       form.classList.add('hidden');
       success?.classList.remove('hidden');
     });
