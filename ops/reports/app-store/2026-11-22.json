@@ -1,17 +1,13 @@
 {
-  "generatedAt": "2026-11-22T01:30:11.655Z",
-  "startedAt": "2026-11-22T01:30:11.097Z",
+  "generatedAt": "2026-11-22T01:31:42.964Z",
+  "startedAt": "2026-11-22T01:31:42.406Z",
   "trigger": "push",
-  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/44971733409",
+  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/44971862451",
   "ok": false,
   "errors": [
     {
-      "section": "app",
-      "error": "GET /v1/apps/6761634387?fields[apps]=name,bundleId,sku,primaryLocale -> 403 FORBIDDEN.REQUIRED_AGREEMENTS_MISSING_OR_EXPIRED A required agreement is missing or has expired.: This request requires an in-effect agreement that has not been signed or has expired."
-    },
-    {
-      "section": "versions",
-      "error": "GET /v1/apps/6761634387/appStoreVersions?filter[platform]=IOS&limit=10&fields[appStoreVersions]=versionString,appStoreState,appVersionState,releaseType,createdDate,earliestReleaseDate -> 403 FORBIDDEN.REQUIRED_AGREEMENTS_MISSING_OR_EXPIRED A required agreement is missing or has expired.: This request requires an in-effect agreement that has not been signed or has expired."
+      "section": "versionLocalizations 1.0.3",
+      "error": "GET /v1/appStoreVersions/1e1e61e4-0bba-4959-95b9-5e04be823000/appStoreVersionLocalizations?limit=50 -> 403 FORBIDDEN.REQUIRED_AGREEMENTS_MISSING_OR_EXPIRED A required agreement is missing or has expired.: This request requires an in-effect agreement that has not been signed or has expired."
     },
     {
       "section": "appInfos",
@@ -24,15 +20,78 @@
   ],
   "applied": null,
   "appId": "6761634387",
-  "app": null,
-  "versions": [],
-  "liveVersion": null,
+  "app": {
+    "id": "6761634387",
+    "name": "Departure: Fitness Quest",
+    "bundleId": "com.qualia.fitness",
+    "sku": "qualia-fitness",
+    "primaryLocale": "en-US"
+  },
+  "versions": [
+    {
+      "id": "1e1e61e4-0bba-4959-95b9-5e04be823000",
+      "versionString": "1.0.3",
+      "state": "READY_FOR_DISTRIBUTION",
+      "appStoreState": "READY_FOR_SALE",
+      "appVersionState": "READY_FOR_DISTRIBUTION",
+      "releaseType": "AFTER_APPROVAL",
+      "createdDate": "2026-04-25T17:01:53-07:00",
+      "editable": false,
+      "live": true
+    },
+    {
+      "id": "ec2e67ab-1fc5-45b2-aada-cdf654ba0649",
+      "versionString": "1.0.2",
+      "state": "READY_FOR_DISTRIBUTION",
+      "appStoreState": "READY_FOR_SALE",
+      "appVersionState": "READY_FOR_DISTRIBUTION",
+      "releaseType": "AFTER_APPROVAL",
+      "createdDate": "2026-04-21T18:07:12-07:00",
+      "editable": false,
+      "live": true
+    },
+    {
+      "id": "576db3ff-cdd7-4189-bc20-ad0604cf6c49",
+      "versionString": "1.0.1",
+      "state": "READY_FOR_DISTRIBUTION",
+      "appStoreState": "READY_FOR_SALE",
+      "appVersionState": "READY_FOR_DISTRIBUTION",
+      "releaseType": "AFTER_APPROVAL",
+      "createdDate": "2026-04-20T13:39:57-07:00",
+      "editable": false,
+      "live": true
+    },
+    {
+      "id": "2d0d0123-a49c-4de2-a1d3-7bb11880cb81",
+      "versionString": "1.0",
+      "state": "READY_FOR_DISTRIBUTION",
+      "appStoreState": "READY_FOR_SALE",
+      "appVersionState": "READY_FOR_DISTRIBUTION",
+      "releaseType": "AFTER_APPROVAL",
+      "createdDate": "2026-04-03T13:24:06-07:00",
+      "editable": false,
+      "live": true
+    }
+  ],
+  "liveVersion": {
+    "id": "1e1e61e4-0bba-4959-95b9-5e04be823000",
+    "versionString": "1.0.3",
+    "state": "READY_FOR_DISTRIBUTION",
+    "appStoreState": "READY_FOR_SALE",
+    "appVersionState": "READY_FOR_DISTRIBUTION",
+    "releaseType": "AFTER_APPROVAL",
+    "createdDate": "2026-04-25T17:01:53-07:00",
+    "editable": false,
+    "live": true
+  },
   "pendingVersions": [],
   "editableVersion": null,
   "notes": [
     "No editable App Store version. Listing changes other than promotional text need a new version."
   ],
-  "versionLocalizations": {},
+  "versionLocalizations": {
+    "1.0.3": null
+  },
   "appInfos": [],
   "ratingsSummary": {
     "available": true,
