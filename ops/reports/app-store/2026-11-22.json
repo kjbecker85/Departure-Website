@@ -1,13 +1,14 @@
 {
-  "generatedAt": "2026-11-22T01:34:26.988Z",
-  "startedAt": "2026-11-22T01:34:22.732Z",
+  "generatedAt": "2026-11-22T02:51:24.826Z",
+  "startedAt": "2026-11-22T02:51:06.822Z",
   "trigger": "push",
-  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/44972071009",
+  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/44977948403",
   "ok": true,
   "errors": [],
-  "applied": {
-    "ok": true,
-    "file": "ops/reports/app-store/last-apply.json"
+  "applied": null,
+  "release": {
+    "ok": false,
+    "file": "ops/reports/app-store/last-release.json"
   },
   "appId": "6761634387",
   "app": {
@@ -18,6 +19,17 @@
     "primaryLocale": "en-US"
   },
   "versions": [
+    {
+      "id": "4d905e7e-0744-4907-bc77-59f8333298e7",
+      "versionString": "1.0.4",
+      "state": "PREPARE_FOR_SUBMISSION",
+      "appStoreState": "PREPARE_FOR_SUBMISSION",
+      "appVersionState": "PREPARE_FOR_SUBMISSION",
+      "releaseType": "AFTER_APPROVAL",
+      "createdDate": "2026-11-21T18:51:07-08:00",
+      "editable": true,
+      "live": false
+    },
     {
       "id": "1e1e61e4-0bba-4959-95b9-5e04be823000",
       "versionString": "1.0.3",
@@ -74,11 +86,30 @@
     "editable": false,
     "live": true
   },
-  "pendingVersions": [],
-  "editableVersion": null,
-  "notes": [
-    "No editable App Store version. Listing changes other than promotional text need a new version."
+  "pendingVersions": [
+    {
+      "id": "4d905e7e-0744-4907-bc77-59f8333298e7",
+      "versionString": "1.0.4",
+      "state": "PREPARE_FOR_SUBMISSION",
+      "appStoreState": "PREPARE_FOR_SUBMISSION",
+      "appVersionState": "PREPARE_FOR_SUBMISSION",
+      "releaseType": "AFTER_APPROVAL",
+      "createdDate": "2026-11-21T18:51:07-08:00",
+      "editable": true,
+      "live": false
+    }
   ],
+  "editableVersion": {
+    "id": "4d905e7e-0744-4907-bc77-59f8333298e7",
+    "versionString": "1.0.4",
+    "state": "PREPARE_FOR_SUBMISSION",
+    "appStoreState": "PREPARE_FOR_SUBMISSION",
+    "appVersionState": "PREPARE_FOR_SUBMISSION",
+    "releaseType": "AFTER_APPROVAL",
+    "createdDate": "2026-11-21T18:51:07-08:00",
+    "editable": true,
+    "live": false
+  },
   "versionLocalizations": {
     "1.0.3": [
       {
@@ -90,6 +121,18 @@
         "promotionalText": "Turn every workout into a quest. Log real lifts, earn XP, rank up from Recruit to Legend, and fight monsters with your team. Free to play.",
         "supportUrl": "https://departure.engagequalia.com/support",
         "whatsNew": " • Sign in with Apple                                                                                                                 \n  • Sign in with Google                                                                                                                \n  • Quality and stability improvements"
+      }
+    ],
+    "1.0.4": [
+      {
+        "id": "5e77fb9c-0f57-4594-b138-e93566b5b587",
+        "description": "Departure: Fitness Quest makes working out feel like a game. Log your workouts across arms, legs, core, and cardio — and earn XP for every session. The more consistent and varied your training, the higher you rank through 12 tiers from Thrall to Allfather.                                                    \n                                                  \nSee your transformation before it happens. Upload a selfie and our AI generates an image of your future physique based on your workout plan, giving you a powerful visual of where you're headed.    \n                                                                                                  \nTeam up with friends and compete together. Create or join a team, pick a genre theme (Barbarian, Cyberpunk, Samurai, and more), set group goals, and climb the team leaderboard. Your individual effort contributes to your team's score.                                                       \n                                                                                                      \n  Features:                                                                                           \n  - Log workouts with detailed exercise tracking\n  - XP scoring system with streak and variety bonuses                                                 \n  - 24 rank tiers to progress through                                                              \n  - AI-powered future body transformation images\n  - Team creation with 18 unique genre themes   \n  - Team goals and group scoring              \n  - Social features to find and compete with friends  ",
+        "locale": "en-US",
+        "keywords": "workout,tracker,game,weightlifting,exercise,strength,gamified,level,habit,raid,team,monster,1rm,xp",
+        "marketingUrl": "https://departure.engagequalia.com",
+        "promotionalText": "Turn every workout into a quest. Log real lifts, earn XP, rank up from Recruit to Legend, and fight monsters with your team. Free to play.",
+        "supportUrl": "https://departure.engagequalia.com/support",
+        "whatsNew": "Onboarding is shorter to get through, with a Skip button and a clearer order. A workout in progress is no longer lost while the app refreshes your sign in. XP and ranks are rebalanced, and Home shows your weekly streak. New players start with a set of common gear, and duplicate gear drops now pay coins. Fixes for double purchase grants and a projection graph crash."
       }
     ]
   },
@@ -106,6 +149,23 @@
           "name": "Departure: Fitness Quest",
           "subtitle": null,
           "privacyPolicyUrl": "https://docs.google.com/document/d/1MFbwdZ6QtHDXghhFWAMlgsE8Qd9GqpRWVaq6n2xCfEs/edit?usp=sharing",
+          "privacyChoicesUrl": null,
+          "privacyPolicyText": null
+        }
+      ]
+    },
+    {
+      "id": "e44ec198-517d-486c-a642-ba17ae37ac17",
+      "state": "PREPARE_FOR_SUBMISSION",
+      "appStoreState": "PREPARE_FOR_SUBMISSION",
+      "editable": true,
+      "localizations": [
+        {
+          "id": "97ae2e01-988d-4f24-9ba2-12569613efa8",
+          "locale": "en-US",
+          "name": "Departure: Fitness Quest",
+          "subtitle": "Gym Log, Ranks & Boss Fights",
+          "privacyPolicyUrl": "https://departure.engagequalia.com/privacy/",
           "privacyChoicesUrl": null,
           "privacyPolicyText": null
         }
