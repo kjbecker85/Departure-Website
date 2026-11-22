@@ -1,0 +1,13 @@
+{
+  "note": "Take 1.0.4 back from review and send 1.1.0 (build 30) in its place. Kyle approved publishing 1.1.0 on 2026-11-22 after testing it in TestFlight. This first pass prepares the version; screenshots and the submission follow.",
+  "version": "1.1.0",
+  "fromVersion": "1.0.4",
+  "withdraw": true,
+  "build": "30",
+  "whatsNew": "Logging a workout is rebuilt. Repeat your last workout in three taps, or start from a saved routine. Each exercise shows what you did last time, and one tap fills it in. Step buttons add a rep or five pounds without the keyboard. Routines now keep every set. Search finds what you type, and you can add your own exercises.\n\nA new Home puts your warrior up top with the Recruit's Trials: five first steps that pay coins. The app opens faster, saves faster and is a much smaller download. Reminders warn you before a streak is lost.\n\nFixed: runs and holds with seconds that would not save, and the daily bonus for new players. You can now report and block other players.",
+  "promotionalText": "New: repeat your last workout in three taps and keep every set in your routines. Your lifts earn XP. Your team fights bosses. Free, no ads.",
+  "keywords": "workout,tracker,lifting,weightlifting,strength,exercise,game,gamified,rpg,xp,level,habit,team,monster,raid,1rm,routine",
+  "description": "Log real sets, reps and weight. Every set earns XP.\nRank up through 24 ranks and fight 24 bosses with your team.\nFree to play. No ads.\n\nA REAL WORKOUT LOG\n• Strength, cardio, timed holds, heavy bag rounds, classes and sports\n• See what you lifted last time and repeat it in one tap\n• Repeat your last workout, or start from a saved routine\n• Runs and rides keep distance, time and pace\n• Personal records found for you, with bonuses for beating your last session\n\nA GAME THAT REWARDS SHOWING UP\n• Every workout pays XP and coins\n• 24 ranks, from Recruit to Legend\n• Gear drops that make your warrior stronger\n• Weekly goals and streak bonuses for training on schedule\n\nTRAIN WITH A TEAM\n• Make or join a team and pick one of 18 themes\n• Your workouts power team battles against 24 bosses, from goblins to titans\n• A team feed with reactions, and a team rank you climb together\n\nSEE YOUR FUTURE SELF\n• Add a photo and get an AI image of the body your plan is building\n\nFAIR PLAY\n• Clear scoring rules and honest weight limits, so every rank is earned\n\nDeparture is free to download and play. Optional purchases include coin packs, XP boosts, equipment slots and banners.",
+  "releaseType": "AFTER_APPROVAL",
+  "submitForReview": false
+}
