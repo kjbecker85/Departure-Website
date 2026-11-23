@@ -272,7 +272,10 @@ async function main() {
   let fbResult = { success: false };
   let discordResult = { success: false };
 
-  const shouldPost = (platform) => !onlyPlatforms || onlyPlatforms.includes(platform);
+  // Instagram goes out through Metricool since 2026-11-23 (the direct token expired and expires every 60 days).
+  // Set SKIP_PLATFORMS to leave a platform to another tool without touching the retry logic.
+  const skipPlatforms = (process.env.SKIP_PLATFORMS || "").split(",").map((p) => p.trim().toLowerCase()).filter(Boolean);
+  const shouldPost = (platform) => !skipPlatforms.includes(platform) && (!onlyPlatforms || onlyPlatforms.includes(platform));
   if (onlyPlatforms) console.log(`Posting only to: ${onlyPlatforms.join(", ")}`);
 
   // Post to X (uses local image)
@@ -319,10 +322,15 @@ async function main() {
     if (shouldPost("ig"))      { updates.ig_posted      = igResult.success;      if (igPostId)      updates.ig_post_id      = igPostId; }
     if (shouldPost("fb"))      { updates.fb_posted      = fbResult.success;      if (fbPostId)      updates.fb_post_id      = fbPostId; }
     if (shouldPost("discord")) { updates.discord_posted = discordResult.success; if (discordPostId) updates.discord_post_id = discordPostId; }
-    await supabase
+    const { error: updateError } = await supabase
       .from("social_posts")
       .update(updates)
       .eq("id", post.id);
+    if (updateError) {
+      // A post that went out but is not recorded would go out again on the next run.
+      console.error("Could not record the post in Supabase:", updateError.message);
+      process.exit(1);
+    }
 
     console.log("\n--- Post marked as completed in Supabase ---");
   } else {

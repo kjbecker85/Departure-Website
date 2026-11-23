@@ -61,6 +61,8 @@ jobs:
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
           FB_PAGE_ACCESS_TOKEN: ${{ secrets.FB_PAGE_ACCESS_TOKEN }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          # Instagram is scheduled through Metricool, not this job.
+          SKIP_PLATFORMS: ig
         run: |
           DATE_ARG=""
           if [ -n "${{ github.event.inputs.date }}" ]; then
