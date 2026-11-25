@@ -2,11 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Pricing — Departure: Fitness Quest" description="Departure is free to play. No subscriptions, no ads. Full workout tracking, RPG progression, team battles, and AI transformation all work free. Optional one-time premium packs." ogImage="/social/premium-store.jpg">
+<Layout title="Pricing | Departure: Fitness Quest" description="Departure is free to download and play on iPhone, with no ads and no subscriptions. Workout tracking, ranks, team battles and the Future Self image all work for free, and optional one-time packs add boosts and extras." ogImage="/social/premium-store.jpg">
   <section class="pt-16 pb-8 lg:pt-24 lg:pb-12">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
       <h1 class="text-4xl sm:text-5xl font-extrabold mb-4">Free to play. Seriously.</h1>
-      <p class="text-text-muted text-lg max-w-2xl mx-auto">Every core feature is free. Premium packs accelerate your journey with XP boosts, extra equipment slots, and exclusive gear.</p>
+      <p class="text-text-muted text-lg max-w-2xl mx-auto">Everything you need to train and play is free. Optional one-time packs help you level up faster with XP boosts, extra equipment slots and premium gear.</p>
     </div>
   </section>
 
@@ -18,25 +18,25 @@ import Layout from '../layouts/Layout.astro';
           <div class="absolute -top-3 left-6 bg-primary px-3 py-1 rounded-full text-xs font-bold text-white">MOST POPULAR</div>
           <h3 class="text-2xl font-bold mb-2">Free</h3>
           <p class="text-4xl font-extrabold mb-1">$0</p>
-          <p class="text-text-muted text-sm mb-6">Forever. No catch.</p>
+          <p class="text-text-muted text-sm mb-6">The free version has no time limit.</p>
 
           <ul class="space-y-3 mb-8">
             {[
-              "Full workout tracking (all 88+ exercises)",
-              "10 exercise categories",
-              "RPG progression & 24 rank tiers",
-              "4 warrior stat tracking (STR/VIT/RES/END)",
-              "Personal record auto-detection",
-              "Training schedule builder (9 methods)",
-              "Team creation & monster battles",
-              "24-monster journey map",
-              "Daily & weekly challenges",
-              "Workout feed, reactions & comments",
-              "AI Future Self transformation image",
-              "Progress photo tracking",
-              "5 equipment slots",
-              "Equipment drops from battles",
-              "Anti-cheat system",
+              "A full workout log with more than 300 built-in exercises",
+              "12 exercise categories, and you can add your own exercises",
+              "24 ranks to climb as your workouts earn XP",
+              "Four character stats that grow with your training",
+              "Personal records found for you automatically",
+              "A weekly training schedule from 9 plans, or your own",
+              "Create or join a team and fight monsters together",
+              "A journey map of 24 monsters to beat in order",
+              "Daily and weekly challenge workouts",
+              "A team feed with reactions, comments and chat",
+              "One free AI Future Self image every week",
+              "Progress photos and weekly check-ins",
+              "5 equipment slots for your character's gear",
+              "Gear that drops from workouts and battles",
+              "Anti-cheat rules that keep every score honest",
             ].map(feature => (
               <li class="flex items-start gap-3">
                 <svg class="w-5 h-5 text-green mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
@@ -53,7 +53,7 @@ import Layout from '../layouts/Layout.astro';
         <!-- Premium -->
         <div class="bg-surface border border-surface-light/50 rounded-2xl p-8">
           <h3 class="text-2xl font-bold mb-2">Premium Packs</h3>
-          <p class="text-text-muted text-sm mb-6">Optional one-time purchases. Not subscriptions.</p>
+          <p class="text-text-muted text-sm mb-6">These are optional one-time purchases, and none of them renew.</p>
 
           <div class="space-y-4 mb-8">
             <div class="bg-surface-light/30 rounded-xl p-4">
@@ -61,7 +61,7 @@ import Layout from '../layouts/Layout.astro';
                 <h4 class="font-semibold">Starter Pack</h4>
                 <span class="text-primary-light font-bold">$4.99</span>
               </div>
-              <p class="text-text-muted text-sm">1.5x XP Boost (permanent) + Cooldown Skip + 500 Coins + 2 Bonus Image Credits</p>
+              <p class="text-text-muted text-sm">Earn 25% more XP on every workout, for good. You also get 500 coins, 2 extra AI image credits, and 1 cooldown skip, which lets your team fight again without waiting the usual 24 hours.</p>
             </div>
 
             <div class="bg-surface-light/30 rounded-xl p-4">
@@ -69,7 +69,7 @@ import Layout from '../layouts/Layout.astro';
                 <h4 class="font-semibold">Pro Pack</h4>
                 <span class="text-primary-light font-bold">$9.99</span>
               </div>
-              <p class="text-text-muted text-sm">Amulet Slot + 1,000 Coins + Premium Banner + 5 Bonus Image Credits</p>
+              <p class="text-text-muted text-sm">Unlocks a sixth equipment slot for an amulet and the Forge Banner Pack of 3 team banners. You also get 1,000 coins and 5 extra AI image credits.</p>
             </div>
 
             <div class="bg-surface-light/30 rounded-xl p-4">
@@ -77,7 +77,7 @@ import Layout from '../layouts/Layout.astro';
                 <h4 class="font-semibold">Elite Pack</h4>
                 <span class="text-primary-light font-bold">$19.99</span>
               </div>
-              <p class="text-text-muted text-sm">Everything in Pro + 3x XP Boost + Treasure Tier + 3 Cooldown Skips + 2,000 Coins + 2 Premium Banners + 10 Bonus Image Credits</p>
+              <p class="text-text-muted text-sm">Everything in the Pro Pack, plus 50% more XP on every workout, for good. It adds the Legendary Banner Pack of 3 banners and the Goblin Treasure Trail, which drops a treasure chest after every Goblin win. In total you get 2,000 coins, 10 extra AI image credits and 3 cooldown skips.</p>
             </div>
 
             <div class="border-t border-surface-light/50 pt-4">
@@ -101,7 +101,7 @@ import Layout from '../layouts/Layout.astro';
 
           <div class="bg-primary/5 border border-primary/20 rounded-xl p-4">
             <p class="text-sm text-text-muted">
-              <span class="font-semibold text-text">No subscriptions.</span> Every purchase is one-time. Coins are earned through gameplay too — premium just accelerates.
+              <span class="font-semibold text-text">No subscriptions.</span> You pay once for each purchase. You also earn coins by training and winning battles, so buying them only gets you there faster.
             </p>
           </div>
         </div>
@@ -114,10 +114,10 @@ import Layout from '../layouts/Layout.astro';
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
       <h2 class="text-2xl font-bold mb-4">Our philosophy</h2>
       <p class="text-text-muted text-lg mb-6">
-        Fitness should be accessible. The full workout tracker, RPG progression, team battles, challenges, and AI transformation all work without spending a dime. A free player can reach Legend rank and clear every monster. Premium packs let you level faster, unlock extra equipment slots, and grab exclusive banners and gear — a boost, not a gate.
+        We think fitness should be open to everyone. The full workout log, ranks, team battles, challenges and the weekly Future Self image all work without paying. A free player can reach Legend, the top rank, and beat every monster. Paid packs let you level faster and add extra equipment slots, banners and gear.
       </p>
       <p class="text-text-muted">
-        No ads. No data selling. No subscriptions. One-time purchases only. Just a game that rewards you for showing up.
+        There are no ads and no subscriptions, and we never sell your data. Departure is a game that rewards you for showing up and training.
       </p>
     </div>
   </section>

@@ -10,7 +10,7 @@ interface Props {
 const SITE_URL = 'https://departure.engagequalia.com';
 const {
   title,
-  description = "Departure is a fitness RPG that tracks real workouts — sets, reps, weight — and turns them into XP, ranks, equipment, and team monster battles. Free to play. Built for adults.",
+  description = "Departure is a free iPhone app that logs your real workouts, with sets, reps and weight, and turns them into a role playing game with ranks, gear and team monster battles. It is built for adults.",
   ogImage = '/social/home-screen.jpg'
 } = Astro.props;
 
@@ -59,9 +59,9 @@ const ogImageUrl = new URL(ogImage, SITE_URL).href;
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "Departure: Fitness Quest",
-      "operatingSystem": "iOS, Android",
+      "operatingSystem": "iOS",
       "applicationCategory": "HealthApplication",
-      "description": "A fitness RPG that tracks real workouts and turns them into XP, ranks, equipment, and team monster battles. Dark Souls aesthetic. Free to play.",
+      "description": "A free fitness role playing game that logs real workouts and turns them into experience points, ranks, gear and team monster battles, with dark fantasy art.",
       "offers": {
         "@type": "Offer",
         "price": "0",
@@ -146,7 +146,7 @@ const ogImageUrl = new URL(ogImage, SITE_URL).href;
               <span class="text-lg font-bold">Departure</span>
             </div>
             <p class="text-text-muted text-sm max-w-md">
-              Train like a warrior. Transform like a legend. The fitness RPG that turns every workout into an epic quest.
+              Train like a warrior. Transform like a legend. Departure is a free iPhone app that turns your real workouts into a role playing game.
             </p>
           </div>
           <div>
@@ -172,7 +172,6 @@ const ogImageUrl = new URL(ogImage, SITE_URL).href;
           <div class="flex gap-4">
             <a href="/support" class="text-text-muted hover:text-text text-xs transition-colors">Support</a>
             <a href="/privacy" class="text-text-muted hover:text-text text-xs transition-colors">Privacy Policy</a>
-            <a href="/terms" class="text-text-muted hover:text-text text-xs transition-colors">Terms of Service</a>
           </div>
         </div>
       </div>
