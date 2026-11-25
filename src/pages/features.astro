@@ -3,12 +3,12 @@ import Layout from '../layouts/Layout.astro';
 import PhoneMockup from '../components/PhoneMockup.astro';
 ---
 
-<Layout title="Features — Departure: Fitness Quest" description="88+ exercises, 10 categories, auto PR detection, 24 rank tiers, team monster battles, AI body transformation, daily challenges, equipment drops, and anti-cheat system. All free." ogImage="/social/equipment.jpg">
+<Layout title="Features | Departure: Fitness Quest" description="Departure logs more than 300 exercises in 12 categories and finds your personal records for you. Your workouts earn XP to climb 24 ranks, power a team in monster battles, and unlock daily challenges and gear. The core game is free." ogImage="/social/equipment.jpg">
   <!-- Hero -->
   <section class="pt-16 pb-12 lg:pt-24 lg:pb-16">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
       <h1 class="text-4xl sm:text-5xl font-extrabold mb-4">Everything you need to level up.</h1>
-      <p class="text-text-muted text-lg max-w-2xl mx-auto">Real workout tracking meets RPG progression. Here's what makes Departure different.</p>
+      <p class="text-text-muted text-lg max-w-2xl mx-auto">Departure is a serious workout log and a role playing game (RPG) in one app. Here is what you can do in it and how each part works.</p>
     </div>
   </section>
 
@@ -19,24 +19,24 @@ import PhoneMockup from '../components/PhoneMockup.astro';
         <div>
           <span class="text-primary-light text-sm font-semibold uppercase tracking-wider">Core Training</span>
           <h2 class="text-3xl font-bold mt-2 mb-4">Serious workout tracking.</h2>
-          <p class="text-text-muted mb-6">Not a toy. Departure tracks real exercises with real data — sets, reps, weight, duration. Built for people who actually go to the gym.</p>
+          <p class="text-text-muted mb-6">Departure records what you actually did: sets, reps, weight, time and distance. It is built for people who train and want an accurate log of every session.</p>
           <div class="space-y-4">
             <div class="flex items-start gap-3">
               <div class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
-                <span class="text-primary-light text-sm font-bold">10</span>
+                <span class="text-primary-light text-sm font-bold">12</span>
               </div>
               <div>
                 <p class="font-medium text-sm">Exercise Categories</p>
-                <p class="text-text-muted text-sm">Arms, Chest, Back, Shoulders, Legs, Core, Cardio, Power, Stamina, Flex</p>
+                <p class="text-text-muted text-sm">Workouts are sorted into Arms, Chest, Back, Shoulders, Legs, Core, Power, Stamina, Cardio, Flex, Classes and Sports.</p>
               </div>
             </div>
             <div class="flex items-start gap-3">
               <div class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
-                <span class="text-primary-light text-sm font-bold">88</span>
+                <span class="text-primary-light text-sm font-bold">300</span>
               </div>
               <div>
                 <p class="font-medium text-sm">Built-in Exercises</p>
-                <p class="text-text-muted text-sm">Every major compound and isolation movement, plus cardio and flexibility work</p>
+                <p class="text-text-muted text-sm">More than 300 exercises are built in, from the major lifts to cardio, classes, sports and stretching. If yours is missing, you can add it.</p>
               </div>
             </div>
             <div class="flex items-start gap-3">
@@ -45,7 +45,7 @@ import PhoneMockup from '../components/PhoneMockup.astro';
               </div>
               <div>
                 <p class="font-medium text-sm">Auto PR Detection</p>
-                <p class="text-text-muted text-sm">Personal records tracked automatically using Epley 1RM formula for strength, duration for cardio</p>
+                <p class="text-text-muted text-sm">The app finds your personal records (PRs) on its own. For lifts, it estimates your one rep max, the most you could lift once, from the weight and reps you logged. For cardio, it tracks your longest session.</p>
               </div>
             </div>
             <div class="flex items-start gap-3">
@@ -54,7 +54,7 @@ import PhoneMockup from '../components/PhoneMockup.astro';
               </div>
               <div>
                 <p class="font-medium text-sm">Anti-Cheat System</p>
-                <p class="text-text-muted text-sm">Weight limits, volume spike detection, daily caps — honest effort only</p>
+                <p class="text-text-muted text-sm">Rules catch entries that are not believable, such as an impossible weight or a sudden jump far past your usual training, so XP reflects honest work. Every rule is listed in the app.</p>
               </div>
             </div>
           </div>
@@ -72,12 +72,12 @@ import PhoneMockup from '../components/PhoneMockup.astro';
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="grid lg:grid-cols-2 gap-12 items-center">
         <div class="flex justify-center order-2 lg:order-1">
-          <PhoneMockup src="/screenshots/equipment.png" alt="Equipment and warrior customization" class="max-w-[280px]" />
+          <PhoneMockup src="/screenshots/equipment.png" alt="Equipment screen where you dress your character in gear" class="max-w-[280px]" />
         </div>
         <div class="order-1 lg:order-2">
           <span class="text-gold text-sm font-semibold uppercase tracking-wider">Training Methods</span>
           <h2 class="text-3xl font-bold mt-2 mb-4">Train your way.</h2>
-          <p class="text-text-muted mb-6">9 training methods to match any style. Set your schedule once, then just show up and train.</p>
+          <p class="text-text-muted mb-6">Pick one of eight training plans or build your own, then choose the days you train. The app then shows what is planned for each day. The Domestic plan counts household chores as training.</p>
           <div class="grid grid-cols-3 gap-3">
             {["Push/Pull/Legs", "Upper/Lower", "Full Body", "Bro Split", "HIIT", "CrossFit", "Tai Chi", "Domestic", "Custom"].map(method => (
               <div class="bg-surface border border-surface-light/50 rounded-lg px-3 py-2 text-center">
@@ -96,34 +96,34 @@ import PhoneMockup from '../components/PhoneMockup.astro';
       <div class="text-center mb-12">
         <span class="text-accent text-sm font-semibold uppercase tracking-wider">RPG System</span>
         <h2 class="text-3xl font-bold mt-2 mb-4">Your body is your character sheet.</h2>
-        <p class="text-text-muted text-lg max-w-2xl mx-auto">Every workout earns XP, levels your stats, and progresses you through 24 rank tiers.</p>
+        <p class="text-text-muted text-lg max-w-2xl mx-auto">Every workout earns experience points (XP), and XP moves you up 24 ranks. Your training history also builds the four stats below, which decide how much your character adds in battle.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="bg-surface border border-surface-light/50 rounded-2xl p-6 text-center">
           <div class="text-3xl font-bold text-red mb-1">STR</div>
           <p class="text-text-muted text-sm font-medium mb-2">Strength</p>
-          <p class="text-text-muted text-xs">Chest, back, shoulders, arms — how hard you hit</p>
+          <p class="text-text-muted text-xs">Strength grows with the total weight you have lifted over time.</p>
         </div>
         <div class="bg-surface border border-surface-light/50 rounded-2xl p-6 text-center">
           <div class="text-3xl font-bold text-green mb-1">VIT</div>
           <p class="text-text-muted text-sm font-medium mb-2">Vitality</p>
-          <p class="text-text-muted text-xs">Core, flexibility, recovery — your durability</p>
+          <p class="text-text-muted text-xs">Vitality grows with consistency: the workouts you finish and how long your weekly streak lasts.</p>
         </div>
         <div class="bg-surface border border-surface-light/50 rounded-2xl p-6 text-center">
           <div class="text-3xl font-bold text-accent mb-1">RES</div>
           <p class="text-text-muted text-sm font-medium mb-2">Resilience</p>
-          <p class="text-text-muted text-xs">Power, stamina — explosive performance</p>
+          <p class="text-text-muted text-xs">Resilience grows with how hard you push, how long you train, and how many kinds of training you do.</p>
         </div>
         <div class="bg-surface border border-surface-light/50 rounded-2xl p-6 text-center">
           <div class="text-3xl font-bold text-gold mb-1">END</div>
           <p class="text-text-muted text-sm font-medium mb-2">Endurance</p>
-          <p class="text-text-muted text-xs">Cardio, conditioning — go the distance</p>
+          <p class="text-text-muted text-xs">Endurance grows with the minutes you spend on cardio.</p>
         </div>
       </div>
 
       <div class="mt-12 text-center">
-        <h3 class="text-xl font-semibold mb-6">24 Ranks to Conquer</h3>
+        <h3 class="text-xl font-semibold mb-6">8 titles with 3 levels each make 24 ranks</h3>
         <div class="flex flex-wrap justify-center gap-3">
           {["Recruit", "Warrior", "Gladiator", "Knight", "Champion", "Warlord", "Conqueror", "Legend"].map((rank, i) => (
             <div class="bg-surface border border-surface-light/50 rounded-full px-4 py-2 flex items-center gap-2">
@@ -142,23 +142,23 @@ import PhoneMockup from '../components/PhoneMockup.astro';
         <div>
           <span class="text-accent text-sm font-semibold uppercase tracking-wider">AI-Powered</span>
           <h2 class="text-3xl font-bold mt-2 mb-4">Your future self, visualized.</h2>
-          <p class="text-text-muted mb-6">Upload a selfie and set your goals. Our AI generates what you could realistically look like if you follow through — factoring in your body type, nutrition, and commitment level.</p>
+          <p class="text-text-muted mb-6">Take a selfie and set a goal for fat loss or muscle gain. The app uses AI to make a realistic picture of how you could look if you follow your plan, and estimates how long it could take based on your diet, sleep and training.</p>
           <ul class="space-y-3">
             <li class="flex items-start gap-3">
               <svg class="w-5 h-5 text-green mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-              <span class="text-text-muted text-sm">AI body transformation images</span>
+              <span class="text-text-muted text-sm">You get one free Future Self image a week, and image credits from packs let you make more.</span>
             </li>
             <li class="flex items-start gap-3">
               <svg class="w-5 h-5 text-green mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-              <span class="text-text-muted text-sm">Weight/body fat projection timeline</span>
+              <span class="text-text-muted text-sm">A timeline estimates when you could reach your target weight and body fat.</span>
             </li>
             <li class="flex items-start gap-3">
               <svg class="w-5 h-5 text-green mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-              <span class="text-text-muted text-sm">Progress photo tracking over time</span>
+              <span class="text-text-muted text-sm">Progress photos show you how far you have come.</span>
             </li>
             <li class="flex items-start gap-3">
               <svg class="w-5 h-5 text-green mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-              <span class="text-text-muted text-sm">Weekly check-ins and plan adjustments</span>
+              <span class="text-text-muted text-sm">A weekly check-in keeps your plan current, and you can change the plan at any time.</span>
             </li>
           </ul>
         </div>
@@ -174,29 +174,29 @@ import PhoneMockup from '../components/PhoneMockup.astro';
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="grid lg:grid-cols-2 gap-12 items-center">
         <div class="flex justify-center gap-4">
-          <PhoneMockup src="/screenshots/team-journey.png" alt="Team journey map" class="max-w-[240px]" />
+          <PhoneMockup src="/screenshots/team-journey.png" alt="Team journey map showing the monsters in order" class="max-w-[240px]" />
           <PhoneMockup src="/screenshots/team-stats.png" alt="Team stats and roster" class="max-w-[240px] hidden sm:block mt-8" />
         </div>
         <div>
           <span class="text-red text-sm font-semibold uppercase tracking-wider">Team Arena</span>
           <h2 class="text-3xl font-bold mt-2 mb-4">Stronger together.</h2>
-          <p class="text-text-muted mb-6">Form a team, choose your genre (Barbarian, Samurai, Cyberpunk...), and fight through the monster journey together. React to teammates' workouts, chat, and compete.</p>
+          <p class="text-text-muted mb-6">Create or join a team, pick a banner that sets its look, such as Barbarian Horde or Knights of the Realm, and fight the monsters together. Teammates see each other's workouts in a shared feed, where they can react, comment and chat.</p>
           <div class="space-y-3">
             <div class="flex items-start gap-3">
               <svg class="w-5 h-5 text-primary-light mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-              <span class="text-text-muted text-sm">24-monster journey map across 6 themed worlds</span>
+              <span class="text-text-muted text-sm">A journey map lays out 24 monsters in six themed worlds, and the team beats them in order.</span>
             </div>
             <div class="flex items-start gap-3">
               <svg class="w-5 h-5 text-primary-light mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-              <span class="text-text-muted text-sm">18 team genres with unique art and war banners</span>
+              <span class="text-text-muted text-sm">There are 18 team banners, each with its own art. Four are free, five are bought with gold the team wins in battle, and nine come in paid packs.</span>
             </div>
             <div class="flex items-start gap-3">
               <svg class="w-5 h-5 text-primary-light mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-              <span class="text-text-muted text-sm">Workout feed with emoji reactions and comments</span>
+              <span class="text-text-muted text-sm">The team feed shows every member's workouts, with reactions and comments.</span>
             </div>
             <div class="flex items-start gap-3">
               <svg class="w-5 h-5 text-primary-light mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-              <span class="text-text-muted text-sm">Enhanced Tier 2 warpath for endgame teams</span>
+              <span class="text-text-muted text-sm">After a team clears a world, tougher versions of its monsters unlock, with bigger rewards.</span>
             </div>
           </div>
         </div>
@@ -211,11 +211,11 @@ import PhoneMockup from '../components/PhoneMockup.astro';
         <div>
           <span class="text-gold text-sm font-semibold uppercase tracking-wider">Daily & Weekly</span>
           <h2 class="text-3xl font-bold mt-2 mb-4">Challenges that keep you sharp.</h2>
-          <p class="text-text-muted mb-6">Fresh challenges every day and week — tied to your actual stat categories. Complete them for bonus XP, coins, and temporary buffs that boost your combat power.</p>
+          <p class="text-text-muted mb-6">Each day and each week, the app offers a challenge workout matched to your training. Finish it to earn bonus XP, coins and a short boost to your stats that makes your character stronger in battle.</p>
         </div>
         <div class="flex justify-center gap-4">
           <PhoneMockup src="/screenshots/challenges.png" alt="Daily and weekly challenges" class="max-w-[250px]" />
-          <PhoneMockup src="/screenshots/banners.png" alt="Team banners and war flags" class="max-w-[250px] hidden sm:block mt-8" />
+          <PhoneMockup src="/screenshots/banners.png" alt="Team banners a team can choose from" class="max-w-[250px] hidden sm:block mt-8" />
         </div>
       </div>
     </div>
@@ -225,7 +225,7 @@ import PhoneMockup from '../components/PhoneMockup.astro';
   <section class="py-20 bg-surface/30">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
       <h2 class="text-3xl font-bold mb-4">Start your quest today.</h2>
-      <p class="text-text-muted text-lg mb-8">Free. No paywall. No ads. Just train.</p>
+      <p class="text-text-muted text-lg mb-8">Departure is free to download and play, and it has no ads.</p>
       <a href="https://apps.apple.com/app/id6761634387" target="_blank" rel="noopener" class="inline-flex items-center justify-center bg-primary hover:bg-primary-light text-white px-8 py-4 rounded-xl font-semibold transition-colors text-lg">
             Download Free on iPhone
           </a>
