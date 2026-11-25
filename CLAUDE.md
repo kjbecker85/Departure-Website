@@ -42,3 +42,7 @@ Live on the iOS App Store (id6761634387). Google Play is a closed beta.
 - `scripts/sync-queue.cjs` audits image_path drift between queue and DB — run after any bulk edit; `--apply` fixes upcoming/failed rows
 - Supabase row marked "posted" if ANY platform succeeds — check `x_posted`/`ig_posted`/`fb_posted` bool columns for per-platform status
 - GitHub Actions workflow supports `only_platforms` input for partial retries; always quote the value in shell: `"${{ github.event.inputs.only_platforms }}"`
+
+## Writing rules
+
+- Clarity comes before brevity (Kyle, 2026-11-25). Everything a user, player or visitor reads is written in complete sentences that say what happens, why, and what it means for them. No fragments, and no labels standing in for an explanation. Define a term where the reader first meets it, for a smart reader who is new to the subject. Do not pad. Buttons, tabs and headings stay short.
