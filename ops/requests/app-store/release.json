@@ -1,8 +1,0 @@
-{
-  "version": "1.1.1",
-  "build": "31",
-  "whatsNew": "The back arrow at the top of a screen works again on iOS 26. Before this fix it could stop responding, and the only way out was to close the app. Screens that are still loading now show a back arrow too, so you are never stuck on a spinner. The text across the app is clearer and says what each reward, battle and team bonus does for you. If Restore Purchases fails, it now tells you what went wrong. The check that keeps impossible lifts from counting compares only with your own past lifts, and it no longer flags normal progress on lighter weights.",
-  "releaseType": "AFTER_APPROVAL",
-  "submitForReview": true,
-  "note": "1.1.1: back arrow fix for iOS 26 and clearer wording (qualia-fitness PRs 13 to 18)"
-}

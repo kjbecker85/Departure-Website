@@ -1,12 +1,15 @@
 {
-  "generatedAt": "2026-11-25T20:29:09.626Z",
-  "startedAt": "2026-11-25T20:29:06.234Z",
-  "trigger": "schedule",
-  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/45695361532",
+  "generatedAt": "2026-11-26T01:46:58.915Z",
+  "startedAt": "2026-11-26T01:44:36.512Z",
+  "trigger": "push",
+  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/45737778235",
   "ok": true,
   "errors": [],
   "applied": null,
-  "release": null,
+  "release": {
+    "ok": true,
+    "file": "ops/reports/app-store/last-release.json"
+  },
   "otherRequests": null,
   "appId": "6761634387",
   "app": {
@@ -18,15 +21,26 @@
   },
   "versions": [
     {
+      "id": "8427e7fc-cfb9-4254-8c72-e74a9c4c0da5",
+      "versionString": "1.1.1",
+      "state": "WAITING_FOR_REVIEW",
+      "appStoreState": "WAITING_FOR_REVIEW",
+      "appVersionState": "WAITING_FOR_REVIEW",
+      "releaseType": "AFTER_APPROVAL",
+      "createdDate": "2026-11-25T17:44:37-08:00",
+      "editable": false,
+      "live": false
+    },
+    {
       "id": "4d905e7e-0744-4907-bc77-59f8333298e7",
       "versionString": "1.1.0",
-      "state": "REJECTED",
-      "appStoreState": "REJECTED",
-      "appVersionState": "REJECTED",
+      "state": "READY_FOR_DISTRIBUTION",
+      "appStoreState": "READY_FOR_SALE",
+      "appVersionState": "READY_FOR_DISTRIBUTION",
       "releaseType": "AFTER_APPROVAL",
       "createdDate": "2026-11-21T18:51:07-08:00",
-      "editable": true,
-      "live": false
+      "editable": false,
+      "live": true
     },
     {
       "id": "1e1e61e4-0bba-4959-95b9-5e04be823000",
@@ -74,53 +88,34 @@
     }
   ],
   "liveVersion": {
-    "id": "1e1e61e4-0bba-4959-95b9-5e04be823000",
-    "versionString": "1.0.3",
+    "id": "4d905e7e-0744-4907-bc77-59f8333298e7",
+    "versionString": "1.1.0",
     "state": "READY_FOR_DISTRIBUTION",
     "appStoreState": "READY_FOR_SALE",
     "appVersionState": "READY_FOR_DISTRIBUTION",
     "releaseType": "AFTER_APPROVAL",
-    "createdDate": "2026-04-25T17:01:53-07:00",
+    "createdDate": "2026-11-21T18:51:07-08:00",
     "editable": false,
     "live": true
   },
   "pendingVersions": [
     {
-      "id": "4d905e7e-0744-4907-bc77-59f8333298e7",
-      "versionString": "1.1.0",
-      "state": "REJECTED",
-      "appStoreState": "REJECTED",
-      "appVersionState": "REJECTED",
+      "id": "8427e7fc-cfb9-4254-8c72-e74a9c4c0da5",
+      "versionString": "1.1.1",
+      "state": "WAITING_FOR_REVIEW",
+      "appStoreState": "WAITING_FOR_REVIEW",
+      "appVersionState": "WAITING_FOR_REVIEW",
       "releaseType": "AFTER_APPROVAL",
-      "createdDate": "2026-11-21T18:51:07-08:00",
-      "editable": true,
+      "createdDate": "2026-11-25T17:44:37-08:00",
+      "editable": false,
       "live": false
     }
   ],
-  "editableVersion": {
-    "id": "4d905e7e-0744-4907-bc77-59f8333298e7",
-    "versionString": "1.1.0",
-    "state": "REJECTED",
-    "appStoreState": "REJECTED",
-    "appVersionState": "REJECTED",
-    "releaseType": "AFTER_APPROVAL",
-    "createdDate": "2026-11-21T18:51:07-08:00",
-    "editable": true,
-    "live": false
-  },
+  "editableVersion": null,
+  "notes": [
+    "No editable App Store version. Listing changes other than promotional text need a new version."
+  ],
   "versionLocalizations": {
-    "1.0.3": [
-      {
-        "id": "5cd1a155-bec5-469e-b06f-1b229ee8ff4a",
-        "description": "Departure: Fitness Quest makes working out feel like a game. Log your workouts across arms, legs, core, and cardio — and earn XP for every session. The more consistent and varied your training, the higher you rank through 12 tiers from Thrall to Allfather.                                                    \n                                                  \nSee your transformation before it happens. Upload a selfie and our AI generates an image of your future physique based on your workout plan, giving you a powerful visual of where you're headed.    \n                                                                                                  \nTeam up with friends and compete together. Create or join a team, pick a genre theme (Barbarian, Cyberpunk, Samurai, and more), set group goals, and climb the team leaderboard. Your individual effort contributes to your team's score.                                                       \n                                                                                                      \n  Features:                                                                                           \n  - Log workouts with detailed exercise tracking\n  - XP scoring system with streak and variety bonuses                                                 \n  - 24 rank tiers to progress through                                                              \n  - AI-powered future body transformation images\n  - Team creation with 18 unique genre themes   \n  - Team goals and group scoring              \n  - Social features to find and compete with friends  ",
-        "locale": "en-US",
-        "keywords": "fitness, workout, gym, tracker, strength training, rpg, challenge, muscle, weightlifting, cardio",
-        "marketingUrl": "https://departure.engagequalia.com",
-        "promotionalText": "Turn every workout into a quest. Log real lifts, earn XP, rank up from Recruit to Legend, and fight monsters with your team. Free to play.",
-        "supportUrl": "https://departure.engagequalia.com/support",
-        "whatsNew": " • Sign in with Apple                                                                                                                 \n  • Sign in with Google                                                                                                                \n  • Quality and stability improvements"
-      }
-    ],
     "1.1.0": [
       {
         "id": "5e77fb9c-0f57-4594-b138-e93566b5b587",
@@ -135,126 +130,71 @@
     ]
   },
   "screenshots": {
-    "1.0.3": [
+    "1.1.0": [
       {
         "locale": "en-US",
         "displayType": "APP_IPHONE_65",
         "images": [
           {
-            "fileName": "onboarding-motivation-2.png",
-            "width": 1242,
-            "height": 2688,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/qYxBPoXPvR5ZVWCxqdpI8g/1242x2688bb.png",
+            "fileName": "01-log-list.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/9SEOk4uay1LD-LZBVQeKKA/1284x2778bb.png",
             "state": "COMPLETE"
           },
           {
-            "fileName": "01_quest.jpg",
-            "width": 1242,
-            "height": 2688,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/gyr4_p7PPnnZkaa_ZeRbMA/1242x2688bb.png",
+            "fileName": "02-team.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/FavXhZGAEnT5d_KfwAbotA/1284x2778bb.png",
             "state": "COMPLETE"
           },
           {
-            "fileName": "02_current_self.jpg",
-            "width": 1242,
-            "height": 2688,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/QpVYGRkoAL2rOryH-nasiw/1242x2688bb.png",
+            "fileName": "03-summary.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/F-7EUP8Ybe_KEFfEuTDjdQ/1284x2778bb.png",
             "state": "COMPLETE"
           },
           {
-            "fileName": "03a_goal.jpg",
-            "width": 1242,
-            "height": 2688,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/k70RLKpqaaHEC5U0OV_jdg/1242x2688bb.png",
+            "fileName": "04-home.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/0Py4kTJT4A24knnZM3pHDw/1284x2778bb.png",
             "state": "COMPLETE"
           },
           {
-            "fileName": "03b_disciplines.jpg",
-            "width": 1242,
-            "height": 2688,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/aYCvi7bn1SB9iC_0rfBYzQ/1242x2688bb.png",
+            "fileName": "05-log-empty.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/cVbXi702nsJ6A4ScYMuVNw/1284x2778bb.png",
             "state": "COMPLETE"
           },
           {
-            "fileName": "04_future_self.jpg",
-            "width": 1242,
-            "height": 2688,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/jnSkqz1XdfTXLAVjkUWEHg/1242x2688bb.png",
+            "fileName": "06-equip.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/0tf2s1EWSTRmAGArALrAYw/1284x2778bb.png",
             "state": "COMPLETE"
           },
           {
-            "fileName": "05_team.jpg",
-            "width": 1242,
-            "height": 2688,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/QMbHHIFK59ygzwshzgp63Q/1242x2688bb.png",
+            "fileName": "07-trophy.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/G5LWvbQWBZaKSS_ncP6WlQ/1284x2778bb.png",
             "state": "COMPLETE"
           },
           {
-            "fileName": "06a_workout_xp.jpg",
-            "width": 1242,
-            "height": 2688,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/kZowfhUti3C_CM6ZKOLnrw/1242x2688bb.png",
-            "state": "COMPLETE"
-          },
-          {
-            "fileName": "06b_workout_loot.jpg",
-            "width": 1242,
-            "height": 2688,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/iO1HE26tasYXlszbdp_afA/1242x2688bb.png",
-            "state": "COMPLETE"
-          },
-          {
-            "fileName": "07_slay.jpg",
-            "width": 1242,
-            "height": 2688,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/BYtrrt_E2SFcv2a_oFTUwQ/1242x2688bb.png",
-            "state": "COMPLETE"
-          }
-        ]
-      },
-      {
-        "locale": "en-US",
-        "displayType": "APP_IPAD_PRO_3GEN_129",
-        "images": [
-          {
-            "fileName": "iPad_13inch_4.png",
-            "width": 2048,
-            "height": 2732,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/pwkN1BfktyNPQrVjKVmjww/2048x2732bb.png",
-            "state": "COMPLETE"
-          },
-          {
-            "fileName": "iPad_13inch_5.png",
-            "width": 2048,
-            "height": 2732,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/KmvTqG-BXR3UT5htkP7k8A/2048x2732bb.png",
-            "state": "COMPLETE"
-          },
-          {
-            "fileName": "iPad_13inch_7.png",
-            "width": 2048,
-            "height": 2732,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/eH_dY8g4Q9A-54EbTdnTrA/2048x2732bb.png",
-            "state": "COMPLETE"
-          },
-          {
-            "fileName": "iPad_13inch_6.png",
-            "width": 2048,
-            "height": 2732,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/p4J6mzYIVhWkk6KCOk9XNw/2048x2732bb.png",
-            "state": "COMPLETE"
-          },
-          {
-            "fileName": "iPad_13inch_8.png",
-            "width": 2048,
-            "height": 2732,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/wuy17g-Uhe8yq3AzrGMxwQ/2048x2732bb.png",
+            "fileName": "08-heatmap.png",
+            "width": 1284,
+            "height": 2778,
+            "url": "https://is1-ssl.mzstatic.com/image/thumb/sPruHQvIzm8bgo58-kHrdA/1284x2778bb.png",
             "state": "COMPLETE"
           }
         ]
       }
     ],
-    "1.1.0": [
+    "1.1.1": [
       {
         "locale": "en-US",
         "displayType": "APP_IPHONE_65",
@@ -321,30 +261,30 @@
   },
   "appInfos": [
     {
-      "id": "21f0fda3-83c8-4f1f-8aa7-8d5eae215b8c",
+      "id": "e44ec198-517d-486c-a642-ba17ae37ac17",
       "state": "READY_FOR_DISTRIBUTION",
       "appStoreState": "READY_FOR_SALE",
       "editable": false,
       "localizations": [
         {
-          "id": "2d5bffbc-8f14-4a30-86ec-efe221fa01c8",
+          "id": "97ae2e01-988d-4f24-9ba2-12569613efa8",
           "locale": "en-US",
           "name": "Departure: Fitness Quest",
-          "subtitle": null,
-          "privacyPolicyUrl": "https://docs.google.com/document/d/1MFbwdZ6QtHDXghhFWAMlgsE8Qd9GqpRWVaq6n2xCfEs/edit?usp=sharing",
+          "subtitle": "Gym Log, Ranks & Boss Fights",
+          "privacyPolicyUrl": "https://departure.engagequalia.com/privacy/",
           "privacyChoicesUrl": null,
           "privacyPolicyText": null
         }
       ]
     },
     {
-      "id": "e44ec198-517d-486c-a642-ba17ae37ac17",
-      "state": "REJECTED",
-      "appStoreState": "REJECTED",
-      "editable": true,
+      "id": "5b1ecca6-af88-4317-8a38-2d2af4ae47ae",
+      "state": "WAITING_FOR_REVIEW",
+      "appStoreState": "WAITING_FOR_REVIEW",
+      "editable": false,
       "localizations": [
         {
-          "id": "97ae2e01-988d-4f24-9ba2-12569613efa8",
+          "id": "25f12df6-3f97-4456-a290-ffaec32b438d",
           "locale": "en-US",
           "name": "Departure: Fitness Quest",
           "subtitle": "Gym Log, Ranks & Boss Fights",
@@ -362,8 +302,8 @@
     "userRatingCount": 2,
     "averageUserRatingForCurrentVersion": 5,
     "userRatingCountForCurrentVersion": 2,
-    "storeVersion": "1.0.3",
-    "currentVersionReleaseDate": "2026-04-27T17:32:59Z"
+    "storeVersion": "1.1.0",
+    "currentVersionReleaseDate": "2026-11-26T00:33:46Z"
   },
   "customerReviews": []
 }
