@@ -14,6 +14,7 @@
  *   { "locale": "en-US", "subtitle", "keywords", "promotionalText", "description", "whatsNew" }
  *   Only fields present are changed. The file is deleted after it is processed.
  * Reads (optional): ops/requests/app-store/release.json
+ * Reads (optional): ops/requests/app-store/iap-prices.json  (in-app purchase prices; report only unless "apply": true)
  *   { "version", "build", "whatsNew", "keywords", "promotionalText", "description", "subtitle",
  *     "privacyPolicyUrl", "releaseType", "submitForReview", "locale" }
  *   Finds or creates the version, waits for the build, attaches it, sets the listing text,
@@ -34,6 +35,7 @@ const REQUEST_FILE = path.join(ROOT, 'ops/requests/app-store/listing.json');
 const RELEASE_FILE = path.join(ROOT, 'ops/requests/app-store/release.json');
 const DIAGNOSE_FILE = path.join(ROOT, 'ops/requests/app-store/diagnose.json');
 const COMPLIANCE_FILE = path.join(ROOT, 'ops/requests/app-store/compliance.json');
+const IAP_PRICES_FILE = path.join(ROOT, 'ops/requests/app-store/iap-prices.json');
 const REPORT_DIR = path.join(ROOT, 'ops/reports/app-store');
 const API = 'https://api.appstoreconnect.apple.com';
 const APP_ID = process.env.ASC_APP_ID || '6761634387';
@@ -1078,6 +1080,101 @@ async function processDiagnose(req) {
 }
 
 // ---------------------------------------------------------------------------
+// In-app purchase price request: ops/requests/app-store/iap-prices.json
+//
+//   { "why": "...", "apply": false, "territory": "USA",
+//     "prices": { "amulet_slot_unlock": "7.99", "treasure_tier_goblins": "1.99" } }
+//
+// For each product id it finds the in-app purchase, reads its current manual
+// prices, and looks up the price point for the wanted customer price in the
+// base territory. With "apply": true it then posts a price schedule that
+// starts now. Apple sets every other territory's price from the base
+// territory. With "apply": false (the default) it only reports, so a run
+// without "apply" is a safe way to read what the store charges today.
+// A lower price takes effect at once. Apple does not let a price increase
+// be undone, so read the report before raising anything.
+async function processIapPrices(req) {
+  const out = { startedAt: new Date().toISOString(), request: { ...req }, products: [] };
+  const territory = req.territory || 'USA';
+  const wanted = req.prices && typeof req.prices === 'object' ? req.prices : {};
+  const apply = req.apply === true;
+
+  for (const [productId, target] of Object.entries(wanted)) {
+    const rec = { productId, target: String(target), steps: [] };
+    out.products.push(rec);
+    const step = (name, status, details) => rec.steps.push({ step: name, status, ...details });
+    try {
+      const found = await asc('GET', `/v1/apps/${APP_ID}/inAppPurchasesV2?filter[productId]=${encodeURIComponent(productId)}&limit=5`);
+      const iap = (found.data || []).find((d) => d.attributes && d.attributes.productId === productId);
+      if (!iap) { step('find', 'error', { error: 'no in-app purchase with this product id' }); continue; }
+      rec.iapId = iap.id;
+      rec.name = iap.attributes.name;
+      rec.state = iap.attributes.state;
+      step('find', 'ok');
+
+      // What the store charges today. Read only; a failure here does not stop the change.
+      try {
+        const cur = await asc('GET', `/v1/inAppPurchasePriceSchedules/${iap.id}/manualPrices?include=inAppPurchasePricePoint,territory&limit=50`);
+        const points = Object.fromEntries((cur.included || []).filter((i) => i.type === 'inAppPurchasePricePoints').map((i) => [i.id, i.attributes.customerPrice]));
+        rec.before = (cur.data || []).map((d) => ({
+          territory: d.relationships && d.relationships.territory && d.relationships.territory.data ? d.relationships.territory.data.id : null,
+          customerPrice: points[d.relationships && d.relationships.inAppPurchasePricePoint && d.relationships.inAppPurchasePricePoint.data ? d.relationships.inAppPurchasePricePoint.data.id : ''] || null,
+          startDate: d.attributes ? d.attributes.startDate : null,
+          endDate: d.attributes ? d.attributes.endDate : null,
+        }));
+        step('current price', 'ok');
+      } catch (e) {
+        rec.steps.push(errorRecord({ step: 'current price', status: 'error (not fatal)' }, e));
+      }
+
+      // The price point for the wanted customer price in the base territory.
+      let pricePoint = null;
+      let url = `/v2/inAppPurchases/${iap.id}/pricePoints?filter[territory]=${territory}&limit=200`;
+      for (let page = 0; page < 10 && url && !pricePoint; page++) {
+        const pts = await asc('GET', url);
+        pricePoint = (pts.data || []).find((d) => Number(d.attributes.customerPrice) === Number(target)) || null;
+        url = pts.links && pts.links.next ? pts.links.next : null;
+      }
+      if (!pricePoint) { step('price point', 'error', { error: `no ${territory} price point at ${target}` }); continue; }
+      rec.pricePointId = pricePoint.id;
+      rec.proceeds = pricePoint.attributes.proceeds;
+      step('price point', 'ok');
+
+      const already = (rec.before || []).some((b) => b.territory === territory && Number(b.customerPrice) === Number(target) && !b.endDate);
+      if (already) { step('apply', 'already at this price'); continue; }
+      if (!apply) { step('apply', 'not requested (report only)'); continue; }
+
+      await asc('POST', '/v1/inAppPurchasePriceSchedules', {
+        data: {
+          type: 'inAppPurchasePriceSchedules',
+          attributes: {},
+          relationships: {
+            inAppPurchase: { data: { type: 'inAppPurchases', id: iap.id } },
+            baseTerritory: { data: { type: 'territories', id: territory } },
+            manualPrices: { data: [{ type: 'inAppPurchasePrices', id: '${price1}' }] },
+          },
+        },
+        included: [{
+          type: 'inAppPurchasePrices',
+          id: '${price1}',
+          attributes: { startDate: null },
+          relationships: {
+            inAppPurchaseV2: { data: { type: 'inAppPurchasesV2', id: iap.id } },
+            inAppPurchasePricePoint: { data: { type: 'inAppPurchasePricePoints', id: pricePoint.id } },
+          },
+        }],
+      });
+      step('apply', 'price schedule posted');
+    } catch (e) {
+      rec.steps.push(errorRecord({ step: 'fatal', status: 'error' }, e));
+    }
+  }
+
+  out.ok = out.products.length > 0 && out.products.every((r) => !r.steps.some((st) => st.status === 'error'));
+  return out;
+}
+
+
 // Compliance request: ops/requests/app-store/compliance.json
 //   { "version": "1.0.4",
 //     "ageRatingDeclaration": { <ageRatingDeclarations attributes> },
@@ -1298,6 +1395,7 @@ async function main() {
   for (const [file, name, fn] of [
     [COMPLIANCE_FILE, 'last-compliance.json', processCompliance],
     [DIAGNOSE_FILE, 'last-diagnose.json', processDiagnose],
+    [IAP_PRICES_FILE, 'last-iap-prices.json', processIapPrices],
   ]) {
     if (!fs.existsSync(file)) continue;
     let r;
