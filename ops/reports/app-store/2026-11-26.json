@@ -1,15 +1,12 @@
 {
-  "generatedAt": "2026-11-26T03:03:40.137Z",
-  "startedAt": "2026-11-26T03:02:48.211Z",
+  "generatedAt": "2026-11-26T03:12:58.673Z",
+  "startedAt": "2026-11-26T03:12:55.689Z",
   "trigger": "push",
-  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/45746343574",
+  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/45747449166",
   "ok": true,
   "errors": [],
   "applied": null,
-  "release": {
-    "ok": true,
-    "file": "ops/reports/app-store/last-release.json"
-  },
+  "release": null,
   "otherRequests": null,
   "appId": "6761634387",
   "app": {
