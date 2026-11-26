@@ -1,18 +1,16 @@
 {
-  "generatedAt": "2026-11-26T02:30:14.613Z",
-  "startedAt": "2026-11-26T02:29:57.567Z",
+  "generatedAt": "2026-11-26T03:03:40.137Z",
+  "startedAt": "2026-11-26T03:02:48.211Z",
   "trigger": "push",
-  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/45742797361",
+  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/45746343574",
   "ok": true,
   "errors": [],
   "applied": null,
-  "release": null,
-  "otherRequests": [
-    {
-      "file": "ops/reports/app-store/last-iap-prices.json",
-      "ok": true
-    }
-  ],
+  "release": {
+    "ok": true,
+    "file": "ops/reports/app-store/last-release.json"
+  },
+  "otherRequests": null,
   "appId": "6761634387",
   "app": {
     "id": "6761634387",
@@ -24,7 +22,7 @@
   "versions": [
     {
       "id": "8427e7fc-cfb9-4254-8c72-e74a9c4c0da5",
-      "versionString": "1.1.1",
+      "versionString": "1.1.2",
       "state": "WAITING_FOR_REVIEW",
       "appStoreState": "WAITING_FOR_REVIEW",
       "appVersionState": "WAITING_FOR_REVIEW",
@@ -103,7 +101,7 @@
   "pendingVersions": [
     {
       "id": "8427e7fc-cfb9-4254-8c72-e74a9c4c0da5",
-      "versionString": "1.1.1",
+      "versionString": "1.1.2",
       "state": "WAITING_FOR_REVIEW",
       "appStoreState": "WAITING_FOR_REVIEW",
       "appVersionState": "WAITING_FOR_REVIEW",
@@ -196,7 +194,7 @@
         ]
       }
     ],
-    "1.1.1": [
+    "1.1.2": [
       {
         "locale": "en-US",
         "displayType": "APP_IPHONE_65",
@@ -304,8 +302,8 @@
     "userRatingCount": 2,
     "averageUserRatingForCurrentVersion": 5,
     "userRatingCountForCurrentVersion": 2,
-    "storeVersion": "1.0.3",
-    "currentVersionReleaseDate": "2026-04-27T17:32:59Z"
+    "storeVersion": "1.1.0",
+    "currentVersionReleaseDate": "2026-11-26T00:33:46Z"
   },
   "customerReviews": []
 }

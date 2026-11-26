@@ -1,105 +1,138 @@
 {
-  "startedAt": "2026-11-26T01:44:36.519Z",
+  "startedAt": "2026-11-26T03:02:48.217Z",
   "request": {
-    "version": "1.1.1",
-    "build": "31",
-    "whatsNew": "The back arrow at the top of a screen works again on iOS 26. Before this fix it could stop responding, and the only way out was to close the app. Screens that are still loading now show a back arrow too, so you are never stuck on a spinner. The text across the app is clearer and says what each reward, battle and team bonus does for you. If Restore Purchases fails, it now tells you what went wrong. The check that keeps impossible lifts from counting compares only with your own past lifts, and it no longer flags normal progress on lighter weights.",
+    "version": "1.1.2",
+    "build": "33",
+    "fromVersion": "1.1.1",
+    "withdraw": true,
+    "whatsNew": "The back arrow at the top of a screen works again on iOS 26. Before this fix it could stop responding, and the only way out was to close the app. The Equip screen has a new board laid out like a body, with a slot for your legs that looks like one. Tap a slot to see the gear you can wear there, with every stat named. A team's creator can now start Warpath fights from the first day, and you can send friend requests from player search. Ranks now show correctly on the leaderboard. The weekly Skirmish runs again: teams are matched every Monday, and your leader can pick the battleground during the first 48 hours. Two-handed weapons are stronger, and the game now warns you before one takes off your sword and shield. The Amulet Slot and most Treasure Trails cost less. Buying gear with coins is safer on a weak connection. The text across the app is clearer about what each reward, battle and team bonus does for you.",
     "releaseType": "AFTER_APPROVAL",
     "submitForReview": true,
-    "note": "1.1.1: back arrow fix for iOS 26 and clearer wording (qualia-fitness PRs 13 to 18)"
+    "note": "1.1.2 replaces 1.1.1 in review (Kyle's yes, 2026-11-26): it holds the back arrow fix plus the Arena, Equip and Shop audit (qualia-fitness PRs 13 to 20). Kyle checked both builds on his phone."
   },
   "locale": "en-US",
   "steps": [
     {
       "step": "validate",
       "status": "ok",
-      "at": "2026-11-26T01:44:36.519Z"
+      "at": "2026-11-26T03:02:48.217Z"
+    },
+    {
+      "step": "fromVersion",
+      "status": "found",
+      "at": "2026-11-26T03:02:48.951Z",
+      "id": "8427e7fc-cfb9-4254-8c72-e74a9c4c0da5",
+      "versionString": "1.1.1",
+      "state": "WAITING_FOR_REVIEW"
+    },
+    {
+      "step": "withdraw",
+      "status": "requested",
+      "at": "2026-11-26T03:02:50.611Z",
+      "reviewSubmissionId": "84603448-e013-443b-98cb-8051abaeb44c",
+      "state": "CANCELING"
+    },
+    {
+      "step": "withdrawWait",
+      "status": "ok",
+      "at": "2026-11-26T03:03:11.041Z",
+      "state": "DEVELOPER_REJECTED",
+      "polls": 1
+    },
+    {
+      "step": "rename",
+      "status": "ok",
+      "at": "2026-11-26T03:03:12.663Z",
+      "id": "8427e7fc-cfb9-4254-8c72-e74a9c4c0da5",
+      "before": "1.1.1",
+      "after": "1.1.2"
     },
     {
       "step": "version",
-      "status": "created",
-      "at": "2026-11-26T01:44:39.614Z",
+      "status": "found",
+      "at": "2026-11-26T03:03:13.709Z",
       "id": "8427e7fc-cfb9-4254-8c72-e74a9c4c0da5",
-      "state": "PREPARE_FOR_SUBMISSION"
+      "state": "DEVELOPER_REJECTED",
+      "releaseType": "AFTER_APPROVAL"
     },
     {
       "step": "build",
       "status": "valid",
-      "at": "2026-11-26T01:46:40.500Z",
-      "id": "99680998-05cf-4312-871b-9d666cc58cbf",
-      "uploadedDate": "2026-11-25T17:44:46-08:00",
+      "at": "2026-11-26T03:03:13.947Z",
+      "id": "4a13c3cc-fa66-4661-8f73-e0e50792ed4f",
+      "uploadedDate": "2026-11-25T18:39:54-08:00",
       "usesNonExemptEncryption": false,
-      "polls": 3
+      "polls": 1
     },
     {
       "step": "exportCompliance",
       "status": "already set",
-      "at": "2026-11-26T01:46:40.500Z",
+      "at": "2026-11-26T03:03:13.947Z",
       "usesNonExemptEncryption": false
     },
     {
       "step": "attachBuild",
       "status": "ok",
-      "at": "2026-11-26T01:46:43.092Z",
-      "buildId": "99680998-05cf-4312-871b-9d666cc58cbf",
-      "replaced": null
+      "at": "2026-11-26T03:03:17.760Z",
+      "buildId": "4a13c3cc-fa66-4661-8f73-e0e50792ed4f",
+      "replaced": "99680998-05cf-4312-871b-9d666cc58cbf"
     },
     {
       "step": "versionLocalization",
       "status": "ok",
-      "at": "2026-11-26T01:46:43.665Z",
+      "at": "2026-11-26T03:03:18.539Z",
       "id": "9b3f72cd-8431-405b-8f00-ed35ffacef08",
       "before": {
-        "whatsNew": "Logging a workout is rebuilt. Repeat your last workout in three taps, or start from a saved routine. Each exercise shows what you did last time, and one tap fills it in. Step buttons add a rep or five pounds without the keyboard. Routines now keep every set. Search finds what you type, and you can add your own exercises.\n\nA new Home puts your warrior up top with the Recruit's Trials: five first steps that pay coins. The app opens faster, saves faster and is a much smaller download. Reminders warn you before a streak is lost.\n\nFixed: runs and holds with seconds that would not save, and the daily bonus for new players. You can now report and block other players."
+        "whatsNew": "The back arrow at the top of a screen works again on iOS 26. Before this fix it could stop responding, and the only way out was to close the app. Screens that are still loading now show a back arrow too, so you are never stuck on a spinner. The text across the app is clearer and says what each reward, battle and team bonus does for you. If Restore Purchases fails, it now tells you what went wrong. The check that keeps impossible lifts from counting compares only with your own past lifts, and it no longer flags normal progress on lighter weights."
       },
       "after": {
-        "whatsNew": "The back arrow at the top of a screen works again on iOS 26. Before this fix it could stop responding, and the only way out was to close the app. Screens that are still loading now show a back arrow too, so you are never stuck on a spinner. The text across the app is clearer and says what each reward, battle and team bonus does for you. If Restore Purchases fails, it now tells you what went wrong. The check that keeps impossible lifts from counting compares only with your own past lifts, and it no longer flags normal progress on lighter weights."
+        "whatsNew": "The back arrow at the top of a screen works again on iOS 26. Before this fix it could stop responding, and the only way out was to close the app. The Equip screen has a new board laid out like a body, with a slot for your legs that looks like one. Tap a slot to see the gear you can wear there, with every stat named. A team's creator can now start Warpath fights from the first day, and you can send friend requests from player search. Ranks now show correctly on the leaderboard. The weekly Skirmish runs again: teams are matched every Monday, and your leader can pick the battleground during the first 48 hours. Two-handed weapons are stronger, and the game now warns you before one takes off your sword and shield. The Amulet Slot and most Treasure Trails cost less. Buying gear with coins is safer on a weak connection. The text across the app is clearer about what each reward, battle and team bonus does for you."
       }
     },
     {
       "step": "appInfoLocalization",
       "status": "skipped",
-      "at": "2026-11-26T01:46:43.665Z",
+      "at": "2026-11-26T03:03:18.540Z",
       "reason": "no subtitle or privacyPolicyUrl in the request"
     },
     {
       "step": "screenshots",
       "status": "skipped",
-      "at": "2026-11-26T01:46:43.665Z",
+      "at": "2026-11-26T03:03:18.540Z",
       "reason": "not in the request"
     },
     {
       "step": "releaseType",
       "status": "ok",
-      "at": "2026-11-26T01:46:44.448Z",
+      "at": "2026-11-26T03:03:19.591Z",
       "before": "AFTER_APPROVAL",
       "after": "AFTER_APPROVAL"
     },
     {
       "step": "reviewSubmission",
       "status": "created",
-      "at": "2026-11-26T01:46:44.955Z",
-      "id": "84603448-e013-443b-98cb-8051abaeb44c",
+      "at": "2026-11-26T03:03:24.351Z",
+      "id": "1d21f490-e091-4e74-bc17-335f5ca68ab7",
       "state": "READY_FOR_REVIEW"
     },
     {
       "step": "reviewSubmissionItem",
       "status": "created",
-      "at": "2026-11-26T01:46:50.055Z",
-      "id": "ODQ2MDM0NDgtZTAxMy00NDNiLTk4Y2ItODA1MWFiYWViNDRjfDZ8ODk2MTYwODE4",
+      "at": "2026-11-26T03:03:29.435Z",
+      "id": "MWQyMWY0OTAtZTA5MS00ZTc0LWJjMTctMzM1ZjVjYTY4YWI3fDZ8ODk2MTYwODE4",
       "state": "READY_FOR_REVIEW"
     },
     {
       "step": "submit",
       "status": "ok",
-      "at": "2026-11-26T01:46:54.926Z",
-      "reviewSubmissionId": "84603448-e013-443b-98cb-8051abaeb44c",
+      "at": "2026-11-26T03:03:35.295Z",
+      "reviewSubmissionId": "1d21f490-e091-4e74-bc17-335f5ca68ab7",
       "state": "WAITING_FOR_REVIEW",
-      "submittedDate": "2026-11-26T01:46:53.455Z"
+      "submittedDate": "2026-11-26T03:03:33.839Z"
     }
   ],
   "ok": true,
   "reviewSubmissionState": "WAITING_FOR_REVIEW",
   "finalVersionState": "WAITING_FOR_REVIEW",
-  "finishedAt": "2026-11-26T01:46:55.763Z"
+  "finishedAt": "2026-11-26T03:03:36.621Z"
 }
