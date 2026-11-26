@@ -1159,7 +1159,8 @@ async function processIapPrices(req) {
           id: '${price1}',
           attributes: { startDate: null },
           relationships: {
-            inAppPurchaseV2: { data: { type: 'inAppPurchasesV2', id: iap.id } },
+            // Apple names the relationship inAppPurchaseV2 and wants the type 'inAppPurchases' in it.
+            inAppPurchaseV2: { data: { type: 'inAppPurchases', id: iap.id } },
             inAppPurchasePricePoint: { data: { type: 'inAppPurchasePricePoints', id: pricePoint.id } },
           },
         }],
