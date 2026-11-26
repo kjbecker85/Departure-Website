@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-26T02:28:38.084Z",
-  "startedAt": "2026-11-26T02:28:25.865Z",
+  "generatedAt": "2026-11-26T02:30:14.613Z",
+  "startedAt": "2026-11-26T02:29:57.567Z",
   "trigger": "push",
-  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/45742629034",
+  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/45742797361",
   "ok": true,
   "errors": [],
   "applied": null,
@@ -304,8 +304,8 @@
     "userRatingCount": 2,
     "averageUserRatingForCurrentVersion": 5,
     "userRatingCountForCurrentVersion": 2,
-    "storeVersion": "1.1.0",
-    "currentVersionReleaseDate": "2026-11-26T00:33:46Z"
+    "storeVersion": "1.0.3",
+    "currentVersionReleaseDate": "2026-04-27T17:32:59Z"
   },
   "customerReviews": []
 }

@@ -1,8 +1,8 @@
 {
-  "startedAt": "2026-11-26T02:28:25.876Z",
+  "startedAt": "2026-11-26T02:29:57.572Z",
   "request": {
-    "why": "Kyle left pricing to Claude (2026-11-26). The Amulet Slot cost the same as the Pro Pack that includes it, so it goes to 7.99. The six Treasure Trails all cost 14.99 although the Goblin trail pays about 56 coins and the Titan trail 4,320, so they are graded by what they pay. All of these are price cuts.",
-    "apply": true,
+    "why": "Read back the prices after the cuts of 2026-11-26. Report only.",
+    "apply": false,
     "territory": "USA",
     "prices": {
       "amulet_slot_unlock": "7.99",
@@ -33,7 +33,7 @@
         },
         {
           "step": "apply",
-          "status": "price schedule posted"
+          "status": "already at this price"
         }
       ],
       "iapId": "6761794403",
@@ -42,7 +42,7 @@
       "before": [
         {
           "territory": "USA",
-          "customerPrice": "9.99",
+          "customerPrice": "7.99",
           "startDate": null,
           "endDate": null
         }
@@ -68,7 +68,7 @@
         },
         {
           "step": "apply",
-          "status": "price schedule posted"
+          "status": "already at this price"
         }
       ],
       "iapId": "6761794794",
@@ -77,7 +77,7 @@
       "before": [
         {
           "territory": "USA",
-          "customerPrice": "14.99",
+          "customerPrice": "1.99",
           "startDate": null,
           "endDate": null
         }
@@ -103,7 +103,7 @@
         },
         {
           "step": "apply",
-          "status": "price schedule posted"
+          "status": "already at this price"
         }
       ],
       "iapId": "6761794991",
@@ -112,7 +112,7 @@
       "before": [
         {
           "territory": "USA",
-          "customerPrice": "14.99",
+          "customerPrice": "2.99",
           "startDate": null,
           "endDate": null
         }
@@ -138,7 +138,7 @@
         },
         {
           "step": "apply",
-          "status": "price schedule posted"
+          "status": "already at this price"
         }
       ],
       "iapId": "6761794992",
@@ -147,7 +147,7 @@
       "before": [
         {
           "territory": "USA",
-          "customerPrice": "14.99",
+          "customerPrice": "4.99",
           "startDate": null,
           "endDate": null
         }
@@ -173,7 +173,7 @@
         },
         {
           "step": "apply",
-          "status": "price schedule posted"
+          "status": "already at this price"
         }
       ],
       "iapId": "6761795039",
@@ -182,7 +182,7 @@
       "before": [
         {
           "territory": "USA",
-          "customerPrice": "14.99",
+          "customerPrice": "6.99",
           "startDate": null,
           "endDate": null
         }
@@ -208,7 +208,7 @@
         },
         {
           "step": "apply",
-          "status": "price schedule posted"
+          "status": "already at this price"
         }
       ],
       "iapId": "6761795017",
@@ -217,7 +217,7 @@
       "before": [
         {
           "territory": "USA",
-          "customerPrice": "14.99",
+          "customerPrice": "9.99",
           "startDate": null,
           "endDate": null
         }
@@ -262,5 +262,5 @@
     }
   ],
   "ok": true,
-  "finishedAt": "2026-11-26T02:28:34.683Z"
+  "finishedAt": "2026-11-26T02:30:05.573Z"
 }
