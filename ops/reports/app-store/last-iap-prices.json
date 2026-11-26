@@ -1,0 +1,266 @@
+{
+  "startedAt": "2026-11-26T02:26:36.863Z",
+  "request": {
+    "why": "Read current prices and price points before lowering the Amulet Slot and grading the Treasure Trails (Kyle left pricing to Claude, 2026-11-26). Report only.",
+    "apply": false,
+    "territory": "USA",
+    "prices": {
+      "amulet_slot_unlock": "7.99",
+      "treasure_tier_goblins": "1.99",
+      "treasure_tier_undead": "2.99",
+      "treasure_tier_orcs": "4.99",
+      "treasure_tier_beasts": "6.99",
+      "treasure_tier_dragons": "9.99",
+      "treasure_tier_titans": "14.99"
+    }
+  },
+  "products": [
+    {
+      "productId": "amulet_slot_unlock",
+      "target": "7.99",
+      "steps": [
+        {
+          "step": "find",
+          "status": "ok"
+        },
+        {
+          "step": "current price",
+          "status": "ok"
+        },
+        {
+          "step": "price point",
+          "status": "ok"
+        },
+        {
+          "step": "apply",
+          "status": "not requested (report only)"
+        }
+      ],
+      "iapId": "6761794403",
+      "name": "Amulet Slot",
+      "state": "APPROVED",
+      "before": [
+        {
+          "territory": "USA",
+          "customerPrice": "9.99",
+          "startDate": null,
+          "endDate": null
+        }
+      ],
+      "pricePointId": "eyJzIjoiNjc2MTc5NDQwMyIsInQiOiJVU0EiLCJwIjoiMTAxMDEifQ",
+      "proceeds": "5.6"
+    },
+    {
+      "productId": "treasure_tier_goblins",
+      "target": "1.99",
+      "steps": [
+        {
+          "step": "find",
+          "status": "ok"
+        },
+        {
+          "step": "current price",
+          "status": "ok"
+        },
+        {
+          "step": "price point",
+          "status": "ok"
+        },
+        {
+          "step": "apply",
+          "status": "not requested (report only)"
+        }
+      ],
+      "iapId": "6761794794",
+      "name": "Goblin Horde Treasure",
+      "state": "APPROVED",
+      "before": [
+        {
+          "territory": "USA",
+          "customerPrice": "14.99",
+          "startDate": null,
+          "endDate": null
+        }
+      ],
+      "pricePointId": "eyJzIjoiNjc2MTc5NDc5NCIsInQiOiJVU0EiLCJwIjoiMTAwMjMifQ",
+      "proceeds": "1.4"
+    },
+    {
+      "productId": "treasure_tier_undead",
+      "target": "2.99",
+      "steps": [
+        {
+          "step": "find",
+          "status": "ok"
+        },
+        {
+          "step": "current price",
+          "status": "ok"
+        },
+        {
+          "step": "price point",
+          "status": "ok"
+        },
+        {
+          "step": "apply",
+          "status": "not requested (report only)"
+        }
+      ],
+      "iapId": "6761794991",
+      "name": "Undead Legion Treasure",
+      "state": "APPROVED",
+      "before": [
+        {
+          "territory": "USA",
+          "customerPrice": "14.99",
+          "startDate": null,
+          "endDate": null
+        }
+      ],
+      "pricePointId": "eyJzIjoiNjc2MTc5NDk5MSIsInQiOiJVU0EiLCJwIjoiMTAwMzYifQ",
+      "proceeds": "2.1"
+    },
+    {
+      "productId": "treasure_tier_orcs",
+      "target": "4.99",
+      "steps": [
+        {
+          "step": "find",
+          "status": "ok"
+        },
+        {
+          "step": "current price",
+          "status": "ok"
+        },
+        {
+          "step": "price point",
+          "status": "ok"
+        },
+        {
+          "step": "apply",
+          "status": "not requested (report only)"
+        }
+      ],
+      "iapId": "6761794992",
+      "name": "Orc Treasure",
+      "state": "APPROVED",
+      "before": [
+        {
+          "territory": "USA",
+          "customerPrice": "14.99",
+          "startDate": null,
+          "endDate": null
+        }
+      ],
+      "pricePointId": "eyJzIjoiNjc2MTc5NDk5MiIsInQiOiJVU0EiLCJwIjoiMTAwNjIifQ",
+      "proceeds": "3.5"
+    },
+    {
+      "productId": "treasure_tier_beasts",
+      "target": "6.99",
+      "steps": [
+        {
+          "step": "find",
+          "status": "ok"
+        },
+        {
+          "step": "current price",
+          "status": "ok"
+        },
+        {
+          "step": "price point",
+          "status": "ok"
+        },
+        {
+          "step": "apply",
+          "status": "not requested (report only)"
+        }
+      ],
+      "iapId": "6761795039",
+      "name": "Ancient Beasts Treasure",
+      "state": "APPROVED",
+      "before": [
+        {
+          "territory": "USA",
+          "customerPrice": "14.99",
+          "startDate": null,
+          "endDate": null
+        }
+      ],
+      "pricePointId": "eyJzIjoiNjc2MTc5NTAzOSIsInQiOiJVU0EiLCJwIjoiMTAwODgifQ",
+      "proceeds": "4.9"
+    },
+    {
+      "productId": "treasure_tier_dragons",
+      "target": "9.99",
+      "steps": [
+        {
+          "step": "find",
+          "status": "ok"
+        },
+        {
+          "step": "current price",
+          "status": "ok"
+        },
+        {
+          "step": "price point",
+          "status": "ok"
+        },
+        {
+          "step": "apply",
+          "status": "not requested (report only)"
+        }
+      ],
+      "iapId": "6761795017",
+      "name": "Dragon Flight Treasure",
+      "state": "APPROVED",
+      "before": [
+        {
+          "territory": "USA",
+          "customerPrice": "14.99",
+          "startDate": null,
+          "endDate": null
+        }
+      ],
+      "pricePointId": "eyJzIjoiNjc2MTc5NTAxNyIsInQiOiJVU0EiLCJwIjoiMTAxMjcifQ",
+      "proceeds": "7.0"
+    },
+    {
+      "productId": "treasure_tier_titans",
+      "target": "14.99",
+      "steps": [
+        {
+          "step": "find",
+          "status": "ok"
+        },
+        {
+          "step": "current price",
+          "status": "ok"
+        },
+        {
+          "step": "price point",
+          "status": "ok"
+        },
+        {
+          "step": "apply",
+          "status": "already at this price"
+        }
+      ],
+      "iapId": "6761795060",
+      "name": "Titan Treasure",
+      "state": "APPROVED",
+      "before": [
+        {
+          "territory": "USA",
+          "customerPrice": "14.99",
+          "startDate": null,
+          "endDate": null
+        }
+      ],
+      "pricePointId": "eyJzIjoiNjc2MTc5NTA2MCIsInQiOiJVU0EiLCJwIjoiMTAxNTIifQ",
+      "proceeds": "10.5"
+    }
+  ],
+  "ok": true,
+  "finishedAt": "2026-11-26T02:26:41.183Z"
+}
