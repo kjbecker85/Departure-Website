@@ -1,0 +1,14 @@
+{
+  "why": "Kyle left pricing to Claude (2026-11-26). The Amulet Slot cost the same as the Pro Pack that includes it, so it goes to 7.99. The six Treasure Trails all cost 14.99 although the Goblin trail pays about 56 coins and the Titan trail 4,320, so they are graded by what they pay. All of these are price cuts.",
+  "apply": true,
+  "territory": "USA",
+  "prices": {
+    "amulet_slot_unlock": "7.99",
+    "treasure_tier_goblins": "1.99",
+    "treasure_tier_undead": "2.99",
+    "treasure_tier_orcs": "4.99",
+    "treasure_tier_beasts": "6.99",
+    "treasure_tier_dragons": "9.99",
+    "treasure_tier_titans": "14.99"
+  }
+}
