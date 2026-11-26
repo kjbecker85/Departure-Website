@@ -1,8 +1,8 @@
 {
-  "startedAt": "2026-11-26T02:26:36.863Z",
+  "startedAt": "2026-11-26T02:27:40.796Z",
   "request": {
-    "why": "Read current prices and price points before lowering the Amulet Slot and grading the Treasure Trails (Kyle left pricing to Claude, 2026-11-26). Report only.",
-    "apply": false,
+    "why": "Kyle left pricing to Claude (2026-11-26). The Amulet Slot cost the same as the Pro Pack that includes it, so it goes to 7.99. The six Treasure Trails all cost 14.99 although the Goblin trail pays about 56 coins and the Titan trail 4,320, so they are graded by what they pay. All of these are price cuts.",
+    "apply": true,
     "territory": "USA",
     "prices": {
       "amulet_slot_unlock": "7.99",
@@ -32,8 +32,22 @@
           "status": "ok"
         },
         {
-          "step": "apply",
-          "status": "not requested (report only)"
+          "step": "fatal",
+          "status": "error",
+          "error": "POST /v1/inAppPurchasePriceSchedules -> 409 ENTITY_ERROR.RELATIONSHIP.INVALID The provided entity includes a relationship with an invalid value: The given related type 'inAppPurchasesV2' is not valid for the relationship 'inAppPurchaseV2'",
+          "apiErrors": [
+            {
+              "id": "6593ab9c-9b7b-402f-8c21-a06ac5f8a35d",
+              "status": "409",
+              "code": "ENTITY_ERROR.RELATIONSHIP.INVALID",
+              "title": "The provided entity includes a relationship with an invalid value",
+              "detail": "The given related type 'inAppPurchasesV2' is not valid for the relationship 'inAppPurchaseV2'",
+              "source": {
+                "pointer": "/included/0/relationships/inAppPurchaseV2/data/type"
+              }
+            }
+          ],
+          "httpStatus": 409
         }
       ],
       "iapId": "6761794403",
@@ -67,8 +81,22 @@
           "status": "ok"
         },
         {
-          "step": "apply",
-          "status": "not requested (report only)"
+          "step": "fatal",
+          "status": "error",
+          "error": "POST /v1/inAppPurchasePriceSchedules -> 409 ENTITY_ERROR.RELATIONSHIP.INVALID The provided entity includes a relationship with an invalid value: The given related type 'inAppPurchasesV2' is not valid for the relationship 'inAppPurchaseV2'",
+          "apiErrors": [
+            {
+              "id": "d9fccb86-ba6e-4d3f-856d-f99f292507f3",
+              "status": "409",
+              "code": "ENTITY_ERROR.RELATIONSHIP.INVALID",
+              "title": "The provided entity includes a relationship with an invalid value",
+              "detail": "The given related type 'inAppPurchasesV2' is not valid for the relationship 'inAppPurchaseV2'",
+              "source": {
+                "pointer": "/included/0/relationships/inAppPurchaseV2/data/type"
+              }
+            }
+          ],
+          "httpStatus": 409
         }
       ],
       "iapId": "6761794794",
@@ -102,8 +130,22 @@
           "status": "ok"
         },
         {
-          "step": "apply",
-          "status": "not requested (report only)"
+          "step": "fatal",
+          "status": "error",
+          "error": "POST /v1/inAppPurchasePriceSchedules -> 409 ENTITY_ERROR.RELATIONSHIP.INVALID The provided entity includes a relationship with an invalid value: The given related type 'inAppPurchasesV2' is not valid for the relationship 'inAppPurchaseV2'",
+          "apiErrors": [
+            {
+              "id": "7cfe0346-bc6e-48cc-9ecd-4461dacf2672",
+              "status": "409",
+              "code": "ENTITY_ERROR.RELATIONSHIP.INVALID",
+              "title": "The provided entity includes a relationship with an invalid value",
+              "detail": "The given related type 'inAppPurchasesV2' is not valid for the relationship 'inAppPurchaseV2'",
+              "source": {
+                "pointer": "/included/0/relationships/inAppPurchaseV2/data/type"
+              }
+            }
+          ],
+          "httpStatus": 409
         }
       ],
       "iapId": "6761794991",
@@ -137,8 +179,22 @@
           "status": "ok"
         },
         {
-          "step": "apply",
-          "status": "not requested (report only)"
+          "step": "fatal",
+          "status": "error",
+          "error": "POST /v1/inAppPurchasePriceSchedules -> 409 ENTITY_ERROR.RELATIONSHIP.INVALID The provided entity includes a relationship with an invalid value: The given related type 'inAppPurchasesV2' is not valid for the relationship 'inAppPurchaseV2'",
+          "apiErrors": [
+            {
+              "id": "770ec6a2-4812-4a3a-a7cf-fcc6b6724793",
+              "status": "409",
+              "code": "ENTITY_ERROR.RELATIONSHIP.INVALID",
+              "title": "The provided entity includes a relationship with an invalid value",
+              "detail": "The given related type 'inAppPurchasesV2' is not valid for the relationship 'inAppPurchaseV2'",
+              "source": {
+                "pointer": "/included/0/relationships/inAppPurchaseV2/data/type"
+              }
+            }
+          ],
+          "httpStatus": 409
         }
       ],
       "iapId": "6761794992",
@@ -172,8 +228,22 @@
           "status": "ok"
         },
         {
-          "step": "apply",
-          "status": "not requested (report only)"
+          "step": "fatal",
+          "status": "error",
+          "error": "POST /v1/inAppPurchasePriceSchedules -> 409 ENTITY_ERROR.RELATIONSHIP.INVALID The provided entity includes a relationship with an invalid value: The given related type 'inAppPurchasesV2' is not valid for the relationship 'inAppPurchaseV2'",
+          "apiErrors": [
+            {
+              "id": "39d88c1d-8561-4ac7-8110-7ce596ebb7eb",
+              "status": "409",
+              "code": "ENTITY_ERROR.RELATIONSHIP.INVALID",
+              "title": "The provided entity includes a relationship with an invalid value",
+              "detail": "The given related type 'inAppPurchasesV2' is not valid for the relationship 'inAppPurchaseV2'",
+              "source": {
+                "pointer": "/included/0/relationships/inAppPurchaseV2/data/type"
+              }
+            }
+          ],
+          "httpStatus": 409
         }
       ],
       "iapId": "6761795039",
@@ -207,8 +277,22 @@
           "status": "ok"
         },
         {
-          "step": "apply",
-          "status": "not requested (report only)"
+          "step": "fatal",
+          "status": "error",
+          "error": "POST /v1/inAppPurchasePriceSchedules -> 409 ENTITY_ERROR.RELATIONSHIP.INVALID The provided entity includes a relationship with an invalid value: The given related type 'inAppPurchasesV2' is not valid for the relationship 'inAppPurchaseV2'",
+          "apiErrors": [
+            {
+              "id": "c65c17e1-23cb-47c3-8b26-f3d40dc8ae0e",
+              "status": "409",
+              "code": "ENTITY_ERROR.RELATIONSHIP.INVALID",
+              "title": "The provided entity includes a relationship with an invalid value",
+              "detail": "The given related type 'inAppPurchasesV2' is not valid for the relationship 'inAppPurchaseV2'",
+              "source": {
+                "pointer": "/included/0/relationships/inAppPurchaseV2/data/type"
+              }
+            }
+          ],
+          "httpStatus": 409
         }
       ],
       "iapId": "6761795017",
@@ -261,6 +345,6 @@
       "proceeds": "10.5"
     }
   ],
-  "ok": true,
-  "finishedAt": "2026-11-26T02:26:41.183Z"
+  "ok": false,
+  "finishedAt": "2026-11-26T02:27:46.022Z"
 }

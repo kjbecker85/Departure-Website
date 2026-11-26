@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-26T02:26:44.358Z",
-  "startedAt": "2026-11-26T02:26:36.855Z",
+  "generatedAt": "2026-11-26T02:27:49.076Z",
+  "startedAt": "2026-11-26T02:27:40.792Z",
   "trigger": "push",
-  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/45742417002",
+  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/45742553750",
   "ok": true,
   "errors": [],
   "applied": null,
@@ -10,7 +10,7 @@
   "otherRequests": [
     {
       "file": "ops/reports/app-store/last-iap-prices.json",
-      "ok": true
+      "ok": false
     }
   ],
   "appId": "6761634387",
