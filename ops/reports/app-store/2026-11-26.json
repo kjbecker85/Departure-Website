@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-26T17:38:13.501Z",
-  "startedAt": "2026-11-26T17:38:11.077Z",
-  "trigger": "push",
-  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/45869373049",
+  "generatedAt": "2026-11-26T20:12:31.694Z",
+  "startedAt": "2026-11-26T20:12:29.188Z",
+  "trigger": "schedule",
+  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/45889308228",
   "ok": true,
   "errors": [],
   "applied": null,
