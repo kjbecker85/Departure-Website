@@ -1,0 +1,27 @@
+---
+// Short address the app's "How it works" buttons open (departure.engagequalia.com/help/<slug>).
+// It forwards to the tutorial video for that screen. To move the videos (for example to a
+// Departure YouTube channel), change the urls in src/data/help-videos.json; the app needs no update.
+import videos from '../../data/help-videos.json';
+
+export function getStaticPaths() {
+  return Object.keys(videos).map((slug) => ({ params: { slug } }));
+}
+const { slug } = Astro.params;
+const v = (videos as Record<string, { title: string; url: string }>)[slug as string];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{v.title} | How Departure works</title>
+    <meta http-equiv="refresh" content={`0; url=${v.url}`} />
+    <link rel="canonical" href={v.url} />
+    <style>body{margin:0;background:#0D1520;color:#EDF3F9;font-family:system-ui,sans-serif;display:flex;min-height:100vh;align-items:center;justify-content:center;text-align:center;padding:24px}a{color:#6CCBEA}</style>
+  </head>
+  <body>
+    <p>Opening the video "{v.title}". If it does not open, <a href={v.url}>tap here to watch it</a>.</p>
+    <script is:inline define:vars={{ url: v.url }}>window.location.replace(url);</script>
+  </body>
+</html>

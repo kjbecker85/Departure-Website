@@ -1,0 +1,46 @@
+{
+  "getting-started": {
+    "title": "Getting started: the Home screen",
+    "url": "https://departure.engagequalia.com/social/tutorials/01-getting-started.mp4"
+  },
+  "log-workout": {
+    "title": "Logging a workout",
+    "url": "https://departure.engagequalia.com/social/tutorials/02-log-workout.mp4"
+  },
+  "train-tab": {
+    "title": "The Train tab",
+    "url": "https://departure.engagequalia.com/social/tutorials/03-train-tab.mp4"
+  },
+  "equip": {
+    "title": "Equipping your warrior",
+    "url": "https://departure.engagequalia.com/social/tutorials/04-equip.mp4"
+  },
+  "shop": {
+    "title": "The Shop",
+    "url": "https://departure.engagequalia.com/social/tutorials/05-shop.mp4"
+  },
+  "teams-campfire": {
+    "title": "Your team and the Campfire",
+    "url": "https://departure.engagequalia.com/social/tutorials/06-teams-campfire.mp4"
+  },
+  "warpath": {
+    "title": "Warpath",
+    "url": "https://departure.engagequalia.com/social/tutorials/07-warpath.mp4"
+  },
+  "monster-ambush": {
+    "title": "Monster Ambush",
+    "url": "https://departure.engagequalia.com/social/tutorials/08-monster-ambush.mp4"
+  },
+  "skirmish": {
+    "title": "Skirmish",
+    "url": "https://departure.engagequalia.com/social/tutorials/09-skirmish.mp4"
+  },
+  "training-grounds": {
+    "title": "Training Grounds",
+    "url": "https://departure.engagequalia.com/social/tutorials/10-training-grounds.mp4"
+  },
+  "ranks-scoring": {
+    "title": "Ranks and XP",
+    "url": "https://departure.engagequalia.com/social/tutorials/11-ranks-scoring.mp4"
+  }
+}
