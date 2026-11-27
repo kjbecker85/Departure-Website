@@ -1,15 +1,12 @@
 {
-  "generatedAt": "2026-11-27T00:18:14.654Z",
-  "startedAt": "2026-11-27T00:17:41.369Z",
-  "trigger": "push",
-  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/45915862328",
+  "generatedAt": "2026-11-27T19:59:05.119Z",
+  "startedAt": "2026-11-27T19:59:02.856Z",
+  "trigger": "schedule",
+  "runUrl": "https://github.com/kjbecker85/Departure-Website/actions/runs/46060423672",
   "ok": true,
   "errors": [],
   "applied": null,
-  "release": {
-    "ok": true,
-    "file": "ops/reports/app-store/last-release.json"
-  },
+  "release": null,
   "otherRequests": null,
   "appId": "6761634387",
   "app": {
@@ -23,13 +20,13 @@
     {
       "id": "e39472bf-3556-4bc8-b583-5dfdd2bf928b",
       "versionString": "1.1.3",
-      "state": "WAITING_FOR_REVIEW",
-      "appStoreState": "WAITING_FOR_REVIEW",
-      "appVersionState": "WAITING_FOR_REVIEW",
+      "state": "READY_FOR_DISTRIBUTION",
+      "appStoreState": "READY_FOR_SALE",
+      "appVersionState": "READY_FOR_DISTRIBUTION",
       "releaseType": "AFTER_APPROVAL",
       "createdDate": "2026-11-26T16:17:42-08:00",
       "editable": false,
-      "live": false
+      "live": true
     },
     {
       "id": "8427e7fc-cfb9-4254-8c72-e74a9c4c0da5",
@@ -99,112 +96,36 @@
     }
   ],
   "liveVersion": {
-    "id": "8427e7fc-cfb9-4254-8c72-e74a9c4c0da5",
-    "versionString": "1.1.2",
+    "id": "e39472bf-3556-4bc8-b583-5dfdd2bf928b",
+    "versionString": "1.1.3",
     "state": "READY_FOR_DISTRIBUTION",
     "appStoreState": "READY_FOR_SALE",
     "appVersionState": "READY_FOR_DISTRIBUTION",
     "releaseType": "AFTER_APPROVAL",
-    "createdDate": "2026-11-25T17:44:37-08:00",
+    "createdDate": "2026-11-26T16:17:42-08:00",
     "editable": false,
     "live": true
   },
-  "pendingVersions": [
-    {
-      "id": "e39472bf-3556-4bc8-b583-5dfdd2bf928b",
-      "versionString": "1.1.3",
-      "state": "WAITING_FOR_REVIEW",
-      "appStoreState": "WAITING_FOR_REVIEW",
-      "appVersionState": "WAITING_FOR_REVIEW",
-      "releaseType": "AFTER_APPROVAL",
-      "createdDate": "2026-11-26T16:17:42-08:00",
-      "editable": false,
-      "live": false
-    }
-  ],
+  "pendingVersions": [],
   "editableVersion": null,
   "notes": [
     "No editable App Store version. Listing changes other than promotional text need a new version."
   ],
   "versionLocalizations": {
-    "1.1.2": [
+    "1.1.3": [
       {
-        "id": "9b3f72cd-8431-405b-8f00-ed35ffacef08",
+        "id": "86ae2909-67b5-4f6e-8bfa-773b6c41e17f",
         "description": "Log real sets, reps and weight. Every set earns XP.\nRank up through 24 ranks and fight 24 bosses with your team.\nFree to play. No ads.\n\nA REAL WORKOUT LOG\n• Strength, cardio, timed holds, heavy bag rounds, classes and sports\n• See what you lifted last time and repeat it in one tap\n• Repeat your last workout, or start from a saved routine\n• Runs and rides keep distance, time and pace\n• Personal records found for you, with bonuses for beating your last session\n\nA GAME THAT REWARDS SHOWING UP\n• Every workout pays XP and coins\n• 24 ranks, from Recruit to Legend\n• Gear drops that make your warrior stronger\n• Weekly goals and streak bonuses for training on schedule\n\nTRAIN WITH A TEAM\n• Make or join a team and pick one of 18 themes\n• Your workouts power team battles against 24 bosses, from goblins to titans\n• A team feed with reactions, and a team rank you climb together\n\nSEE YOUR FUTURE SELF\n• Add a photo and get an AI image of the body your plan is building\n\nFAIR PLAY\n• Clear scoring rules and honest weight limits, so every rank is earned\n\nDeparture is free to download and play. Optional purchases include coin packs, XP boosts, equipment slots and banners.",
         "locale": "en-US",
         "keywords": "workout,tracker,lifting,weightlifting,strength,exercise,game,gamified,rpg,xp,habit,team,monster,raid",
         "marketingUrl": "https://departure.engagequalia.com",
         "promotionalText": "New: repeat your last workout in three taps and keep every set in your routines. Your lifts earn XP. Your team fights bosses. Free, no ads.",
         "supportUrl": "https://departure.engagequalia.com/support",
-        "whatsNew": "The back arrow at the top of a screen works again on iOS 26. Before this fix it could stop responding, and the only way out was to close the app. The Equip screen has a new board laid out like a body, with a slot for your legs that looks like one. Tap a slot to see the gear you can wear there, with every stat named. A team's creator can now start Warpath fights from the first day, and you can send friend requests from player search. Ranks now show correctly on the leaderboard. The weekly Skirmish runs again: teams are matched every Monday, and your leader can pick the battleground during the first 48 hours. Two-handed weapons are stronger, and the game now warns you before one takes off your sword and shield. The Amulet Slot and most Treasure Trails cost less. Buying gear with coins is safer on a weak connection. The text across the app is clearer about what each reward, battle and team bonus does for you."
+        "whatsNew": "Departure has a new look. The purple is gone, and the app now uses cold slate and ice blue with bolder headings. The Arena is simpler. You can be on one team at a time, and the four modes sit in two rows: training and Skirmish against people on top, and Monster Ambush and Warpath against monsters below, from easier to harder. Monster Ambush fights now play out on screen, with your warrior and the monster clashing in every round. Skirmish shows only real teams, with a clear scoreboard and a picture of the two teams meeting. Making a battle scene after a Skirmish works again. Training Grounds now suggests one workout each day, picked from the area you have trained least. New players get a short full body workout with no weights. The Campfire is cleaner, with Overview, Roster and Chat at the top. Home and Train show more at a glance: today's challenge, your goal days, your streak and the XP you earned this week. The exercise picker lists the exercises you have done before first, with what you did last time. On the Equip board, boots now sit in their own tall frame."
       }
     ]
   },
   "screenshots": {
-    "1.1.2": [
-      {
-        "locale": "en-US",
-        "displayType": "APP_IPHONE_65",
-        "images": [
-          {
-            "fileName": "01-log-list.png",
-            "width": 1284,
-            "height": 2778,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/9SEOk4uay1LD-LZBVQeKKA/1284x2778bb.png",
-            "state": "COMPLETE"
-          },
-          {
-            "fileName": "02-team.png",
-            "width": 1284,
-            "height": 2778,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/FavXhZGAEnT5d_KfwAbotA/1284x2778bb.png",
-            "state": "COMPLETE"
-          },
-          {
-            "fileName": "03-summary.png",
-            "width": 1284,
-            "height": 2778,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/F-7EUP8Ybe_KEFfEuTDjdQ/1284x2778bb.png",
-            "state": "COMPLETE"
-          },
-          {
-            "fileName": "04-home.png",
-            "width": 1284,
-            "height": 2778,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/0Py4kTJT4A24knnZM3pHDw/1284x2778bb.png",
-            "state": "COMPLETE"
-          },
-          {
-            "fileName": "05-log-empty.png",
-            "width": 1284,
-            "height": 2778,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/cVbXi702nsJ6A4ScYMuVNw/1284x2778bb.png",
-            "state": "COMPLETE"
-          },
-          {
-            "fileName": "06-equip.png",
-            "width": 1284,
-            "height": 2778,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/0tf2s1EWSTRmAGArALrAYw/1284x2778bb.png",
-            "state": "COMPLETE"
-          },
-          {
-            "fileName": "07-trophy.png",
-            "width": 1284,
-            "height": 2778,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/G5LWvbQWBZaKSS_ncP6WlQ/1284x2778bb.png",
-            "state": "COMPLETE"
-          },
-          {
-            "fileName": "08-heatmap.png",
-            "width": 1284,
-            "height": 2778,
-            "url": "https://is1-ssl.mzstatic.com/image/thumb/sPruHQvIzm8bgo58-kHrdA/1284x2778bb.png",
-            "state": "COMPLETE"
-          }
-        ]
-      }
-    ],
     "1.1.3": [
       {
         "locale": "en-US",
@@ -272,26 +193,9 @@
   },
   "appInfos": [
     {
-      "id": "5b1ecca6-af88-4317-8a38-2d2af4ae47ae",
+      "id": "14b828d7-1202-46eb-ba9f-a183912cc07f",
       "state": "READY_FOR_DISTRIBUTION",
       "appStoreState": "READY_FOR_SALE",
-      "editable": false,
-      "localizations": [
-        {
-          "id": "25f12df6-3f97-4456-a290-ffaec32b438d",
-          "locale": "en-US",
-          "name": "Departure: Fitness Quest",
-          "subtitle": "Gym Log, Ranks & Boss Fights",
-          "privacyPolicyUrl": "https://departure.engagequalia.com/privacy/",
-          "privacyChoicesUrl": null,
-          "privacyPolicyText": null
-        }
-      ]
-    },
-    {
-      "id": "14b828d7-1202-46eb-ba9f-a183912cc07f",
-      "state": "WAITING_FOR_REVIEW",
-      "appStoreState": "WAITING_FOR_REVIEW",
       "editable": false,
       "localizations": [
         {
