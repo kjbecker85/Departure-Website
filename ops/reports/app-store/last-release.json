@@ -1,138 +1,105 @@
 {
-  "startedAt": "2026-11-26T03:02:48.217Z",
+  "startedAt": "2026-11-27T00:17:41.373Z",
   "request": {
-    "version": "1.1.2",
-    "build": "33",
-    "fromVersion": "1.1.1",
-    "withdraw": true,
-    "whatsNew": "The back arrow at the top of a screen works again on iOS 26. Before this fix it could stop responding, and the only way out was to close the app. The Equip screen has a new board laid out like a body, with a slot for your legs that looks like one. Tap a slot to see the gear you can wear there, with every stat named. A team's creator can now start Warpath fights from the first day, and you can send friend requests from player search. Ranks now show correctly on the leaderboard. The weekly Skirmish runs again: teams are matched every Monday, and your leader can pick the battleground during the first 48 hours. Two-handed weapons are stronger, and the game now warns you before one takes off your sword and shield. The Amulet Slot and most Treasure Trails cost less. Buying gear with coins is safer on a weak connection. The text across the app is clearer about what each reward, battle and team bonus does for you.",
+    "version": "1.1.3",
+    "build": "45",
+    "whatsNew": "Departure has a new look. The purple is gone, and the app now uses cold slate and ice blue with bolder headings. The Arena is simpler. You can be on one team at a time, and the four modes sit in two rows: training and Skirmish against people on top, and Monster Ambush and Warpath against monsters below, from easier to harder. Monster Ambush fights now play out on screen, with your warrior and the monster clashing in every round. Skirmish shows only real teams, with a clear scoreboard and a picture of the two teams meeting. Making a battle scene after a Skirmish works again. Training Grounds now suggests one workout each day, picked from the area you have trained least. New players get a short full body workout with no weights. The Campfire is cleaner, with Overview, Roster and Chat at the top. Home and Train show more at a glance: today's challenge, your goal days, your streak and the XP you earned this week. The exercise picker lists the exercises you have done before first, with what you did last time. On the Equip board, boots now sit in their own tall frame.",
     "releaseType": "AFTER_APPROVAL",
     "submitForReview": true,
-    "note": "1.1.2 replaces 1.1.1 in review (Kyle's yes, 2026-11-26): it holds the back arrow fix plus the Arena, Equip and Shop audit (qualia-fitness PRs 13 to 20). Kyle checked both builds on his phone."
+    "note": "Kyle checked build 45 in TestFlight and asked to release it (2026-11-26). Holds qualia-fitness PRs 22 to 31 and the Glacier look (PR 29)."
   },
   "locale": "en-US",
   "steps": [
     {
       "step": "validate",
       "status": "ok",
-      "at": "2026-11-26T03:02:48.217Z"
-    },
-    {
-      "step": "fromVersion",
-      "status": "found",
-      "at": "2026-11-26T03:02:48.951Z",
-      "id": "8427e7fc-cfb9-4254-8c72-e74a9c4c0da5",
-      "versionString": "1.1.1",
-      "state": "WAITING_FOR_REVIEW"
-    },
-    {
-      "step": "withdraw",
-      "status": "requested",
-      "at": "2026-11-26T03:02:50.611Z",
-      "reviewSubmissionId": "84603448-e013-443b-98cb-8051abaeb44c",
-      "state": "CANCELING"
-    },
-    {
-      "step": "withdrawWait",
-      "status": "ok",
-      "at": "2026-11-26T03:03:11.041Z",
-      "state": "DEVELOPER_REJECTED",
-      "polls": 1
-    },
-    {
-      "step": "rename",
-      "status": "ok",
-      "at": "2026-11-26T03:03:12.663Z",
-      "id": "8427e7fc-cfb9-4254-8c72-e74a9c4c0da5",
-      "before": "1.1.1",
-      "after": "1.1.2"
+      "at": "2026-11-27T00:17:41.373Z"
     },
     {
       "step": "version",
-      "status": "found",
-      "at": "2026-11-26T03:03:13.709Z",
-      "id": "8427e7fc-cfb9-4254-8c72-e74a9c4c0da5",
-      "state": "DEVELOPER_REJECTED",
-      "releaseType": "AFTER_APPROVAL"
+      "status": "created",
+      "at": "2026-11-27T00:17:44.581Z",
+      "id": "e39472bf-3556-4bc8-b583-5dfdd2bf928b",
+      "state": "PREPARE_FOR_SUBMISSION"
     },
     {
       "step": "build",
       "status": "valid",
-      "at": "2026-11-26T03:03:13.947Z",
-      "id": "4a13c3cc-fa66-4661-8f73-e0e50792ed4f",
-      "uploadedDate": "2026-11-25T18:39:54-08:00",
+      "at": "2026-11-27T00:17:44.758Z",
+      "id": "94781293-c221-4c50-83b6-b3b1b3d92fd6",
+      "uploadedDate": "2026-11-26T16:06:53-08:00",
       "usesNonExemptEncryption": false,
       "polls": 1
     },
     {
       "step": "exportCompliance",
       "status": "already set",
-      "at": "2026-11-26T03:03:13.947Z",
+      "at": "2026-11-27T00:17:44.758Z",
       "usesNonExemptEncryption": false
     },
     {
       "step": "attachBuild",
       "status": "ok",
-      "at": "2026-11-26T03:03:17.760Z",
-      "buildId": "4a13c3cc-fa66-4661-8f73-e0e50792ed4f",
-      "replaced": "99680998-05cf-4312-871b-9d666cc58cbf"
+      "at": "2026-11-27T00:17:46.853Z",
+      "buildId": "94781293-c221-4c50-83b6-b3b1b3d92fd6",
+      "replaced": null
     },
     {
       "step": "versionLocalization",
       "status": "ok",
-      "at": "2026-11-26T03:03:18.539Z",
-      "id": "9b3f72cd-8431-405b-8f00-ed35ffacef08",
+      "at": "2026-11-27T00:17:47.326Z",
+      "id": "86ae2909-67b5-4f6e-8bfa-773b6c41e17f",
       "before": {
-        "whatsNew": "The back arrow at the top of a screen works again on iOS 26. Before this fix it could stop responding, and the only way out was to close the app. Screens that are still loading now show a back arrow too, so you are never stuck on a spinner. The text across the app is clearer and says what each reward, battle and team bonus does for you. If Restore Purchases fails, it now tells you what went wrong. The check that keeps impossible lifts from counting compares only with your own past lifts, and it no longer flags normal progress on lighter weights."
+        "whatsNew": "The back arrow at the top of a screen works again on iOS 26. Before this fix it could stop responding, and the only way out was to close the app. The Equip screen has a new board laid out like a body, with a slot for your legs that looks like one. Tap a slot to see the gear you can wear there, with every stat named. A team's creator can now start Warpath fights from the first day, and you can send friend requests from player search. Ranks now show correctly on the leaderboard. The weekly Skirmish runs again: teams are matched every Monday, and your leader can pick the battleground during the first 48 hours. Two-handed weapons are stronger, and the game now warns you before one takes off your sword and shield. The Amulet Slot and most Treasure Trails cost less. Buying gear with coins is safer on a weak connection. The text across the app is clearer about what each reward, battle and team bonus does for you."
       },
       "after": {
-        "whatsNew": "The back arrow at the top of a screen works again on iOS 26. Before this fix it could stop responding, and the only way out was to close the app. The Equip screen has a new board laid out like a body, with a slot for your legs that looks like one. Tap a slot to see the gear you can wear there, with every stat named. A team's creator can now start Warpath fights from the first day, and you can send friend requests from player search. Ranks now show correctly on the leaderboard. The weekly Skirmish runs again: teams are matched every Monday, and your leader can pick the battleground during the first 48 hours. Two-handed weapons are stronger, and the game now warns you before one takes off your sword and shield. The Amulet Slot and most Treasure Trails cost less. Buying gear with coins is safer on a weak connection. The text across the app is clearer about what each reward, battle and team bonus does for you."
+        "whatsNew": "Departure has a new look. The purple is gone, and the app now uses cold slate and ice blue with bolder headings. The Arena is simpler. You can be on one team at a time, and the four modes sit in two rows: training and Skirmish against people on top, and Monster Ambush and Warpath against monsters below, from easier to harder. Monster Ambush fights now play out on screen, with your warrior and the monster clashing in every round. Skirmish shows only real teams, with a clear scoreboard and a picture of the two teams meeting. Making a battle scene after a Skirmish works again. Training Grounds now suggests one workout each day, picked from the area you have trained least. New players get a short full body workout with no weights. The Campfire is cleaner, with Overview, Roster and Chat at the top. Home and Train show more at a glance: today's challenge, your goal days, your streak and the XP you earned this week. The exercise picker lists the exercises you have done before first, with what you did last time. On the Equip board, boots now sit in their own tall frame."
       }
     },
     {
       "step": "appInfoLocalization",
       "status": "skipped",
-      "at": "2026-11-26T03:03:18.540Z",
+      "at": "2026-11-27T00:17:47.327Z",
       "reason": "no subtitle or privacyPolicyUrl in the request"
     },
     {
       "step": "screenshots",
       "status": "skipped",
-      "at": "2026-11-26T03:03:18.540Z",
+      "at": "2026-11-27T00:17:47.327Z",
       "reason": "not in the request"
     },
     {
       "step": "releaseType",
       "status": "ok",
-      "at": "2026-11-26T03:03:19.591Z",
+      "at": "2026-11-27T00:17:56.021Z",
       "before": "AFTER_APPROVAL",
       "after": "AFTER_APPROVAL"
     },
     {
       "step": "reviewSubmission",
       "status": "created",
-      "at": "2026-11-26T03:03:24.351Z",
-      "id": "1d21f490-e091-4e74-bc17-335f5ca68ab7",
+      "at": "2026-11-27T00:17:59.057Z",
+      "id": "ab76d323-999c-47d6-8029-e13f0830f9a9",
       "state": "READY_FOR_REVIEW"
     },
     {
       "step": "reviewSubmissionItem",
       "status": "created",
-      "at": "2026-11-26T03:03:29.435Z",
-      "id": "MWQyMWY0OTAtZTA5MS00ZTc0LWJjMTctMzM1ZjVjYTY4YWI3fDZ8ODk2MTYwODE4",
+      "at": "2026-11-27T00:18:04.199Z",
+      "id": "YWI3NmQzMjMtOTk5Yy00N2Q2LTgwMjktZTEzZjA4MzBmOWE5fDZ8ODk2MjQ1MjQ3",
       "state": "READY_FOR_REVIEW"
     },
     {
       "step": "submit",
       "status": "ok",
-      "at": "2026-11-26T03:03:35.295Z",
-      "reviewSubmissionId": "1d21f490-e091-4e74-bc17-335f5ca68ab7",
+      "at": "2026-11-27T00:18:10.405Z",
+      "reviewSubmissionId": "ab76d323-999c-47d6-8029-e13f0830f9a9",
       "state": "WAITING_FOR_REVIEW",
-      "submittedDate": "2026-11-26T03:03:33.839Z"
+      "submittedDate": "2026-11-27T00:18:08.828Z"
     }
   ],
   "ok": true,
   "reviewSubmissionState": "WAITING_FOR_REVIEW",
   "finalVersionState": "WAITING_FOR_REVIEW",
-  "finishedAt": "2026-11-26T03:03:36.621Z"
+  "finishedAt": "2026-11-27T00:18:11.168Z"
 }
